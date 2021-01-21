@@ -1,0 +1,43 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.oms",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "6.10.5",
+    "applicationType": "monolith",
+    "baseName": "OrderManagementSystem",
+    "packageName": "com.oms",
+    "packageFolder": "com/oms",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "NDgwZGVhYzc1MmJiODQzNzMzZjE5MjdhMmMyY2ZmNzA1ZmU3ZGUzY2FhNmQ5OWQ3NDY2MWYyOWQzNWQwZDdkYTM1YjIwYjk3OTZlZDBhMTE2YjkyMTQxMjMxMGI1OTY2NDlmNWQxYWU3ZGIxMDgzOTNkMWUyZGM0MWMyMGI3N2M=",
+    "embeddableLaunchScript": false,
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "litera",
+    "clientThemeVariant": "light",
+    "creationTimestamp": 1611189718062,
+    "testFrameworks": ["gatling"],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en", "de", "hi", "pt-br"],
+    "blueprints": []
+  }
+}
