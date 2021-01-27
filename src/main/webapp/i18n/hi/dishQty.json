@@ -1,0 +1,23 @@
+{
+  "orderManagementSystemApp": {
+    "dishQty": {
+      "home": {
+        "title": "DishQties",
+        "createLabel": "नया Dish Qty बनाएँ",
+        "createOrEditLabel": "Dish Qty बनाएँ या संपादित करें",
+        "notFound": "No Dish Qties found"
+      },
+      "created": "एक नया Dish Qty [identifier: {{ param }}] तैयार है",
+      "updated": "एक Dish Qty [identifier: {{ param }}] का अद्यतन हुआ है",
+      "deleted": "Dish Qty [identifier: {{ param }}] हटा दिया है",
+      "delete": {
+        "question": "Dish Qty [id: {{ id }}] हटाने की पुष्टि करें"
+      },
+      "detail": {
+        "title": "Dish Qty"
+      },
+      "qtyName": "Qty Name",
+      "menu": "Menu"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+id;dish_name;dish_description;dish_image;dish_image_content_type;type;is_todays_special
+1;generating Keyboard;Plastic;../fake-data/blob/hipster.png;image/png;NON_VEG;true
+2;overriding;Books benchmark;../fake-data/blob/hipster.png;image/png;NON_VEG;false
+3;streamline Towels Integration;Cambridgeshire quantify synergies;../fake-data/blob/hipster.png;image/png;NON_VEG;true
+4;Investment Account Corporate open-source;Bridge;../fake-data/blob/hipster.png;image/png;NON_VEG;false
+5;Kentucky;index;../fake-data/blob/hipster.png;image/png;VEG;false
+6;Generic Concrete Cheese;Salad index;../fake-data/blob/hipster.png;image/png;VEG;true
+7;Optimized Oklahoma analyzing;Crossroad Granite Marketing;../fake-data/blob/hipster.png;image/png;VEG;false
+8;Auto Loan Account Rustic Concrete Table revolutionize;Washington;../fake-data/blob/hipster.png;image/png;NON_VEG;false
+9;Accounts calculate;Money Market Account Fantastic Granite Computer;../fake-data/blob/hipster.png;image/png;NON_VEG;true
+10;Creative Kyrgyz Republic;workforce Investment Account;../fake-data/blob/hipster.png;image/png;VEG;false

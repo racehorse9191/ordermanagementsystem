@@ -1,0 +1,24 @@
+{
+  "orderManagementSystemApp": {
+    "tables": {
+      "home": {
+        "title": "Tables",
+        "createLabel": "नया Tables बनाएँ",
+        "createOrEditLabel": "Tables बनाएँ या संपादित करें",
+        "notFound": "No Tables found"
+      },
+      "created": "एक नया Tables [identifier: {{ param }}] तैयार है",
+      "updated": "एक Tables [identifier: {{ param }}] का अद्यतन हुआ है",
+      "deleted": "Tables [identifier: {{ param }}] हटा दिया है",
+      "delete": {
+        "question": "Tables [id: {{ id }}] हटाने की पुष्टि करें"
+      },
+      "detail": {
+        "title": "Tables"
+      },
+      "tableName": "Table Name",
+      "tablestatus": "Tablestatus",
+      "order": "Order"
+    }
+  }
+}

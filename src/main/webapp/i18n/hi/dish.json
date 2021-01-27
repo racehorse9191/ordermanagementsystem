@@ -1,0 +1,28 @@
+{
+  "orderManagementSystemApp": {
+    "dish": {
+      "home": {
+        "title": "Dishes",
+        "createLabel": "नया Dish बनाएँ",
+        "createOrEditLabel": "Dish बनाएँ या संपादित करें",
+        "notFound": "No Dishes found"
+      },
+      "created": "एक नया Dish [identifier: {{ param }}] तैयार है",
+      "updated": "एक Dish [identifier: {{ param }}] का अद्यतन हुआ है",
+      "deleted": "Dish [identifier: {{ param }}] हटा दिया है",
+      "delete": {
+        "question": "Dish [id: {{ id }}] हटाने की पुष्टि करें"
+      },
+      "detail": {
+        "title": "Dish"
+      },
+      "dishName": "Dish Name",
+      "dishDescription": "Dish Description",
+      "dishImage": "Dish Image",
+      "type": "Type",
+      "isTodaysSpecial": "Is Todays Special",
+      "menu": "Menu",
+      "category": "Category"
+    }
+  }
+}

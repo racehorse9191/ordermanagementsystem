@@ -1,0 +1,24 @@
+{
+  "orderManagementSystemApp": {
+    "tables": {
+      "home": {
+        "title": "Tables",
+        "createLabel": "Criar novo Tables",
+        "createOrEditLabel": "Criar ou editar Tables",
+        "notFound": "Nenhum Tables encontrado"
+      },
+      "created": "Um novo Tables foi criado com o identificador {{ param }}",
+      "updated": "Um Tables foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Tables foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Tables {{ id }}?"
+      },
+      "detail": {
+        "title": "Tables"
+      },
+      "tableName": "Table Name",
+      "tablestatus": "Tablestatus",
+      "order": "Order"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "orderManagementSystemApp": {
+    "dish": {
+      "home": {
+        "title": "Dishes",
+        "createLabel": "Criar novo Dish",
+        "createOrEditLabel": "Criar ou editar Dish",
+        "notFound": "Nenhum Dish encontrado"
+      },
+      "created": "Um novo Dish foi criado com o identificador {{ param }}",
+      "updated": "Um Dish foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Dish foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Dish {{ id }}?"
+      },
+      "detail": {
+        "title": "Dish"
+      },
+      "dishName": "Dish Name",
+      "dishDescription": "Dish Description",
+      "dishImage": "Dish Image",
+      "type": "Type",
+      "isTodaysSpecial": "Is Todays Special",
+      "menu": "Menu",
+      "category": "Category"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Tables",
+  "fields": [
+    {
+      "fieldName": "tableName",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "tablestatus",
+      "fieldType": "TableStatus",
+      "fieldValues": "RESERVED,ENGAGED,FREE"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "order",
+      "otherEntityRelationshipName": "tables",
+      "relationshipName": "order"
+    }
+  ],
+  "changelogDate": "20210121005700",
+  "entityTableName": "tables",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

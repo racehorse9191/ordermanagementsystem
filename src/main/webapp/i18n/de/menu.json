@@ -1,0 +1,26 @@
+{
+  "orderManagementSystemApp": {
+    "menu": {
+      "home": {
+        "title": "Menus",
+        "createLabel": "Menu erstellen",
+        "createOrEditLabel": "Menu erstellen oder bearbeiten",
+        "notFound": "No Menus found"
+      },
+      "created": "Menu erstellt mit ID {{ param }}",
+      "updated": "Menu aktualisiert mit ID {{ param }}",
+      "deleted": "Menu gelöscht mit ID {{ param }}",
+      "delete": {
+        "question": "Soll Menu {{ id }} wirklich dauerhaft gelöscht werden?"
+      },
+      "detail": {
+        "title": "Menu"
+      },
+      "price": "Price",
+      "isAvailable": "Is Available",
+      "order": "Order",
+      "dish": "Dish",
+      "dishQty": "Dish Qty"
+    }
+  }
+}

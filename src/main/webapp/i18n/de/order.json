@@ -1,0 +1,28 @@
+{
+  "orderManagementSystemApp": {
+    "order": {
+      "home": {
+        "title": "Orders",
+        "createLabel": "Order erstellen",
+        "createOrEditLabel": "Order erstellen oder bearbeiten",
+        "notFound": "No Orders found"
+      },
+      "created": "Order erstellt mit ID {{ param }}",
+      "updated": "Order aktualisiert mit ID {{ param }}",
+      "deleted": "Order gelöscht mit ID {{ param }}",
+      "delete": {
+        "question": "Soll Order {{ id }} wirklich dauerhaft gelöscht werden?"
+      },
+      "detail": {
+        "title": "Order"
+      },
+      "menuIdsandQty": "Menu Idsand Qty",
+      "waiterName": "Waiter Name",
+      "note": "Note",
+      "orderDate": "Order Date",
+      "orderstatus": "Orderstatus",
+      "menu": "Menu",
+      "tables": "Tables"
+    }
+  }
+}

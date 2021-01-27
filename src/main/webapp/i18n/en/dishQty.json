@@ -1,0 +1,23 @@
+{
+  "orderManagementSystemApp": {
+    "dishQty": {
+      "home": {
+        "title": "Dish Qties",
+        "createLabel": "Create a new Dish Qty",
+        "createOrEditLabel": "Create or edit a Dish Qty",
+        "notFound": "No Dish Qties found"
+      },
+      "created": "A new Dish Qty is created with identifier {{ param }}",
+      "updated": "A Dish Qty is updated with identifier {{ param }}",
+      "deleted": "A Dish Qty is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Dish Qty {{ id }}?"
+      },
+      "detail": {
+        "title": "Dish Qty"
+      },
+      "qtyName": "Qty Name",
+      "menu": "Menu"
+    }
+  }
+}

@@ -1,0 +1,57 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="dish">
+            <h2><span jhiTranslate="orderManagementSystemApp.dish.detail.title">Dish</span> {{ dish.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="orderManagementSystemApp.dish.dishName">Dish Name</span></dt>
+                <dd>
+                    <span>{{ dish.dishName }}</span>
+                </dd>
+                <dt><span jhiTranslate="orderManagementSystemApp.dish.dishDescription">Dish Description</span></dt>
+                <dd>
+                    <span>{{ dish.dishDescription }}</span>
+                </dd>
+                <dt><span jhiTranslate="orderManagementSystemApp.dish.dishImage">Dish Image</span></dt>
+                <dd>
+                    <div *ngIf="dish.dishImage">
+                        <a (click)="openFile(dish.dishImageContentType, dish.dishImage)">
+                            <img [src]="'data:' + dish.dishImageContentType + ';base64,' + dish.dishImage" style="max-width: 100%;" alt="dish image"/>
+                        </a>
+                        {{ dish.dishImageContentType }}, {{ byteSize(dish.dishImage) }}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="orderManagementSystemApp.dish.type">Type</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'orderManagementSystemApp.Type.' + dish.type }}">{{ dish.type }}</span>
+                </dd>
+                <dt><span jhiTranslate="orderManagementSystemApp.dish.isTodaysSpecial">Is Todays Special</span></dt>
+                <dd>
+                    <span>{{ dish.isTodaysSpecial }}</span>
+                </dd>
+                <dt><span jhiTranslate="orderManagementSystemApp.dish.category">Category</span></dt>
+                <dd>
+                    <div *ngIf="dish.category">
+                        <a [routerLink]="['/category', dish.category?.id, 'view']">{{ dish.category?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/dish', dish.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

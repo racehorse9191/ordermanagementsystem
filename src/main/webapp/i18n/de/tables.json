@@ -1,0 +1,24 @@
+{
+  "orderManagementSystemApp": {
+    "tables": {
+      "home": {
+        "title": "Tables",
+        "createLabel": "Tables erstellen",
+        "createOrEditLabel": "Tables erstellen oder bearbeiten",
+        "notFound": "No Tables found"
+      },
+      "created": "Tables erstellt mit ID {{ param }}",
+      "updated": "Tables aktualisiert mit ID {{ param }}",
+      "deleted": "Tables gelöscht mit ID {{ param }}",
+      "delete": {
+        "question": "Soll Tables {{ id }} wirklich dauerhaft gelöscht werden?"
+      },
+      "detail": {
+        "title": "Tables"
+      },
+      "tableName": "Table Name",
+      "tablestatus": "Tablestatus",
+      "order": "Order"
+    }
+  }
+}

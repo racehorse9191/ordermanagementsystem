@@ -1,0 +1,49 @@
+{
+  "name": "Menu",
+  "fields": [
+    {
+      "fieldName": "price",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "isAvailable",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "order",
+      "otherEntityRelationshipName": "menu",
+      "relationshipName": "order"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "dish",
+      "otherEntityRelationshipName": "menu",
+      "relationshipName": "dish",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "dishQty",
+      "otherEntityRelationshipName": "menu",
+      "relationshipName": "dishQty",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210121010100",
+  "entityTableName": "menu",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

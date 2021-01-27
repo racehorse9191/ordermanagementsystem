@@ -1,0 +1,59 @@
+{
+  "name": "Dish",
+  "fields": [
+    {
+      "fieldName": "dishName",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "dishDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dishImage",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "Type",
+      "fieldValues": "VEG,NON_VEG",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "isTodaysSpecial",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "menu",
+      "otherEntityRelationshipName": "dish",
+      "relationshipName": "menu"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "category",
+      "otherEntityRelationshipName": "dish",
+      "relationshipName": "category",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210121010000",
+  "entityTableName": "dish",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

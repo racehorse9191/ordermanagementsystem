@@ -1,0 +1,10 @@
+{
+  "orderManagementSystemApp": {
+    "TableStatus": {
+      "null": "",
+      "RESERVED": "RESERVED",
+      "ENGAGED": "ENGAGED",
+      "FREE": "FREE"
+    }
+  }
+}

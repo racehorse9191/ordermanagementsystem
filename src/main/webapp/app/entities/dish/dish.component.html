@@ -1,0 +1,80 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="orderManagementSystemApp.dish.home.title">Dishes</span>
+
+        <button *jhiHasAnyAuthority="'ROLE_ADMIN'" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-dish" [routerLink]="['/dish/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span  jhiTranslate="orderManagementSystemApp.dish.home.createLabel">
+            Create a new Dish
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="dishes?.length === 0">
+        <span jhiTranslate="orderManagementSystemApp.dish.home.notFound">No dishes found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="dishes && dishes.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+                    <th scope="col" ><span jhiTranslate="orderManagementSystemApp.dish.dishName">Dish Name</span></th>
+                    <th scope="col" ><span jhiTranslate="orderManagementSystemApp.dish.dishDescription">Dish Description</span></th>
+                    <th scope="col" ><span jhiTranslate="orderManagementSystemApp.dish.dishImage">Dish Image</span></th>
+                    <th scope="col" ><span jhiTranslate="orderManagementSystemApp.dish.type">Type</span></th>
+                    <th scope="col" ><span jhiTranslate="orderManagementSystemApp.dish.isTodaysSpecial">Is Todays Special</span></th>
+                    <th scope="col" ><span jhiTranslate="orderManagementSystemApp.dish.category">Category</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let dish of dishes ;trackBy: trackId">
+                    <td><a [routerLink]="['/dish', dish.id, 'view']">{{ dish.id }}</a></td>
+                    <td>{{ dish.dishName }}</td>
+                    <td>{{ dish.dishDescription }}</td>
+                    <td>
+                        <a *ngIf="dish.dishImage" (click)="openFile(dish.dishImageContentType, dish.dishImage)">
+                            <img [src]="'data:' + dish.dishImageContentType + ';base64,' + dish.dishImage" style="max-height: 30px;" alt="dish image"/>
+                        </a>
+                        <span *ngIf="dish.dishImage">{{ dish.dishImageContentType }}, {{ byteSize(dish.dishImage) }}</span>
+                    </td>
+                    <td jhiTranslate="{{ 'orderManagementSystemApp.Type.' + dish.type }}">{{ dish.type }}</td>
+                    <td>{{ dish.isTodaysSpecial }}</td>
+                    <td>
+                        <div *ngIf="dish.category">
+                            <a [routerLink]="['/category', dish.category?.id, 'view']" >{{ dish.category?.categoryName }}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/dish', dish.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+
+                            <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit"
+                                    [routerLink]="['/dish', dish.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" (click)="delete(dish)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

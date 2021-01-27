@@ -1,9 +1,19 @@
-<div class="row">
+<!--<div class="row">
     <div class="col-md-3">
         <span class="hipster img-fluid rounded"></span>
-    </div>
+    </div>-->
+    <h2 id="page-heading">
+        <span jhiTranslate="orderManagementSystemApp.tables.home.title">Tables</span>
+        </h2>
+      <mat-grid-list [cols]="breakpoint" rowHeight="2:0.5" (window:resize)="onResize($event)" gutterSize="10px">
+        <mat-grid-tile class="gridtile" *ngFor="let tile of tiles" [colspan]="tile.cols" [rowspan]="tile.rows"
+          [style.background-color]="tile.color" routerLink="menu" [style.color]="'white'"(click)="takeorder(tile.text)"> 
+          {{tile.text}}
+        </mat-grid-tile>
+      </mat-grid-list>
+    
 
-    <div class="col-md-9">
+   <!---- <div class="col-md-9">
         <h1 class="display-4" jhiTranslate="home.title">Welcome, Java Hipster!</h1>
 
         <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p>
@@ -41,4 +51,4 @@
             <span jhiTranslate="home.like">If you like JHipster, don't forget to give us a star on</span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.github">GitHub</a>!
         </p>
     </div>
-</div>
+</div>-->

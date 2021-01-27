@@ -51,6 +51,17 @@ public class CacheConfiguration {
             createCache(cm, com.oms.domain.User.class.getName());
             createCache(cm, com.oms.domain.Authority.class.getName());
             createCache(cm, com.oms.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.oms.domain.Tables.class.getName());
+            createCache(cm, com.oms.domain.Tables.class.getName() + ".orders");
+            createCache(cm, com.oms.domain.DishQty.class.getName());
+            createCache(cm, com.oms.domain.DishQty.class.getName() + ".menus");
+            createCache(cm, com.oms.domain.Category.class.getName());
+            createCache(cm, com.oms.domain.Category.class.getName() + ".dishes");
+            createCache(cm, com.oms.domain.Dish.class.getName());
+            createCache(cm, com.oms.domain.Dish.class.getName() + ".menus");
+            createCache(cm, com.oms.domain.Menu.class.getName());
+            createCache(cm, com.oms.domain.Menu.class.getName() + ".orders");
+            createCache(cm, com.oms.domain.Order.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

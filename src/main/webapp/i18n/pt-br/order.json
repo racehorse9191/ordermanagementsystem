@@ -1,0 +1,28 @@
+{
+  "orderManagementSystemApp": {
+    "order": {
+      "home": {
+        "title": "Orders",
+        "createLabel": "Criar novo Order",
+        "createOrEditLabel": "Criar ou editar Order",
+        "notFound": "Nenhum Order encontrado"
+      },
+      "created": "Um novo Order foi criado com o identificador {{ param }}",
+      "updated": "Um Order foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Order foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Order {{ id }}?"
+      },
+      "detail": {
+        "title": "Order"
+      },
+      "menuIdsandQty": "Menu Idsand Qty",
+      "waiterName": "Waiter Name",
+      "note": "Note",
+      "orderDate": "Order Date",
+      "orderstatus": "Orderstatus",
+      "menu": "Menu",
+      "tables": "Tables"
+    }
+  }
+}

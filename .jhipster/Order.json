@@ -1,0 +1,59 @@
+{
+  "name": "Order",
+  "fields": [
+    {
+      "fieldName": "menuIdsandQty",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "waiterName",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "note",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "orderDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "orderstatus",
+      "fieldType": "OrderStatus",
+      "fieldValues": "CONFIRMED,BEING_PREPARED,READY_TO_SEARVE,COMPLETED,CANCEL"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "menu",
+      "otherEntityRelationshipName": "order",
+      "relationshipName": "menu",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "tables",
+      "otherEntityRelationshipName": "order",
+      "relationshipName": "tables",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210121010200",
+  "entityTableName": "order",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

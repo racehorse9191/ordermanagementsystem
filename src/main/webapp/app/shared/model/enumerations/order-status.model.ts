@@ -1,0 +1,11 @@
+export const enum OrderStatus {
+  CONFIRMED = 'CONFIRMED',
+
+  BEING_PREPARED = 'BEING_PREPARED',
+
+  READY_TO_SEARVE = 'READY_TO_SEARVE',
+
+  COMPLETED = 'COMPLETED',
+
+  CANCEL = 'CANCEL',
+}

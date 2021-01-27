@@ -1,0 +1,9 @@
+{
+  "orderManagementSystemApp": {
+    "Type": {
+      "null": "",
+      "VEG": "VEG",
+      "NON_VEG": "NON_VEG"
+    }
+  }
+}

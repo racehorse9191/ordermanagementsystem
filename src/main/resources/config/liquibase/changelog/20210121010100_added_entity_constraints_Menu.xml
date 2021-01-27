@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity Menu.
+    -->
+    <changeSet id="20210121010100-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="dish_id"
+                                 baseTableName="menu"
+                                 constraintName="fk_menu_dish_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dish"/>
+
+        <addForeignKeyConstraint baseColumnNames="dish_qty_id"
+                                 baseTableName="menu"
+                                 constraintName="fk_menu_dish_qty_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dish_qty"/>
+
+    </changeSet>
+</databaseChangeLog>

@@ -162,7 +162,7 @@ jhipster:
   #     allow-credentials: true
   #     max-age: 1800
   mail:
-    from: OrderManagementSystem@localhost
+    from: racehorse9191@gmail.com
   swagger:
     default-include-pattern: /api/.*
     title: OrderManagementSystem API

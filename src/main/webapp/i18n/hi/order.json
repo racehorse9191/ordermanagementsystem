@@ -1,0 +1,28 @@
+{
+  "orderManagementSystemApp": {
+    "order": {
+      "home": {
+        "title": "Orders",
+        "createLabel": "नया Order बनाएँ",
+        "createOrEditLabel": "Order बनाएँ या संपादित करें",
+        "notFound": "No Orders found"
+      },
+      "created": "एक नया Order [identifier: {{ param }}] तैयार है",
+      "updated": "एक Order [identifier: {{ param }}] का अद्यतन हुआ है",
+      "deleted": "Order [identifier: {{ param }}] हटा दिया है",
+      "delete": {
+        "question": "Order [id: {{ id }}] हटाने की पुष्टि करें"
+      },
+      "detail": {
+        "title": "Order"
+      },
+      "menuIdsandQty": "Menu Idsand Qty",
+      "waiterName": "Waiter Name",
+      "note": "Note",
+      "orderDate": "Order Date",
+      "orderstatus": "Orderstatus",
+      "menu": "Menu",
+      "tables": "Tables"
+    }
+  }
+}

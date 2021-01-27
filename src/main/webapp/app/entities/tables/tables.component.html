@@ -1,0 +1,63 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="orderManagementSystemApp.tables.home.title">Tables</span>
+
+        <button *jhiHasAnyAuthority="'ROLE_ADMIN'" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-tables" [routerLink]="['/tables/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span  jhiTranslate="orderManagementSystemApp.tables.home.createLabel">
+            Create a new Tables
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="tables?.length === 0">
+        <span jhiTranslate="orderManagementSystemApp.tables.home.notFound">No tables found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="tables && tables.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+                    <th scope="col" ><span jhiTranslate="orderManagementSystemApp.tables.tableName">Table Name</span></th>
+                    <th scope="col" ><span jhiTranslate="orderManagementSystemApp.tables.tablestatus">Tablestatus</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let tables of tables ;trackBy: trackId">
+                    <td><a [routerLink]="['/tables', tables.id, 'view']">{{ tables.id }}</a></td>
+                    <td>{{ tables.tableName }}</td>
+                    <td jhiTranslate="{{ 'orderManagementSystemApp.TableStatus.' + tables.tablestatus }}">{{ tables.tablestatus }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/tables', tables.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+
+                            <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit"
+                                    [routerLink]="['/tables', tables.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" (click)="delete(tables)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

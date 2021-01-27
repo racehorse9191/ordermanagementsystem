@@ -1,0 +1,58 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="order">
+            <h2><span jhiTranslate="orderManagementSystemApp.order.detail.title">Order</span> {{ order.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="orderManagementSystemApp.order.menuIdsandQty">Menu Idsand Qty</span></dt>
+                <dd>
+                    <span>{{ order.menuIdsandQty }}</span>
+                </dd>
+                <dt><span jhiTranslate="orderManagementSystemApp.order.waiterName">Waiter Name</span></dt>
+                <dd>
+                    <span>{{ order.waiterName }}</span>
+                </dd>
+                <dt><span jhiTranslate="orderManagementSystemApp.order.note">Note</span></dt>
+                <dd>
+                    <span>{{ order.note }}</span>
+                </dd>
+                <dt><span jhiTranslate="orderManagementSystemApp.order.orderDate">Order Date</span></dt>
+                <dd>
+                    <span>{{ order.orderDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="orderManagementSystemApp.order.orderstatus">Orderstatus</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'orderManagementSystemApp.OrderStatus.' + order.orderstatus }}">{{ order.orderstatus }}</span>
+                </dd>
+                <dt><span jhiTranslate="orderManagementSystemApp.order.menu">Menu</span></dt>
+                <dd>
+                    <div *ngIf="order.menu">
+                        <a [routerLink]="['/menu', order.menu?.id, 'view']">{{ order.menu?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="orderManagementSystemApp.order.tables">Tables</span></dt>
+                <dd>
+                    <div *ngIf="order.tables">
+                        <a [routerLink]="['/tables', order.tables?.id, 'view']">{{ order.tables?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/order', order.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

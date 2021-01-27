@@ -1,0 +1,26 @@
+{
+  "orderManagementSystemApp": {
+    "menu": {
+      "home": {
+        "title": "Menus",
+        "createLabel": "नया Menu बनाएँ",
+        "createOrEditLabel": "Menu बनाएँ या संपादित करें",
+        "notFound": "No Menus found"
+      },
+      "created": "एक नया Menu [identifier: {{ param }}] तैयार है",
+      "updated": "एक Menu [identifier: {{ param }}] का अद्यतन हुआ है",
+      "deleted": "Menu [identifier: {{ param }}] हटा दिया है",
+      "delete": {
+        "question": "Menu [id: {{ id }}] हटाने की पुष्टि करें"
+      },
+      "detail": {
+        "title": "Menu"
+      },
+      "price": "Price",
+      "isAvailable": "Is Available",
+      "order": "Order",
+      "dish": "Dish",
+      "dishQty": "Dish Qty"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "DishQty",
+  "fields": [
+    {
+      "fieldName": "qtyName",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "menu",
+      "otherEntityRelationshipName": "dishQty",
+      "relationshipName": "menu"
+    }
+  ],
+  "changelogDate": "20210121005800",
+  "entityTableName": "dish_qty",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}
