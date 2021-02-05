@@ -1,11 +1,35 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.e2e.json"
+  "compilerOptions": {
+    "outDir": "target/classes/static/app",
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": false,
+    "strictNullChecks": true,
+    "noImplicitReturns": true,
+    "strictFunctionTypes": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "skipLibCheck": true,
+    "strictBindCallApply": true,
+    "target": "es2015",
+    "lib": ["es5", "es2015", "dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@angular/cdk": ["./src/cdk"],
+      "@angular/cdk/*": ["./src/cdk/*"],
+      "@angular/material/*": ["./src/material/*"],
+      "@angular/material-experimental/*": ["./src/material-experimental/*"],
+      "@angular/material-experimental": ["./src/material-experimental"],
+      "@angular/cdk-experimental/*": ["./src/cdk-experimental/*"],
+      "@angular/cdk-experimental": ["./src/cdk-experimental"],
+      "@angular/material-moment-adapter": ["./src/material-moment-adapter"],
+      "@angular/components-examples": ["./src/components-examples"],
+      "@angular/components-examples/*": ["./src/components-examples/*"]
     }
-  ]
+  },
+  "include": ["src/**/*.ts", "e2e/**/*.ts", "test/**/*.ts", "tools/**/*.ts", "integration/**/*.ts", "scripts/**/*.ts"],
+  "exclude": ["node_modules"]
 }
