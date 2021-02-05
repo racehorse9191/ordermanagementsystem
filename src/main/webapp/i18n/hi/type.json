@@ -3,7 +3,9 @@
     "Type": {
       "null": "",
       "VEG": "VEG",
-      "NON_VEG": "NON_VEG"
+      "NON_VEG": "NON VEG",
+      "ALCOHOLIC": "Alcoholic",
+      "NON_AlCOHOLIC": "Non Alocholic"
     }
   }
 }

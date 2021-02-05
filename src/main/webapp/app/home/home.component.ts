@@ -61,7 +61,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   filterTables(val: string): any {
     if (val.includes('All')) {
       this.tiles = this.alltiles;
-      console.log('test all tiles=>', this.tiles);
     } else {
       this.tempArr = [];
       this.tiles = [];
@@ -70,9 +69,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.tempArr.push(x);
         }
       });
-      console.log('this.tempArr=>', this.tiles);
       this.tiles = this.tempArr;
-      console.log('this.tempArrsss=>', this.tiles);
     }
   }
   takeorder(table: any): any {}
