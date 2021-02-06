@@ -1,4 +1,4 @@
-import { IMenu } from 'app/shared/model/menu.model';
+import { IMenu } from './menu.model';
 
 export interface IDishQty {
   id?: number;

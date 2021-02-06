@@ -1,24 +1,29 @@
 {
-  "plugins": ["@typescript-eslint/tslint"],
-  "extends": ["jhipster"],
+  "env": { "browser": true, "node": true, "es6": true },
+  "parser": "@typescript-eslint/parser",
+  "extends": ["plugin:@typescript-eslint/recommended", "jhipster", "eslint:recommended"],
+  "plugins": ["@typescript-eslint", "@typescript-eslint/tslint"],
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts"],
+      "@typescript-eslint": [".ts"]
+    },
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
   "parserOptions": {
     "project": "./tsconfig.base.json"
   },
   "rules": {
+    "no-unused-vars": "off",
     "@typescript-eslint/tslint/config": [
       "error",
       {
         "lintFile": "./tslint.json"
       }
     ],
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
-      {
-        "vars": "all",
-        "args": "after-used",
-        "ignoreRestSiblings": false
-      }
-    ],
+    "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-non-null-assertion": "off"
   }
 }

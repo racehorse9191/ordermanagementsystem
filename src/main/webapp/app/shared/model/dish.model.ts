@@ -1,6 +1,6 @@
-import { IMenu } from 'app/shared/model/menu.model';
-import { ICategory } from 'app/shared/model/category.model';
-import { Type } from 'app/shared/model/enumerations/type.model';
+import { ICategory } from './category.model';
+import { Type } from './enumerations/type.model';
+import { IMenu } from './menu.model';
 
 export interface IDish {
   id?: number;

@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
-import { IMenu } from 'app/shared/model/menu.model';
-import { ITables } from 'app/shared/model/tables.model';
-import { OrderStatus } from 'app/shared/model/enumerations/order-status.model';
+import { OrderStatus } from './enumerations/order-status.model';
+import { IMenu } from './menu.model';
+import { ITables } from './tables.model';
 
 export interface IOrder {
   id?: number;

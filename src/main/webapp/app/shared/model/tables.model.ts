@@ -1,5 +1,5 @@
-import { IOrder } from 'app/shared/model/order.model';
-import { TableStatus } from 'app/shared/model/enumerations/table-status.model';
+import { TableStatus } from './enumerations/table-status.model';
+import { IOrder } from './order.model';
 
 export interface ITables {
   id?: number;
