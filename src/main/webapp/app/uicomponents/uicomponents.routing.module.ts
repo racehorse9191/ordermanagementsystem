@@ -17,7 +17,7 @@ export const UiComponentRoutes: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
-    path: 'ui',
+    path: '',
     component: MenuComponent,
     data: {
       authorities: [Authority.USER],
