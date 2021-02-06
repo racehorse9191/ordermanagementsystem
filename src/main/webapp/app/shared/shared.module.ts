@@ -5,10 +5,18 @@ import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
 import { LoginModalComponent } from './login/login.component';
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
+import { SanitizeHtmlPipe } from './custom-pipes/sanitize-html.pipe';
 
 @NgModule({
   imports: [OrderManagementSystemSharedLibsModule],
-  declarations: [FindLanguageFromKeyPipe, AlertComponent, AlertErrorComponent, LoginModalComponent, HasAnyAuthorityDirective],
+  declarations: [
+    FindLanguageFromKeyPipe,
+    AlertComponent,
+    AlertErrorComponent,
+    LoginModalComponent,
+    SanitizeHtmlPipe,
+    HasAnyAuthorityDirective,
+  ],
   entryComponents: [LoginModalComponent],
   exports: [
     OrderManagementSystemSharedLibsModule,
@@ -17,6 +25,7 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
     AlertErrorComponent,
     LoginModalComponent,
     HasAnyAuthorityDirective,
+    SanitizeHtmlPipe,
   ],
 })
 export class OrderManagementSystemSharedModule {}

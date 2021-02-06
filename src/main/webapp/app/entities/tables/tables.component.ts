@@ -4,9 +4,9 @@ import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ITables } from 'app/shared/model/tables.model';
 import { TablesService } from './tables.service';
 import { TablesDeleteDialogComponent } from './tables-delete-dialog.component';
+import { ITables } from '../../shared/model/tables.model';
 
 @Component({
   selector: 'jhi-tables',

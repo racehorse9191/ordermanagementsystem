@@ -1,0 +1,7 @@
+<ngb-accordion [destroyOnHide]='false' [closeOthers]="true"> 
+	<ngb-panel [id]="category?.categoryName||'' " *ngFor="let category of categories; let i=index;" [title]="category?.categoryName||''" >
+		<ng-template ngbPanelContent>
+			<jhi-dish-view [dishes]="category.dishes" ></jhi-dish-view>
+		</ng-template>
+	</ngb-panel>
+</ngb-accordion>

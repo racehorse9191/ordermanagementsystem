@@ -1,1 +1,20 @@
-<p>dish-view works!</p>
+<section class="items">
+    <div [id]="dish.id" *ngFor="let dish of dishes; let i = index" class="card item" style="width: 18rem;">
+        <img (click)="onOrderClicked(i)" class="card-img-top" [src]="dish?.dishImage  | sanitizeUrl">
+        <div (click)="onOrderClicked(i)" class="card-body">
+          <p class="card-text">{{dish?.dishName}}</p>
+          <p class="card-text">{{dish?.dishDescription}}</p>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div>
+                    <label [for]="'Qty'+i">Qty</label>
+                    <input type="number" class="form-control" id="'Qty'+i" [name]="'Qty'+i" [(ngModel)]="orders[i]" [id]="'order'+i">
+                </div>
+                <div>
+                    <button type="button" (click)="orderButtonClicked(dish,orders[i])" class="btn btn-primary">order</button>
+                </div>
+            </div>
+          </div>
+      </div>
+</section>

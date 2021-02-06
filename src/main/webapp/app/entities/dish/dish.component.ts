@@ -4,9 +4,9 @@ import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IDish } from 'app/shared/model/dish.model';
 import { DishService } from './dish.service';
 import { DishDeleteDialogComponent } from './dish-delete-dialog.component';
+import { IDish } from '../../shared/model/dish.model';
 
 @Component({
   selector: 'jhi-dish',

@@ -1,0 +1,37 @@
+/* --breakpoint-md */
+@media (min-width: 768px) {
+  .items .item {
+    width: calc(100% / 4);
+  }
+}
+
+/* --breakpoint-lg */
+@media (min-width: 992px) {
+  .items .item {
+    width: calc(100% / 6);
+  }
+}
+
+/* --breakpoint-sm */
+@media (min-width: 576px) {
+  .items .item {
+    width: calc(100% / 3);
+  }
+}
+
+.items {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 1rem;
+}
+
+.items .item {
+  padding: 1rem;
+  width: calc(100% / 2);
+}
+.card-img-top {
+  cursor: pointer;
+}
+.card-body {
+  cursor: pointer;
+}

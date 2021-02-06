@@ -1,1 +1,27 @@
-<p>menu works!</p>
+<div class="container">
+      
+    <h1>Order Management Menu</h1>
+      
+    <ngb-tabset [destroyOnHide]="false">
+      
+      <ngb-tab title="Todays Spl">
+        <ng-template ngbTabContent>
+            <jhi-dish-category [todaysSpl]="todaysSplVal" ></jhi-dish-category>
+        </ng-template>
+      </ngb-tab>
+       
+      <ngb-tab>
+        <ng-template ngbTabTitle>Dish Category</ng-template>
+        <ng-template ngbTabContent>
+            <jhi-dish-category [todaysSpl]="!todaysSplVal" ></jhi-dish-category>
+        </ng-template>
+      </ngb-tab>
+       
+      <ngb-tab>
+        <ng-template ngbTabTitle>Order Details</ng-template>
+        <ng-template ngbTabContent>
+            <jhi-order-details></jhi-order-details>
+        </ng-template>
+      </ngb-tab>   
+    </ngb-tabset>
+    </div>

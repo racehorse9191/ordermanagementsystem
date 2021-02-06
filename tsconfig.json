@@ -1,8 +1,7 @@
 {
   "include": ["src/**/*.ts", "e2e/**/*.ts", "test/**/*.ts", "tools/**/*.ts", "integration/**/*.ts", "scripts/**/*.ts"],
   "exclude": ["node_modules", "lib/config", "integration", "resource", "scripts", "jib", "assets", "java", "tools", "docker"],
-
-  "compileOnSave": false,
+  "compileOnSave": true,
   "compilerOptions": {
     "resolveJsonModule": true,
     "outDir": "target/classes/static/app",

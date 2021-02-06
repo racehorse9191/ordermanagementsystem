@@ -4,13 +4,13 @@ import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router
 import { Observable, of, EMPTY } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
-import { Authority } from 'app/shared/constants/authority.constants';
-import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { ITables, Tables } from 'app/shared/model/tables.model';
 import { TablesService } from './tables.service';
 import { TablesComponent } from './tables.component';
 import { TablesDetailComponent } from './tables-detail.component';
 import { TablesUpdateComponent } from './tables-update.component';
+import { ITables, Tables } from '../../shared/model/tables.model';
+import { Authority } from '../../shared/constants/authority.constants';
+import { UserRouteAccessService } from '../../core/auth/user-route-access-service';
 
 @Injectable({ providedIn: 'root' })
 export class TablesResolve implements Resolve<ITables> {

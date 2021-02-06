@@ -16,6 +16,20 @@
     "project": "./tsconfig.base.json"
   },
   "rules": {
+    "eqeqeq": "off",
+    "member-ordering": [
+      "off",
+      {
+        "order": [
+          {
+            "name": "static non-private",
+            "kinds": ["public-static-field", "protected-static-field", "public-static-method", "protected-static-method"]
+          },
+          "constructor"
+        ]
+      }
+    ],
+    "no-console": ["off", "debug", "time", "timeEnd", "trace"],
     "no-unused-vars": "off",
     "@typescript-eslint/tslint/config": [
       "error",
@@ -23,6 +37,7 @@
         "lintFile": "./tslint.json"
       }
     ],
+    "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-non-null-assertion": "off"
   }
