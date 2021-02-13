@@ -21,14 +21,14 @@ export class MenuComponent implements OnInit, OnDestroy {
   loadAll(): void {
     this.menuService.query().subscribe((res: HttpResponse<IMenu[]>) => {
       this.menus = res.body || [];
-      this.menus?.forEach(res => {
-        let tempQty = {};
-        Object.keys(res?.dishQty || []).forEach(key => {
-          if (res?.dishQty) {
-            tempQty[key] = res?.dishQty[key];
+      this.menus?.forEach(menu => {
+        const tempQty = {};
+        Object.keys(menu?.dishQty || []).forEach(key => {
+          if (menu?.dishQty) {
+            tempQty[key] = menu?.dishQty[key];
           }
         });
-        res.dishQty = [...[tempQty]];
+        menu.dishQty = [...[tempQty]];
       });
     });
   }

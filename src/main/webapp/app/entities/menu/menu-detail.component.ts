@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { IMenu } from 'app/shared/model/menu.model';
+import { IMenu } from '../../shared/model/menu.model';
 
 @Component({
   selector: 'jhi-menu-detail',

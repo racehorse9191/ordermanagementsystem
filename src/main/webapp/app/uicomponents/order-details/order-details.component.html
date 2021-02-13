@@ -69,7 +69,7 @@
         </div> </td>
         <td>{{ order.price }}     </td>
         <td>{{ order.orderTotal }}</td>
-        <td> <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" (click)="delete(menu)"
+        <td> <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" (click)="delete(order)"
           class="btn btn-danger btn-sm">
       <fa-icon icon="times"></fa-icon>
       <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>

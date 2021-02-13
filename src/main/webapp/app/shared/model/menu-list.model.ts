@@ -8,8 +8,8 @@ export class MenuListModel {
   price?: string;
   isAvailable?: boolean;
   orders?: OrderModel[];
-  dish?: dishModel;
-  dishQty?: dishQtyModel[];
+  dish?: DishModel;
+  dishQty?: DishQtyModel[];
   constructor(params?: MenuListModel) {
     console.log('params=>', params);
     this.id = params?.id;
@@ -29,7 +29,7 @@ export class OrderModel {
   orderDate?: Moment;
   orderstatus?: OrderStatus;
   menu?: MenuListModel;
-  tables?: tablesModel;
+  tables?: TablesModel;
   constructor(params?: OrderModel) {
     this.id = params?.id;
     this.menuIdsandQty = params?.menuIdsandQty;
@@ -42,7 +42,7 @@ export class OrderModel {
   }
 }
 
-export class dishModel {
+export class DishModel {
   id?: number;
   dishName?: string;
   dishDescription?: string;
@@ -51,8 +51,8 @@ export class dishModel {
   type?: Type;
   isTodaysSpecial?: boolean;
   menus?: MenuListModel[];
-  category?: categoryModel;
-  constructor(params?: dishModel) {
+  category?: CategoryModel;
+  constructor(params?: DishModel) {
     this.id = params?.id;
     this.dishName = params?.dishName;
     this.dishDescription = params?.dishDescription;
@@ -65,35 +65,35 @@ export class dishModel {
   }
 }
 
-export class categoryModel {
+export class CategoryModel {
   id?: number;
   categoryName?: string;
-  dishes?: dishModel[];
-  constructor(params?: categoryModel) {
+  dishes?: DishModel[];
+  constructor(params?: CategoryModel) {
     this.id = params?.id;
     this.categoryName = params?.categoryName;
     this.dishes = params?.dishes;
   }
 }
-export class dishQtyModel {
+export class DishQtyModel {
   id?: number;
   qtyName?: string;
   menus?: MenuListModel[];
   orderQty?: number;
-  constructor(params?: dishQtyModel) {
+  constructor(params?: DishQtyModel) {
     this.id = params?.id;
     this.qtyName = params?.qtyName;
-    this.menus = params?.menus;
+    this.menus = params?.menus || [];
     this.orderQty = params?.orderQty;
   }
 }
 
-export class tablesModel {
+export class TablesModel {
   id?: number;
   tableName?: string;
   tablestatus?: TableStatus;
   orders?: OrderModel[];
-  constructor(params?: tablesModel) {
+  constructor(params?: TablesModel) {
     this.id = params?.id;
     this.tableName = params?.tableName;
     this.tablestatus = params?.tablestatus;

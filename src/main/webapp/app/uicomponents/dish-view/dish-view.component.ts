@@ -1,4 +1,4 @@
-import { MenuListModel, dishQtyModel } from './../../shared/model/menu-list.model';
+import { MenuListModel, DishQtyModel } from './../../shared/model/menu-list.model';
 import { Component, Input, OnChanges, OnInit, SimpleChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DishToOrder } from '../../shared/model/dish-to-order';
@@ -23,7 +23,7 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   vegType: string = 'VEG';
   selectedQty: any = [];
   dishPrice: any = [];
-  dishesToOrder: dishQtyModel[] = [];
+  dishesToOrder: DishQtyModel[] = [];
   constructor(protected subscriptionService: SubscriptionService, config: NgbCarouselConfig, protected cd: ChangeDetectorRef) {
     config.interval = 5000;
     config.wrap = false;
@@ -39,9 +39,9 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedQty[i] = res.dishQty[0];
         this.dishPrice[i] = res.price;
       }
-      res?.dishQty?.forEach(res => {
-        if (res.orderQty) {
-          this.orders.push(res.orderQty);
+      res.dishQty?.forEach(qty => {
+        if (qty.orderQty) {
+          this.orders.push(qty.orderQty);
         }
       });
       if (!this.orders[i]) {
@@ -68,8 +68,6 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
       if (this.dishes) {
         let temp =
           this.dishes[index]?.dishQty?.filter(res => {
-            console.log('res=>', res);
-            console.log('qty=>', this.selectedQty[index]);
             if (res) {
               if (res?.id == this.selectedQty[index].id) {
                 res.orderQty = this.orders[index];
@@ -107,9 +105,15 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
       let temp = [];
       if (this.dishesToOrder) {
         for (let i = 0; i < this.dishesToOrder.length; i++) {
-          if (this.dishesToOrder[i].menus) {
-            for (let j = 0; j < this.dishesToOrder[i].menus.length; j++) {
-              if (this.dishesToOrder[i]?.menus[j]?.dish?.id != value.menus[0].dish.id) {
+          if (this.dishesToOrder[i] && this.dishesToOrder[i].menus) {
+            const len = this.dishesToOrder[i]?.menus?.length || 0;
+            for (let j = 0; j < len; j++) {
+              if (
+                this.dishesToOrder[i].menus &&
+                this.dishesToOrder[i].menus[j] &&
+                this.dishesToOrder[i].menus[j].dish &&
+                this.dishesToOrder[i].menus[j].dish.id != value.menus[0].dish.id
+              ) {
                 temp.push(this.dishesToOrder[i]);
               }
             }

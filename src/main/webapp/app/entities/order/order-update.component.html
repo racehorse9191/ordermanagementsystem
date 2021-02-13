@@ -74,7 +74,7 @@
                     <label class="form-control-label" jhiTranslate="orderManagementSystemApp.order.tables" for="field_tables">Tables</label>
                     <select class="form-control" id="field_tables" name="tables" formControlName="tables">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="tablesOption.id === editForm.get('tables')!.value?.id ? editForm.get('tables')!.value : tablesOption" *ngFor="let tablesOption of tables; trackBy: trackById">{{ tablesOption.tableName }}</option>
+                        <option [ngValue]="tablesOption.id === editForm.get('tables')!.value?.id ? editForm.get('tables')!.value : tablesOption" *ngFor="let tablesOption of tables; trackBy: trackById">{{ tablesOption.id }}</option>
                     </select>
                 </div>
             </div>

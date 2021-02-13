@@ -5,7 +5,7 @@ export class TotalGstPipe implements PipeTransform {
   constructor() {}
 
   transform(total: any, of: number, sumEnable: boolean) {
-    let sum = (total * of) / 100;
+    const sum = (total * of) / 100;
     console.log('sum=>', sum);
     if (sumEnable) {
       return total + sum;

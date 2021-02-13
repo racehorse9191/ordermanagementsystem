@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AccountService } from '../../core/auth/account.service';
-import { dishQtyModel } from '../../shared/model/menu-list.model';
+import { DishQtyModel } from '../../shared/model/menu-list.model';
 import { SubscriptionService } from '../../shared/subscription.service';
 import { Account } from './../../core/user/account.model';
 export class OrderTable {
@@ -12,7 +12,7 @@ export class OrderTable {
   orderQty?: any;
   price?: any;
   orderTotal?: any;
-  allDishQty: dishQtyModel[];
+  allDishQty?: DishQtyModel[];
   constructor(params?: OrderTable) {
     this.id = params?.id;
     this.name = params?.name;
@@ -31,7 +31,7 @@ export class OrderTable {
 export class OrderDetailsComponent implements OnInit, OnDestroy {
   account!: Account;
   detailRecivedSubscription: Subscription = new Subscription();
-  orderList: dishQtyModel[] = [];
+  orderList: DishQtyModel[] = [];
   orderTable: OrderTable[] = [];
   order: OrderTable = new OrderTable();
   collapsed = false;
@@ -86,7 +86,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   }
 
   totalorderDetails() {
-    let total: any[] = [];
+    const total: any[] = [];
     this.orderTable.forEach(res => {
       total.push(res.orderTotal);
     });
@@ -96,7 +96,9 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     console.log('order confirmed');
     this.router.navigate(['/']);
   }
+  orderPlusClicked(index: any) {}
+  orderMinusClicked(index: any) {}
 
-  onQtyChanged(opt1, opt2) {}
-  delete(menu) {}
+  onQtyChanged(opt1: any, opt2: any) {}
+  delete(menu: any) {}
 }

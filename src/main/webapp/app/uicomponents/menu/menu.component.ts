@@ -1,15 +1,13 @@
-import { dishQtyModel, MenuListModel } from './../../shared/model/menu-list.model';
+import { DishQtyModel, MenuListModel } from './../../shared/model/menu-list.model';
 import { HttpResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { DishService } from '../../entities/dish/dish.service';
 import { DishToOrder } from '../../shared/model/dish-to-order';
 import { IMenu } from '../../shared/model/menu.model';
 import { MenuService } from '../../entities/menu/menu.service';
-import { flatten } from '@angular/compiler';
-import { merge, type } from 'jquery';
 import { Subscription } from 'rxjs';
 import { SubscriptionService } from '../../shared/subscription.service';
-import { displayCategory } from '../dish-category/dish-category.component';
+import { DisplayCategory } from '../dish-category/dish-category.component';
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -33,9 +31,9 @@ export class MenuComponent implements OnInit {
   singleCategory: MenuListModel = new MenuListModel();
   detailRecivedSubscription: Subscription = new Subscription();
   showOrderButton: boolean = false;
-  orderList: dishQtyModel[] = [];
-  categoryList: displayCategory[] = [];
-  singleCategoryList: displayCategory = new displayCategory();
+  orderList: DishQtyModel[] = [];
+  categoryList: DisplayCategory[] = [];
+  singleCategoryList: DisplayCategory = new DisplayCategory();
   constructor(
     protected dishService: DishService,
     protected menuService: MenuService,
@@ -70,7 +68,7 @@ export class MenuComponent implements OnInit {
     this.menus?.forEach(res => {
       if (this.categoryTemp.length == 0) {
         this.singleCategory = res;
-        let tempQty = {};
+        const tempQty = {};
         Object.keys(this.singleCategory?.dishQty || []).forEach(key => {
           if (this.singleCategory?.dishQty) {
             tempQty[key] = this.singleCategory?.dishQty[key] || '';
@@ -82,8 +80,8 @@ export class MenuComponent implements OnInit {
         this.singleCategory = new MenuListModel();
       } else {
         if (this.categoryTemp.find(obj => obj?.dish?.id === res?.dish?.id)) {
-          let index = this.categoryTemp.findIndex(x => x?.dish?.id === res?.dish?.id);
-          let newData = {};
+          const index = this.categoryTemp.findIndex(x => x?.dish?.id === res?.dish?.id);
+          const newData = {};
           Object.keys(res?.dishQty || []).forEach(key => {
             if (res?.dishQty) {
               newData[key] = res?.dishQty[key] || null;
@@ -95,7 +93,7 @@ export class MenuComponent implements OnInit {
           }
         } else {
           this.singleCategory = res;
-          let tempQty = {};
+          const tempQty = {};
           Object.keys(this.singleCategory?.dishQty || []).forEach(key => {
             if (this.singleCategory?.dishQty) {
               tempQty[key] = this.singleCategory?.dishQty[key];
@@ -129,7 +127,7 @@ export class MenuComponent implements OnInit {
       this.tabs.select('2');
     }, 10);
   }
-  selectedActiveTab(event) {
+  selectedActiveTab(event: any) {
     console.log('active tab=>', event);
     if (event == 2) {
       this.showOrderButton = false;
@@ -142,7 +140,7 @@ export class MenuComponent implements OnInit {
 
   fetchOrderQty(menu: any) {
     let qty: any = null;
-    menu.dishQty.forEach(res => {
+    menu.dishQty.forEach((res: any) => {
       if (res.orderQty) {
         qty = res.orderQty;
       }
@@ -156,10 +154,10 @@ export class MenuComponent implements OnInit {
 
   /* section to cooks for todays spl */
   updateTOdaysSpl() {
-    let tempTodaysSPl = this.todaySplMenu;
+    const tempTodaysSPl = this.todaySplMenu;
     tempTodaysSPl.forEach(res => {
       this.orderList.forEach(order => {
-        order.menus.forEach(ordMenu => {
+        order?.menus?.forEach(ordMenu => {
           if (res.id == ordMenu.id) {
             res = ordMenu;
           }
@@ -177,11 +175,11 @@ export class MenuComponent implements OnInit {
   /* the section of cooking today's spl ends here*/
   /* this section is for cooking category data */
   updateMenuCategoryDishes() {
-    let tempCategoryList = this.categoryList;
+    const tempCategoryList = this.categoryList;
     tempCategoryList.forEach(res => {
       this.orderList.forEach(order => {
         res.menus.forEach(catMenu => {
-          order.menus.forEach(ordMenu => {
+          order?.menus?.forEach(ordMenu => {
             if (ordMenu.id == catMenu.id) {
               catMenu = ordMenu;
             }
@@ -195,22 +193,22 @@ export class MenuComponent implements OnInit {
   }
 
   createDisplayCategory() {
-    let tempCatergoryList: displayCategory[] = [];
+    const tempCatergoryList: DisplayCategory[] = [];
     this.category?.forEach(res => {
       if (this.category.length == 0) {
         this.singleCategoryList.categoryName = res?.dish?.category?.categoryName || '';
         this.singleCategoryList.menus.push(res);
         tempCatergoryList.push(this.singleCategoryList);
-        this.singleCategoryList = new displayCategory();
+        this.singleCategoryList = new DisplayCategory();
       } else {
         if (tempCatergoryList.find(obj => obj.categoryName === res?.dish?.category?.categoryName)) {
-          let index = tempCatergoryList.findIndex(x => x.categoryName === res?.dish?.category?.categoryName);
+          const index = tempCatergoryList.findIndex(x => x.categoryName === res?.dish?.category?.categoryName);
           tempCatergoryList[index].menus.push(res);
         } else {
           this.singleCategoryList.categoryName = res?.dish?.category?.categoryName || '';
           this.singleCategoryList.menus.push(res);
           tempCatergoryList.push(this.singleCategoryList);
-          this.singleCategoryList = new displayCategory();
+          this.singleCategoryList = new DisplayCategory();
         }
       }
     });
@@ -218,12 +216,12 @@ export class MenuComponent implements OnInit {
   }
   /* the section of cooking category data ends here*/
 
-  onSearchItemRemove(event) {
+  onSearchItemRemove(event: any) {
     console.log('onSearchItemRemove event=>', event);
-    this.orderList = this.orderList.filter(res => res.menus.find(menu => menu.id != event.value.id));
+    this.orderList = this.orderList.filter(res => res?.menus?.find(menu => menu.id != event.value.id));
     this.subscriptionService.updateOrder(this.orderList);
   }
-  onSearchClear(event) {
+  onSearchClear() {
     console.log('onSearchClear event=>', event);
     this.subscriptionService.updateOrder([]);
   }
