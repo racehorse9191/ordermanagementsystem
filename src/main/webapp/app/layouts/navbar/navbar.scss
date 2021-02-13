@@ -52,3 +52,6 @@ Logo styles
   background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
   background-size: contain;
 }
+.dropdown-menu.show {
+  z-index: 1021;
+}

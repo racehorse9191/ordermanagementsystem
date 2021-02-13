@@ -1,37 +1,148 @@
 /* --breakpoint-md */
 @media (min-width: 768px) {
-  .items .item {
+  /*   .items .item {
     width: calc(100% / 4);
-  }
+  } */
 }
 
 /* --breakpoint-lg */
 @media (min-width: 992px) {
-  .items .item {
+  /*  .items .item {
     width: calc(100% / 6);
-  }
+  } */
 }
 
 /* --breakpoint-sm */
 @media (min-width: 576px) {
-  .items .item {
+  /*  .items .item {
     width: calc(100% / 3);
+  } */
+}
+.QtyDropDown {
+  width: 33%;
+}
+.card-text {
+  font-size: small;
+}
+.card .card-body .message {
+  &::after {
+    clear: both;
   }
 }
-
-.items {
-  display: flex;
-  flex-flow: row wrap;
-  padding: 1rem;
+.card .card-body .actions {
+  margin-top: 5px;
 }
-
+.avatarwidth {
+  width: 30%;
+}
 .items .item {
-  padding: 1rem;
-  width: calc(100% / 2);
+  height: 10%;
+  width: 100%;
+}
+.custom-height {
+  cursor: pointer;
+  width: 50%;
+  height: 30%;
 }
 .card-img-top {
   cursor: pointer;
 }
 .card-body {
   cursor: pointer;
+}
+
+.spaceBetween {
+  display: flex;
+  justify-content: space-between;
+}
+span.nonVeg {
+  background-image: url(./../../../assests/non-veg.svg);
+  width: 40px;
+  height: 30px;
+  position: absolute;
+  top: 0%;
+  right: 85%;
+  z-index: 11;
+  background-repeat: no-repeat;
+}
+.customQty {
+  width: 40%;
+}
+span.veg {
+  background-image: url(./../../../assests/veg.svg);
+  width: 40px;
+  height: 30px;
+  position: absolute;
+  top: 0%;
+  right: 85%;
+  z-index: 11;
+  background-repeat: no-repeat;
+}
+button.close {
+  span.close2 {
+    background-image: url(./../../../assests/close-image.svg);
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 5%;
+    right: 0%;
+    z-index: 11;
+    background-repeat: no-repeat;
+  }
+}
+button.close {
+  span.close-icon {
+    background-image: url(./../../../assests/close-image.svg);
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 5%;
+    right: 0%;
+    z-index: 11;
+    background-repeat: no-repeat;
+  }
+}
+
+ngb-carousel .wrapper {
+  position: relative;
+  height: 0;
+  padding-top: 35%; /* Keep ratio for 900x500 images */
+}
+ngb-carousel .wrapper > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  outline: none;
+}
+ngb-carousel .carousel-caption {
+  background: rgba(0, 0, 0, 0.3);
+}
+::ng-deep .carousel-item {
+  display: block;
+  opacity: 0;
+  transition: opacity 2s;
+}
+::ng-deep .carousel-item.active {
+  display: block;
+  opacity: 1;
+  transition: opacity 2s;
+}
+::ng-deep.carousel-control-prev:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+::ng-deep.carousel-control-next:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+::ng-deep ngb-carousel {
+  max-width: 100%;
+  margin: 2% 0% 0% 0%;
+}
+
+::ng-deep ngb-carousel {
+  width: inherit;
+  height: inherit;
 }

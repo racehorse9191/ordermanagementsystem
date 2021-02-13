@@ -7,7 +7,6 @@ import { MenuUpdateComponent } from './menu-update.component';
 import { MenuDeleteDialogComponent } from './menu-delete-dialog.component';
 import { menuRoute } from './menu.route';
 import { OrderManagementSystemSharedModule } from '../../shared/shared.module';
-
 @NgModule({
   imports: [OrderManagementSystemSharedModule, RouterModule.forChild(menuRoute)],
   declarations: [MenuComponent, MenuDetailComponent, MenuUpdateComponent, MenuDeleteDialogComponent],

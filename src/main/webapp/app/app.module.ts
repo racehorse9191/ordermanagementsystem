@@ -17,6 +17,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { UicomponentsModule } from './uicomponents/uicomponents.module';
 import { OrderManagementSystemSharedModule } from './shared/shared.module';
 import { OrderManagementSystemCoreModule } from './core/core.module';
+import { SubscriptionService } from './shared/subscription.service';
 
 @NgModule({
   imports: [

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { JhiLanguageService } from 'ng-jhipster';
-
-import { AccountService } from 'app/core/auth/account.service';
-import { Account } from 'app/core/user/account.model';
-import { LANGUAGES } from 'app/core/language/language.constants';
+import { LANGUAGES } from '../../core/language/language.constants';
+import { AccountService } from '../../core/auth/account.service';
+import { Account } from './../../core/user/account.model';
 
 @Component({
   selector: 'jhi-settings',

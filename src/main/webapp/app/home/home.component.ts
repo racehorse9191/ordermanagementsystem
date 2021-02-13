@@ -1,9 +1,12 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { JhiEventManager } from 'ng-jhipster';
 import { Subscription } from 'rxjs';
-
-import { LoginModalService } from 'app/core/login/login-modal.service';
-import { AccountService } from 'app/core/auth/account.service';
-import { Account } from 'app/core/user/account.model';
+import { AccountService } from '../core/auth/account.service';
+import { LoginModalService } from '../core/login/login-modal.service';
+import { TablesService } from '../entities/tables/tables.service';
+import { ITables } from '../shared/model/tables.model';
+import { Account } from './../core/user/account.model';
 
 export interface Tile {
   color: string;
@@ -34,12 +37,32 @@ export class HomeComponent implements OnInit, OnDestroy {
   alltiles = this.tiles;
   breakpoint: number | undefined;
   tempArr: any[] = [];
+  tables?: ITables[];
+  eventSubscriber?: Subscription;
 
-  constructor(private accountService: AccountService, private loginModalService: LoginModalService) {}
+  constructor(
+    private accountService: AccountService,
+    protected eventManager: JhiEventManager,
+    private loginModalService: LoginModalService,
+    protected tablesService: TablesService
+  ) {}
 
+  loadAll(): void {
+    this.tablesService.query().subscribe((res: HttpResponse<ITables[]>) => (this.tables = res.body || []));
+  }
+
+  registerChangeInTables(): void {
+    this.eventSubscriber = this.eventManager.subscribe('tablesListModification', () => {
+      this.loadAll();
+      console.log('this is tables', this.tables);
+    });
+  }
   ngOnInit(): void {
+    this.loadAll();
+    console.log('this is tables', this.tables);
+    this.registerChangeInTables();
     this.breakpoint = window.innerWidth <= 400 ? 1 : 6;
-    this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
+    this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account || null));
   }
 
   isAuthenticated(): boolean {

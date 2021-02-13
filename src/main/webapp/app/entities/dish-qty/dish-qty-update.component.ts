@@ -5,8 +5,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { IDishQty, DishQty } from 'app/shared/model/dish-qty.model';
 import { DishQtyService } from './dish-qty.service';
+import { DishQty, IDishQty } from '../../shared/model/dish-qty.model';
 
 @Component({
   selector: 'jhi-dish-qty-update',

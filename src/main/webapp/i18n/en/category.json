@@ -5,7 +5,9 @@
         "title": "Categories",
         "createLabel": "Create a new Category",
         "createOrEditLabel": "Create or edit a Category",
-        "notFound": "No Categories found"
+        "notFound": "No Categories found",
+        "showList": "Show List",
+        "showCategory": "show Category"
       },
       "created": "A new Category is created with identifier {{ param }}",
       "updated": "A Category is updated with identifier {{ param }}",

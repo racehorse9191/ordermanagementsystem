@@ -8,19 +8,19 @@ import { DishCategoryComponent } from './dish-category/dish-category.component';
 
 export const UiComponentRoutes: Routes = [
   {
-    path: 'ui/dishView',
-    component: DishViewComponent,
+    path: '',
+    component: MenuComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.dish.home.title',
     },
     canActivate: [UserRouteAccessService],
   },
   {
-    path: '',
-    component: MenuComponent,
+    path: 'ui/dishView',
+    component: DishViewComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.dish.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -29,7 +29,7 @@ export const UiComponentRoutes: Routes = [
     path: 'ui/orderDetails',
     component: OrderDetailsComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.dish.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -38,7 +38,7 @@ export const UiComponentRoutes: Routes = [
     path: 'ui/dishCategory',
     component: DishCategoryComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.dish.home.title',
     },
     canActivate: [UserRouteAccessService],

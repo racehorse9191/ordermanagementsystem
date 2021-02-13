@@ -1,53 +1,81 @@
-import { HttpResponse } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
-import { CategoryService } from '../../entities/category/category.service';
-import { DishService } from '../../entities/dish/dish.service';
-import { ICategory } from '../../shared/model/category.model';
-import { IDish } from '../../shared/model/dish.model';
-
+import { dishQtyModel, MenuListModel } from './../../shared/model/menu-list.model';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { SubscriptionService } from '../../shared/subscription.service';
+import { Subscription } from 'rxjs';
+export class displayCategory {
+  categoryName: string;
+  menus: MenuListModel[];
+  constructor(params?: displayCategory) {
+    this.categoryName = params?.categoryName || '';
+    this.menus = params?.menus || [];
+  }
+}
 @Component({
   selector: 'jhi-dish-category',
   templateUrl: './dish-category.component.html',
   styleUrls: ['./dish-category.component.scss'],
 })
-export class DishCategoryComponent implements OnInit {
-  @Input() todaysSpl: boolean = false;
-  categories?: ICategory[];
-  dishes?: IDish[];
-  groupDishes?: IDish[];
-  constructor(protected categoryService: CategoryService, protected dishService: DishService) {
-    this.loadCategory();
-    this.loadDishes();
+export class DishCategoryComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() menus?: MenuListModel[];
+  showDescription: boolean = true;
+  category: displayCategory[] = [];
+  singleCategory: displayCategory = new displayCategory();
+  detailRecivedSubscription: Subscription = new Subscription();
+  orderList: dishQtyModel[] = [];
+  constructor(protected subscriptionService: SubscriptionService, protected cd: ChangeDetectorRef) {}
+  ngOnChanges(changes: SimpleChanges): void {
+    //this.createDisplayCategory();
+    console.log('inide on changes of category');
   }
-
-  ngOnInit(): void {}
-
-  loadCategory() {
-    this.categoryService.query().subscribe((res: HttpResponse<ICategory[]>) => (this.categories = res.body || []));
+  createDisplayCategory() {
+    this.menus?.forEach(res => {
+      if (this.category.length == 0) {
+        this.singleCategory.categoryName = res?.dish?.category?.categoryName || '';
+        this.singleCategory.menus.push(res);
+        this.category.push(this.singleCategory);
+        this.singleCategory = new displayCategory();
+      } else {
+        if (this.category.find(obj => obj.categoryName === res?.dish?.category?.categoryName)) {
+          let index = this.category.findIndex(x => x.categoryName === res?.dish?.category?.categoryName);
+          this.category[index].menus.push(res);
+        } else {
+          this.singleCategory.categoryName = res?.dish?.category?.categoryName || '';
+          this.singleCategory.menus.push(res);
+          this.category.push(this.singleCategory);
+          this.singleCategory = new displayCategory();
+        }
+      }
+    });
   }
-
-  loadDishes() {
-    this.dishService.query().subscribe((res: HttpResponse<IDish[]>) => {
-      this.dishes = res.body || [];
-      this.groupDishByCategory();
+  ngOnInit(): void {
+    this.detailRecivedSubscription = this.subscriptionService.selectedorderOrderObservable.subscribe((obj: dishQtyModel[]) => {
+      if (obj.length != 0) {
+        this.orderList = obj;
+        this.cd.detectChanges();
+        //this.updateMenuCategoryDishes()
+      } else {
+        this.orderList = [];
+      }
     });
   }
 
-  groupDishByCategory() {
-    this.categories?.forEach(category => {
-      category.dishes = [];
-      this.dishes?.forEach(dish => {
-        if (this.todaysSpl) {
-          if (category.id == dish.category?.id && dish.isTodaysSpecial) {
-            category.dishes?.push(dish);
-          }
-        } else {
-          if (category.id == dish.category?.id) {
-            category.dishes?.push(dish);
-          }
-        }
+  ngOnDestroy() {
+    this.detailRecivedSubscription.unsubscribe();
+  }
+
+  updateMenuCategoryDishes() {
+    console.log('category=>', this.category);
+    this.category.forEach(res => {
+      this.orderList.forEach(order => {
+        res.menus.forEach(catMenu => {
+          order.menus.forEach(ordMenu => {
+            if (ordMenu.id == catMenu.id) {
+              catMenu = ordMenu;
+            }
+          });
+        });
       });
     });
-    console.log('for each=>', this.categories);
+    console.log('orders=>', this.category);
   }
 }

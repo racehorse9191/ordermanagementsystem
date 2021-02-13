@@ -1,20 +1,48 @@
-<section class="items">
-    <div [id]="dish.id" *ngFor="let dish of dishes; let i = index" class="card item" style="width: 18rem;">
-        <img (click)="onOrderClicked(i)" class="card-img-top" [src]="dish?.dishImage  | sanitizeUrl">
-        <div (click)="onOrderClicked(i)" class="card-body">
-          <p class="card-text">{{dish?.dishName}}</p>
-          <p class="card-text">{{dish?.dishDescription}}</p>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div>
-                    <label [for]="'Qty'+i">Qty</label>
-                    <input type="number" class="form-control" id="'Qty'+i" [name]="'Qty'+i" [(ngModel)]="orders[i]" [id]="'order'+i">
-                </div>
-                <div>
-                    <button type="button" (click)="orderButtonClicked(dish,orders[i])" class="btn btn-primary">order</button>
-                </div>
-            </div>
+<ngb-carousel *ngIf="todaysSpl"> 
+  <ng-template  *ngFor="let menu of dishes; let i = index"  [id]="menu?.dish?.dishName || ''" ngbSlide>
+    <div class="wrapper">
+      <img [src]="menu.dish?.dishImage  | sanitizeUrl" alt="Random first slide">
+    </div>
+    <div class="carousel-caption">
+      <h3>{{menu.dish?.dishName  }}</h3>
+      <p> {{menu.dish?.dishDescription}}</p>
+    </div>
+  </ng-template>
+</ngb-carousel>
+ <section class="items">
+  <div class="card" [id]="menu.id" *ngFor="let menu of dishes; let i = index">
+    <div class="card-body">
+     <img [src]="menu.dish?.dishImage  | sanitizeUrl" class="float-right rounded-circle avatarwidth">
+      
+      <div class="message">
+        <h5 class="card-title">
+          <div class="chip"> 
+            <img src="./../../../assests/non-veg.svg" *ngIf="menu.dish && menu.dish.type === nonVegType" alt="Person" width="25" height="25">
+            <img src="./../../../assests/veg.svg"  *ngIf="menu.dish && menu.dish?.type === vegType " alt="Person" width="25" height="25">
+            {{menu.dish?.dishName}}
           </div>
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted">price: {{ dishPrice[i] | currency:'INR'}}</h6>
+        <p class="card-text">{{menu.dish?.dishDescription}}</p>
       </div>
-</section>
+      <div class="actions">
+        <ng-select class="QtyDropDown" data-toggle="tooltip" data-placement="bottom" (change)="onQtyChanged(i,$event)"
+        title="Select Dish Qty" id="selectDish" name="selectDish" bindLabel="qtyName" [(ngModel)] = "selectedQty[i]"
+        [items]="menu?.dishQty || []" [clearable]="false" [searchable]="false" placeholder="dish Qty">
+        </ng-select>
+        <div class="input-group customQty">
+          <div class="input-group-prepend">
+            <span class="input-group-text" (click)="orderPlusClicked(i)" > <i class="bi bi-plus-square"></i> </span>
+          </div>
+          <input type="number" class="col-sm-5" id="'Qty'+i" [name]="'Qty'+i" [(ngModel)]="orders[i]" [id]="'order'+i">
+          <div class="input-group-append">
+            <span class="input-group-text" (click)="orderMinusClicked(i)"><i class="bi bi-dash-square"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> 
+
+
+

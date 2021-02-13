@@ -1,71 +1,81 @@
-<table datatable class="row-border hover">
+<div style="height: fit-content;">
+<div class="pos-f-t">
+  <div  [ngClass]="{'collapse': collapsed, 'navbar-collapse': true}" id="navbarToggleExternalContent">
+    <div class="bg-dark p-4">
+      <h4 class="text-white">Order Summary</h4>
+      <form #orderForm>
+        <div class="form-group row">
+          <label class="text-white col-sm-2 col-form-label" for="waiterName">Waiter Name</label>
+          <div class="col-sm-10">
+            <input type="text" required class="form-control" id="waiterName" readonly aria-describedby="waiterNameMandatory" [value]="account.firstName" placeholder="Enter waiter Name">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="text-white col-sm-2 col-form-label"  for="noteArea">Note</label>
+          <div class="col-sm-10">
+          <textarea class="form-control" id="noteArea" placeholder="Note for Chef" rows="3"></textarea>
+          </div>
+        </div>
+      </form>
+      <ul  class="text-white">
+        <li> CGST(9%) : {{ totalorderDetails()  | totalGst:9:false  | currency:'INR' }}   </li>
+        <li> SGST(9%) : {{ totalorderDetails()  | totalGst:9:false  | currency:'INR' }} </li>
+        </ul>
+        <div class="row">
+          <ul>
+            <li><span class="text-muted">No of Items Ordered:  {{ orderTable.length }}</span></li>
+            <li><span class="text-muted">Grand Total Price:  {{ totalorderDetails()  | totalGst:18:true  | currency:'INR'}}</span></li>
+          </ul>
+        </div>
+        <button type="submit" class="btn btn-primary" for="orderForm" [disabled]="orderTable.length == 0" (click) ="confirmOrder()">Confirm Order</button>
+    </div>
+  </div>
+  <nav class="navbar navbar-dark bg-dark">
+    <button (click)="toggleCollapsed()" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </nav>
+</div>
+<div class="table-responsive"> 
+  <table class="table table-striped">
     <thead>
       <tr>
-        <th>ID</th>
-        <th>First name</th>
-        <th>Last name</th>
+        <th scope="col"> SL No.</th>
+        <th scope="col">Dish Name</th>
+        <th scope="col">Dish Qty</th>
+        <th scope="col">order Qty</th>
+        <th scope="col">Dish Price</th>
+        <th scope="col">order Total</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>1</td>
-        <td>Foo</td>
-        <td>Bar</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Someone</td>
-        <td>Youknow</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>Iamout</td>
-        <td>Ofinspiration</td>
-      </tr>
-      <tr>
-        <td>4</td>
-        <td>Yoda</td>
-        <td>Skywalker</td>
-      </tr>
-      <tr>
-        <td>5</td>
-        <td>Patrick</td>
-        <td>Dupont</td>
-      </tr>
-      <tr>
-        <td>6</td>
-        <td>Barack</td>
-        <td>Obama</td>
-      </tr>
-      <tr>
-        <td>7</td>
-        <td>François</td>
-        <td>Holland</td>
-      </tr>
-      <tr>
-        <td>8</td>
-        <td>Michel</td>
-        <td>Popo</td>
-      </tr>
-      <tr>
-        <td>9</td>
-        <td>Chuck</td>
-        <td>Norris</td>
-      </tr>
-      <tr>
-        <td>10</td>
-        <td>Simon</td>
-        <td>Robin</td>
-      </tr>
-      <tr>
-        <td>11</td>
-        <td>Louis</td>
-        <td>Lin</td>
-      </tr>
-      <tr>
-        <td>12</td>
-        <td>Zelda</td>
-        <td>Link</td>
+      <tr [id]= "order.name"  *ngFor="let order of orderTable; let i = index" >
+        <td>  {{ i+1 }}             </td>
+        <td>{{ order.name }}      </td>
+        <td>
+          <ng-select class="QtyDropDown" data-toggle="tooltip" data-placement="bottom" (change)="onQtyChanged(i,$event)"
+        title="Select Dish Qty" id="selectDish" name="selectDish" bindLabel="qtyName" [(ngModel)] = "order.dishQty"
+        [items]="order.allDishQty" [clearable]="false" [searchable]="false" placeholder="dish Qty">
+        </ng-select>  </td>
+        <td> <div class="input-group customQty">
+          <div class="input-group-prepend">
+            <span class="input-group-text" (click)="orderPlusClicked(i)" > <i class="bi bi-plus-square"></i> </span>
+          </div>
+          <input type="number" class="col-sm-5" id="'Qty'+i" [name]="'Qty'+i" [(ngModel)]="order.orderQty" [id]="'order'+i">
+          <div class="input-group-append">
+            <span class="input-group-text" (click)="orderMinusClicked(i)"><i class="bi bi-dash-square"></i></span>
+          </div>
+        </div> </td>
+        <td>{{ order.price }}     </td>
+        <td>{{ order.orderTotal }}</td>
+        <td> <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" (click)="delete(menu)"
+          class="btn btn-danger btn-sm">
+      <fa-icon icon="times"></fa-icon>
+      <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+  </button></td>
       </tr>
     </tbody>
   </table>
+</div>
+</div>

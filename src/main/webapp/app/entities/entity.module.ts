@@ -30,7 +30,7 @@ import { RouterModule } from '@angular/router';
       },
       {
         path: 'ui',
-        loadChildren: () => import('./../uicomponents/uicomponents.module').then(m => m.UicomponentsModule),
+        loadChildren: () => import('../uicomponents/uicomponents.module').then(m => m.UicomponentsModule),
       },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),

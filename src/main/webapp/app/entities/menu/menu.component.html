@@ -37,12 +37,12 @@
                     <td>{{ menu.isAvailable }}</td>
                     <td>
                         <div *ngIf="menu.dish">
-                            <a [routerLink]="['/dish', menu.dish?.id, 'view']" >{{ menu.dish?.dishName }}</a>
+                            <a [routerLink]="['/dish', menu.dish?.id, 'view']" >{{ menu?.dish?.dishName }}</a>
                         </div>
                     </td>
                     <td>
                         <div *ngIf="menu.dishQty">
-                            <a [routerLink]="['/dish-qty', menu.dishQty?.id, 'view']" >{{ menu.dishQty?.qtyName }}</a>
+                            <a [routerLink]="['/dish-qty', menu.dishQty[0].id || 0, 'view']">{{ menu.dishQty[0].qtyName || '' }}</a>
                         </div>
                     </td>
                     <td class="text-right">

@@ -33,7 +33,9 @@
             "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
           }
-        }
+        },
+        "assets": ["src/main/webapp/assests"],
+        "styles": ["./node_modules/@ng-select/ng-select/themes/default.theme.css"]
       }
     }
   },
