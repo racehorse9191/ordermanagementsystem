@@ -8,7 +8,7 @@ import { DishCategoryComponent } from './dish-category/dish-category.component';
 
 export const UiComponentRoutes: Routes = [
   {
-    path: '',
+    path: 'menu/:id',
     component: MenuComponent,
     data: {
       authorities: [Authority.USER, Authority.ADMIN],

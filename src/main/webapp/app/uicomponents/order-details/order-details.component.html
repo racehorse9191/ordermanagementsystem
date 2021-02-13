@@ -1,41 +1,4 @@
 <div style="height: fit-content;">
-<div class="pos-f-t">
-  <div  [ngClass]="{'collapse': collapsed, 'navbar-collapse': true}" id="navbarToggleExternalContent">
-    <div class="bg-dark p-4">
-      <h4 class="text-white">Order Summary</h4>
-      <form #orderForm>
-        <div class="form-group row">
-          <label class="text-white col-sm-2 col-form-label" for="waiterName">Waiter Name</label>
-          <div class="col-sm-10">
-            <input type="text" required class="form-control" id="waiterName" readonly aria-describedby="waiterNameMandatory" [value]="account.firstName" placeholder="Enter waiter Name">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="text-white col-sm-2 col-form-label"  for="noteArea">Note</label>
-          <div class="col-sm-10">
-          <textarea class="form-control" id="noteArea" placeholder="Note for Chef" rows="3"></textarea>
-          </div>
-        </div>
-      </form>
-      <ul  class="text-white">
-        <li> CGST(9%) : {{ totalorderDetails()  | totalGst:9:false  | currency:'INR' }}   </li>
-        <li> SGST(9%) : {{ totalorderDetails()  | totalGst:9:false  | currency:'INR' }} </li>
-        </ul>
-        <div class="row">
-          <ul>
-            <li><span class="text-muted">No of Items Ordered:  {{ orderTable.length }}</span></li>
-            <li><span class="text-muted">Grand Total Price:  {{ totalorderDetails()  | totalGst:18:true  | currency:'INR'}}</span></li>
-          </ul>
-        </div>
-        <button type="submit" class="btn btn-primary" for="orderForm" [disabled]="orderTable.length == 0" (click) ="confirmOrder()">Confirm Order</button>
-    </div>
-  </div>
-  <nav class="navbar navbar-dark bg-dark">
-    <button (click)="toggleCollapsed()" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  </nav>
-</div>
 <div class="table-responsive"> 
   <table class="table table-striped">
     <thead>
@@ -77,5 +40,42 @@
       </tr>
     </tbody>
   </table>
+</div>
+<div class="pos-f-t">
+  <div  [ngClass]="{'collapse': collapsed, 'navbar-collapse': true}" id="navbarToggleExternalContent">
+    <div class="outline p-4">
+      <h4>Order Summary</h4>
+      <br>
+      <form #orderForm>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label" for="waiterName">Waiter Name</label>
+          <div class="col-sm-10">
+            <input type="text" name="Name" required class="form-control" id="waiterName" readonly aria-describedby="waiterNameMandatory" [value]="account.firstName" placeholder="Enter waiter Name">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label" name="noteArea" [(ngModel)]="chefNote" for="noteArea">Note</label>
+          <div class="col-sm-10">
+          <textarea class="form-control" id="noteArea" placeholder="Note for Chef" rows="3"></textarea>
+          </div>
+        </div>
+      </form>
+        <div class="row">
+          <ul>
+            <li><span>Table:  {{ tableName }}</span></li>
+            <li><span>No of Items Ordered:  {{ orderTable.length }}</span></li>
+            <li> CGST(9%) : {{ totalorderDetails()  | totalGst:9:false  | currency:'INR' }}   </li>
+            <li> SGST(9%) : {{ totalorderDetails()  | totalGst:9:false  | currency:'INR' }} </li>
+            <li><span>Grand Total Price:  {{ totalorderDetails()  | totalGst:18:true  | currency:'INR'}}</span></li>
+          </ul>
+        </div>
+        <button type="submit" class="btn btn-primary" for="orderForm" [disabled]="orderTable.length == 0" (click) ="confirmOrder()">Confirm Order</button>
+    </div>
+  </div>
+  <nav class="navbar navbar-light bg-light">
+    <button (click)="toggleCollapsed()" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </nav>
 </div>
 </div>

@@ -1,8 +1,15 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
+import { Observable, Subscription } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
 import { AccountService } from '../../core/auth/account.service';
+import { OrderService } from '../../entities/order/order.service';
+import { TablesService } from '../../entities/tables/tables.service';
 import { DishQtyModel } from '../../shared/model/menu-list.model';
+import { IOrder, Order } from '../../shared/model/order.model';
+import { Tables } from '../../shared/model/tables.model';
 import { SubscriptionService } from '../../shared/subscription.service';
 import { Account } from './../../core/user/account.model';
 export class OrderTable {
@@ -30,15 +37,33 @@ export class OrderTable {
 })
 export class OrderDetailsComponent implements OnInit, OnDestroy {
   account!: Account;
+  isSaving = false;
   detailRecivedSubscription: Subscription = new Subscription();
   orderList: DishQtyModel[] = [];
   orderTable: OrderTable[] = [];
   order: OrderTable = new OrderTable();
+  private routeSub: Subscription = new Subscription();
   collapsed = false;
-  constructor(protected subscriptionService: SubscriptionService, private router: Router, private accountService: AccountService) {
+  tableName: string = '';
+  chefNote: string = '';
+  table: any;
+  constructor(
+    protected subscriptionService: SubscriptionService,
+    protected tablesService: TablesService,
+    protected orderService: OrderService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private accountService: AccountService
+  ) {
     this.accountService.identity().subscribe(account => {
       if (account) {
         this.account = account;
+      }
+    });
+    this.routeSub = this.route.params.subscribe(params => {
+      console.log(params['id']);
+      if (params && params['id']) {
+        this.fetchTableName(params['id']);
       }
     });
   }
@@ -60,6 +85,16 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.detailRecivedSubscription.unsubscribe();
+    this.routeSub.unsubscribe();
+  }
+
+  fetchTableName(tableId: any) {
+    this.tablesService.find(tableId).subscribe((tables: HttpResponse<Tables>) => {
+      if (tables.body) {
+        this.tableName = tables.body.tableName;
+        this.table = tables.body;
+      }
+    });
   }
 
   constructTable() {
@@ -94,11 +129,33 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   }
   confirmOrder() {
     console.log('order confirmed');
-    this.router.navigate(['/']);
+    const order: Order = new Order();
+    order.menuIdsandQty = this.orderTable.toString();
+    order.note = this.chefNote;
+    order.orderDate = moment();
+    order.tables = this.table;
+    order.waiterName = this.account.firstName;
+    this.subscribeToSaveResponse(this.orderService.create(order));
   }
   orderPlusClicked(index: any) {}
   orderMinusClicked(index: any) {}
 
   onQtyChanged(opt1: any, opt2: any) {}
   delete(menu: any) {}
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IOrder>>): void {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
+  }
+
+  protected onSaveSuccess(): void {
+    this.isSaving = false;
+    this.router.navigate(['/']);
+  }
+
+  protected onSaveError(): void {
+    this.isSaving = false;
+  }
 }
