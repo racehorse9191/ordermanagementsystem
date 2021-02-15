@@ -38,7 +38,7 @@ export const orderRoute: Routes = [
     path: '',
     component: OrderComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.BARTENDER, Authority.CHEF],
       defaultSort: 'id,asc',
       pageTitle: 'orderManagementSystemApp.order.home.title',
     },

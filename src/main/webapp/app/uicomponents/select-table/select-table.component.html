@@ -1,0 +1,9 @@
+<h2 id="page-heading">
+    <span jhiTranslate="orderManagementSystemApp.selectTable">Select Table</span>
+    </h2>
+  <mat-grid-list *ngIf="tables" [cols]="3" rowHeight="1:0.5" gutterSize="10px">
+    <mat-grid-tile class="gridtile" *ngFor="let table of tables" [colspan]="1" [rowspan]="1"
+      [style.background-color]="'white'"(click)="takeorder(table)"> 
+      {{table.tableName}}
+    </mat-grid-tile>
+</mat-grid-list>

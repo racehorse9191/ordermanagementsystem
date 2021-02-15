@@ -5,10 +5,11 @@ import { MenuComponent } from './menu/menu.component';
 import { OrderDetailsComponent } from './order-details/order-details.component';
 import { Routes } from '@angular/router';
 import { DishCategoryComponent } from './dish-category/dish-category.component';
+import { SelectTableComponent } from './select-table/select-table.component';
 
 export const UiComponentRoutes: Routes = [
   {
-    path: 'menu/:id',
+    path: 'menu',
     component: MenuComponent,
     data: {
       authorities: [Authority.USER, Authority.ADMIN],
@@ -37,6 +38,15 @@ export const UiComponentRoutes: Routes = [
   {
     path: 'ui/dishCategory',
     component: DishCategoryComponent,
+    data: {
+      authorities: [Authority.USER, Authority.ADMIN],
+      pageTitle: 'orderManagementSystemApp.dish.home.title',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'selectTable',
+    component: SelectTableComponent,
     data: {
       authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.dish.home.title',

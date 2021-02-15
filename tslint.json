@@ -1,23 +1,30 @@
+// {
+//   "rulesDirectory": ["node_modules/codelyzer"],
+//   "rules": {
+//     "no-unused-vars": "off",
+//     "no-console": ["off", "debug", "time", "timeEnd", "trace"],
+//     "eqeqeq": "off",
+//     "member-ordering": [
+//       "off",
+//       {
+//         "order": [
+//           {
+//             "name": "static non-private",
+//             "kinds": ["public-static-field", "protected-static-field", "public-static-method", "protected-static-method"]
+//           },
+//           "constructor"
+//         ]
+//       }
+//     ],
+//     "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
+//     "directive-selector": [true, "attribute", "jhi", "camelCase"],
+//     "component-selector": [true, "element", "jhi", "kebab-case"]
+//   }
+// }
 {
-  "rulesDirectory": ["node_modules/codelyzer"],
-  "rules": {
-    "no-unused-vars": "off",
-    "no-console": ["off", "debug", "time", "timeEnd", "trace"],
-    "eqeqeq": "off",
-    "member-ordering": [
-      "off",
-      {
-        "order": [
-          {
-            "name": "static non-private",
-            "kinds": ["public-static-field", "protected-static-field", "public-static-method", "protected-static-method"]
-          },
-          "constructor"
-        ]
-      }
-    ],
-    "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
-    "directive-selector": [true, "attribute", "jhi", "camelCase"],
-    "component-selector": [true, "element", "jhi", "kebab-case"]
+  "exclude": ["node_modules", "lib/config", "integration", "resource", "scripts", "jib", "assets", "java", "tools", "docker"],
+  "compileOnSave": true,
+  "compilerOptions": {
+    "experimentalDecorators": true
   }
 }

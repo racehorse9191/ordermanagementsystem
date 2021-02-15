@@ -1,12 +1,13 @@
 package com.oms.web.rest;
 
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.oms.config.Constants;
 import com.oms.domain.User;
 import com.oms.repository.UserRepository;
 import com.oms.security.AuthoritiesConstants;
 import com.oms.service.MailService;
 import org.springframework.data.domain.Sort;
-import java.util.Collections;
+
 import com.oms.service.UserService;
 import com.oms.service.dto.UserDTO;
 import com.oms.web.rest.errors.BadRequestAlertException;
@@ -197,4 +198,6 @@ public class UserResource {
         userService.deleteUser(login);
         return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName,  "userManagement.deleted", login)).build();
     }
+    
+    
 }

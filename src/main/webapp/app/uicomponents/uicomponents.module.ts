@@ -9,11 +9,21 @@ import { RouterModule } from '@angular/router';
 import { UiComponentRoutes } from './uicomponents.routing.module';
 import { DishCategoryComponent } from './dish-category/dish-category.component';
 import { SubscriptionService } from '../shared/subscription.service';
+import { SelectTableComponent } from './select-table/select-table.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
-  declarations: [MenuComponent, OrderDetailsComponent, DishViewComponent, DishCategoryComponent],
-  imports: [CommonModule, OrderManagementSystemSharedModule, NgbModule, RouterModule.forChild(UiComponentRoutes)],
-  exports: [MenuComponent, OrderDetailsComponent, DishViewComponent, DishCategoryComponent],
+  declarations: [MenuComponent, OrderDetailsComponent, DishViewComponent, DishCategoryComponent, SelectTableComponent],
+  imports: [
+    CommonModule,
+    OrderManagementSystemSharedModule,
+    NgbModule,
+    MatGridListModule,
+    MatChipsModule,
+    RouterModule.forChild(UiComponentRoutes),
+  ],
+  exports: [MenuComponent, SelectTableComponent, OrderDetailsComponent, DishViewComponent, DishCategoryComponent],
   providers: [SubscriptionService],
 })
 export class UicomponentsModule {}

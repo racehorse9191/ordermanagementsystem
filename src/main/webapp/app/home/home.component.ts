@@ -1,5 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { JhiEventManager } from 'ng-jhipster';
 import { Subscription } from 'rxjs';
 import { AccountService } from '../core/auth/account.service';
@@ -44,7 +45,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     protected eventManager: JhiEventManager,
     private loginModalService: LoginModalService,
-    protected tablesService: TablesService
+    protected tablesService: TablesService,
+    private router: Router
   ) {}
 
   loadAll(): void {
@@ -58,7 +60,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
   ngOnInit(): void {
-    this.loadAll();
+    // this.loadAll();
+    this.router.navigate(['/ui/selectTable']);
     console.log('this is tables', this.tables);
     this.registerChangeInTables();
     this.breakpoint = window.innerWidth <= 400 ? 1 : 6;
