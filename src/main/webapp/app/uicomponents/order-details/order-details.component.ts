@@ -61,10 +61,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
       }
     });
     this.routeSub = this.route.params.subscribe(params => {
-      console.log(params['id']);
-      if (params && params['id']) {
-        this.fetchTableName(params['id']);
-      }
+      this.table = history.state;
     });
   }
 
@@ -75,7 +72,6 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     this.detailRecivedSubscription = this.subscriptionService.selectedorderOrderObservable.subscribe((obj: any[]) => {
       if (obj.length != 0) {
         this.orderList = obj;
-        console.log('orderList=>', this.orderList);
         this.constructTable();
       } else {
         this.orderTable = [];
@@ -86,15 +82,6 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.detailRecivedSubscription.unsubscribe();
     this.routeSub.unsubscribe();
-  }
-
-  fetchTableName(tableId: any) {
-    this.tablesService.find(tableId).subscribe((tables: HttpResponse<Tables>) => {
-      if (tables.body) {
-        this.tableName = tables.body.tableName;
-        this.table = tables.body;
-      }
-    });
   }
 
   constructTable() {
@@ -130,6 +117,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   }
   confirmOrder() {
     const order: Order = new Order();
+    delete this.table['navigationId'];
     this.orderTable.forEach(res => {
       res.allDishQty.forEach(qty => {
         delete qty.menus;
@@ -142,7 +130,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     order.waiterName = this.account.firstName;
     this.subscribeToSaveResponse(this.orderService.create(order));
   }
-  orderPlusClicked(ordrQty: any, index: any) {
+  orderPlusClicked(index: any) {
     this.orderList[index].orderQty = this.orderList[index].orderQty + 1;
     this.subscriptionService.updateOrder(this.orderList);
   }
