@@ -15,12 +15,44 @@ export class SelectTableComponent implements OnInit {
   constructor(protected tablesService: TablesService, private router: Router) {}
 
   loadAll(): void {
-    this.tablesService.query().subscribe((res: HttpResponse<ITables[]>) => (this.tables = res.body || []));
+    this.tablesService.query().subscribe(res => {
+      console.log('tables res', res);
+      this.tables = res.body;
+    });
+    // this.tablesService.query().subscribe((res: HttpResponse<ITables[]>) => (this.tables = res.body || []));
   }
   ngOnInit(): void {
     this.loadAll();
   }
   takeorder(table: any): any {
     this.router.navigate(['/ui/menu/', { queryParams: table }]);
+  }
+  showVacant() {
+    this.tablesService.query().subscribe(res => {
+      console.log('tables res', res);
+      const tabhelper = [];
+      res.body.forEach(tab => {
+        if (tab.tablestatus && tab.tablestatus.includes('FREE')) {
+          tabhelper.push(tab);
+        }
+      });
+      this.tables = tabhelper;
+    });
+  }
+  showOccupied() {
+    this.tablesService.query().subscribe(res => {
+      console.log('tables res', res);
+      const tabhelper = [];
+      res.body.forEach(tab => {
+        console.log('tables res IN FOR', tab);
+        if (tab.tablestatus && tab.tablestatus.includes('ENGAGED')) {
+          tabhelper.push(tab);
+        }
+      });
+      this.tables = tabhelper;
+    });
+  }
+  showAll() {
+    this.loadAll();
   }
 }

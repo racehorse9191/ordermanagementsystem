@@ -1,9 +1,15 @@
 <h2 id="page-heading">
     <span jhiTranslate="orderManagementSystemApp.selectTable">Select Table</span>
     </h2>
+    	<mat-chip-list aria-label="Fish selection">
+		<mat-chip class="btn btn-primary" style="background:#4582EC;color:white" (click)="showVacant()">Vacant</mat-chip>
+		<mat-chip style="background: #4582EC;color:white" selected (click)="showOccupied()">Occupied</mat-chip>
+		<mat-chip style="background:#4582EC;color:white" selected (click)="showAll()">Show All</mat-chip>
+	</mat-chip-list>
+	<br>
   <mat-grid-list *ngIf="tables" [cols]="3" rowHeight="1:0.5" gutterSize="10px">
-    <mat-grid-tile class="gridtile" *ngFor="let table of tables" [colspan]="1" [rowspan]="1"
-      [style.background-color]="'white'"(click)="takeorder(table)"> 
+    <mat-grid-tile class="gridtile" [class.occupied]="table.tablestatus == 'ENGAGED'" *ngFor="let table of tables" [colspan]="1" [rowspan]="1"
+     (click)="takeorder(table)"> 
       {{table.tableName}}
     </mat-grid-tile>
 </mat-grid-list>
