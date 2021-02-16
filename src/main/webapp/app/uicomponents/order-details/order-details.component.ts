@@ -118,6 +118,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   confirmOrder() {
     const order: Order = new Order();
     delete this.table['navigationId'];
+    this.table.tablestatus = 'ENGAGED';
     this.orderTable.forEach(res => {
       res.allDishQty.forEach(qty => {
         delete qty.menus;
@@ -128,6 +129,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     order.orderDate = moment();
     order.tables = this.table;
     order.waiterName = this.account.firstName;
+    this.tablesService.update(this.table).subscribe(res => {});
     this.subscribeToSaveResponse(this.orderService.create(order));
   }
   orderPlusClicked(index: any) {
