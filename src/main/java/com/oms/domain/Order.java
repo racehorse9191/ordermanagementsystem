@@ -27,7 +27,7 @@ public class Order implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "menu_idsand_qty", nullable = false)
+    @Column(name = "menu_idsand_qty", columnDefinition="LONGTEXT", nullable = false)
     private String menuIdsandQty;
 
     @NotNull

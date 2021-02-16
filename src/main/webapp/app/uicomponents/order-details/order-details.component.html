@@ -1,5 +1,5 @@
 <div style="height: fit-content;">
-<div class="table-responsive"> 
+<div class="table-responsive-sm"> 
   <table class="table table-striped">
     <thead>
       <tr>
@@ -21,15 +21,35 @@
         title="Select Dish Qty" id="selectDish" name="selectDish" bindLabel="qtyName" [(ngModel)] = "order.dishQty"
         [items]="order.allDishQty" [clearable]="false" [searchable]="false" placeholder="dish Qty">
         </ng-select>  </td>
-        <td> <div class="input-group customQty">
-          <div class="input-group-prepend">
-            <span class="input-group-text" (click)="orderPlusClicked(i)" > <i class="bi bi-plus-square"></i> </span>
-          </div>
-          <input type="number" class="col-sm-5" id="'Qty'+i" [name]="'Qty'+i" [(ngModel)]="order.orderQty" [id]="'order'+i">
-          <div class="input-group-append">
-            <span class="input-group-text" (click)="orderMinusClicked(i)"><i class="bi bi-dash-square"></i></span>
-          </div>
-        </div> </td>
+        <td>
+        <div class="Qty-Wrapper">
+          <div class=" Base-wrappwer-Qty  base-Qty">
+            <div (click)="orderMinusClicked(order.orderQty,i)" class="less-Qty">
+              <i size="14" color="#ED5A6B">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#ED5A6B" width="14" height="14" viewBox="0 0 20 20" aria-labelledby="icon-svg-title- icon-svg-desc-" role="img" class="rbbb40-0 hoSSCx">
+                  <title>remove</title>
+                  <path d="M10.96 10.96h4.28c0.53 0 0.96-0.43 0.96-0.96s-0.43-0.96-0.96-0.96v0h-10.48c-0.53 0-0.96 0.43-0.96 0.96s0.43 0.96 0.96 0.96v0h6.2z">
+                  </path>
+                </svg>
+              </i>
+            </div>
+            <div class="qty-view-box">
+                    <span id="'Qty'+i" [id]="'order'+i">
+                      {{ order.orderQty }}
+                    </span>
+                  </div>
+                  <div (click)="orderPlusClicked(order.orderQty,i)" class="plus-Qty">
+                      <i class="rbbb40-1 MxLSp sc-1usozeh-4 TZpZK" size="14" color="#ED5A6B">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="#ED5A6B" width="14" height="14" viewBox="0 0 20 20" aria-labelledby="icon-svg-title- icon-svg-desc-" role="img" class="rbbb40-0 hoSSCx">
+                          <title>plus</title>
+                          <path d="M15.5 9.42h-4.5v-4.5c0-0.56-0.44-1-1-1s-1 0.44-1 1v4.5h-4.5c-0.56 0-1 0.44-1 1s0.44 1 1 1h4.5v4.5c0 0.54 0.44 1 1 1s1-0.46 1-1v-4.5h4.5c0.56 0 1-0.46 1-1s-0.44-1-1-1z">
+                          </path>
+                        </svg>
+                      </i>
+                    </div>
+                  </div>
+                </div>
+      </td>
         <td>{{ order.price }}     </td>
         <td>{{ order.orderTotal }}</td>
         <td> <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" (click)="delete(order)"
@@ -54,9 +74,9 @@
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-sm-2 col-form-label" name="noteArea" [(ngModel)]="chefNote" for="noteArea">Note</label>
+          <label class="col-sm-2 col-form-label" for="noteArea">Note</label>
           <div class="col-sm-10">
-          <textarea class="form-control" id="noteArea" placeholder="Note for Chef" rows="3"></textarea>
+          <textarea class="form-control" id="noteArea" [(ngModel)]="chefNote"  name="noteArea"  placeholder="Note for Chef" rows="3"></textarea>
           </div>
         </div>
       </form>

@@ -88,7 +88,7 @@ export class MenuComponent implements OnInit {
             }
           });
           if (this.categoryTemp[index]?.dishQty) {
-            newData['menus'] = [res];
+            newData['menus'] = [this.categoryTemp[index]];
             this.categoryTemp[index]?.dishQty?.push(newData);
           }
         } else {
@@ -170,7 +170,6 @@ export class MenuComponent implements OnInit {
   }
   fetchTodaysSpl() {
     this.todaySplMenu = this.category?.filter(res => res?.dish?.isTodaysSpecial);
-    console.log('todays spl=>', this.todaySplMenu);
   }
   /* the section of cooking today's spl ends here*/
   /* this section is for cooking category data */
@@ -217,12 +216,10 @@ export class MenuComponent implements OnInit {
   /* the section of cooking category data ends here*/
 
   onSearchItemRemove(event: any) {
-    console.log('onSearchItemRemove event=>', event);
     this.orderList = this.orderList.filter(res => res?.menus?.find(menu => menu.id != event.value.id));
     this.subscriptionService.updateOrder(this.orderList);
   }
   onSearchClear() {
-    console.log('onSearchClear event=>', event);
     this.subscriptionService.updateOrder([]);
   }
 }

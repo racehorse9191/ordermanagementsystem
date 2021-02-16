@@ -36,11 +36,23 @@
   }
 }
  */
-::ng-deep .accordion-shadow .card.open {
-  border-radius: 0.571rem;
-  margin: 10px 0;
-  border: 0;
-  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1) !important;
+.nav-link.active,
+.nav-pills .show > .nav-link {
+  color: white !important;
+  border-radius: 0;
+  border-bottom: 1px;
+  padding-bottom: 1px;
+}
+.nav-link {
+  margin-bottom: 25px !important;
+  border: 1px !important;
+}
+.nav-tabs .nav-link {
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0rem;
+}
+.nav-tabs .nav-link.active {
+  border: blue !important;
 }
 .spaceBetween {
   display: flex;

@@ -23,7 +23,8 @@
           <button type="button" *ngIf="showOrderButton" (click)="orderButtonClicked()" class="btn btn-primary">order</button>
         </a>
   </nav>     
-    <ngb-tabset (tabChange)="selectedActiveTab($event.nextId)" *ngIf="!dishSelected;else selectedBlock" #tabset [destroyOnHide]="true">
+    <ngb-tabset  justify="justified"
+    type="pills" (tabChange)="selectedActiveTab($event.nextId)" *ngIf="!dishSelected;else selectedBlock" #tabset [destroyOnHide]="true">
       
       <ngb-tab id="0" title="Todays Spl">
         <ng-template ngbTabContent>

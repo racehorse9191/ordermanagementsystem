@@ -114,6 +114,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
         });
       }
     });
+    console.log('order details=>', this.orderTable);
   }
 
   calculateOrderTotal(price: any, qty: any) {
@@ -128,20 +129,55 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     return total.reduce((a, b) => a + b, 0);
   }
   confirmOrder() {
-    console.log('order confirmed');
     const order: Order = new Order();
-    order.menuIdsandQty = this.orderTable.toString();
+    this.orderTable.forEach(res => {
+      res.allDishQty.forEach(qty => {
+        delete qty.menus;
+      });
+    });
+    order.menuIdsandQty = JSON.stringify(this.orderTable);
     order.note = this.chefNote;
     order.orderDate = moment();
     order.tables = this.table;
     order.waiterName = this.account.firstName;
     this.subscribeToSaveResponse(this.orderService.create(order));
   }
-  orderPlusClicked(index: any) {}
-  orderMinusClicked(index: any) {}
+  orderPlusClicked(ordrQty: any, index: any) {
+    this.orderList[index].orderQty = this.orderList[index].orderQty + 1;
+    this.subscriptionService.updateOrder(this.orderList);
+  }
+  orderMinusClicked(ordrQty: any, index: any) {
+    if (ordrQty > 0) {
+      this.orderList[index].orderQty = this.orderList[index].orderQty - 1;
+      if (this.orderList[index].orderQty == 0) {
+        this.orderList = this.orderList.filter(res => res.id != this.orderList[index].id);
+      }
+      this.subscriptionService.updateOrder(this.orderList);
+    }
+  }
 
   onQtyChanged(opt1: any, opt2: any) {}
-  delete(menu: any) {}
+  delete(order: any) {
+    const temp = [];
+    this.orderList.forEach(res => {
+      res.menus.forEach(menu => {
+        if (menu.id != order.id) {
+          res.orderQty = 0;
+          temp.push(res);
+        }
+        menu.dishQty.forEach(orQty => {
+          if (orQty.id == res.id) {
+            orQty.orderQty = 0;
+          }
+        });
+      });
+    });
+
+    this.orderList = [];
+    this.orderList = temp;
+    console.log('orderList=>', this.orderList);
+    this.subscriptionService.updateOrder(this.orderList);
+  }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IOrder>>): void {
     result.subscribe(
