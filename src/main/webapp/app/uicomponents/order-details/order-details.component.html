@@ -17,10 +17,12 @@
         <td>  {{ i+1 }}             </td>
         <td>{{ order.name }}      </td>
         <td>
-          <ng-select class="QtyDropDown" data-toggle="tooltip" data-placement="bottom" (change)="onQtyChanged(i,$event)"
+        <!--   <ng-select class="QtyDropDown" data-toggle="tooltip" data-placement="bottom" (change)="onQtyChanged(i,$event)"
         title="Select Dish Qty" id="selectDish" name="selectDish" bindLabel="qtyName" [(ngModel)] = "order.dishQty"
-        [items]="order.allDishQty" [clearable]="false" [searchable]="false" placeholder="dish Qty">
-        </ng-select>  </td>
+        [items]="order.allDishQty" disabled [clearable]="false" [searchable]="false" placeholder="dish Qty">
+        </ng-select> --> 
+      {{order.dishQty}}
+      </td>
         <td>
         <div class="Qty-Wrapper">
           <div class=" Base-wrappwer-Qty  base-Qty">
