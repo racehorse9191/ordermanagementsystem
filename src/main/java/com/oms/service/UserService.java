@@ -56,7 +56,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
-        this.awssthreelist();
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -72,29 +71,7 @@ public class UserService {
             });
     }
     
-    public List<S3ObjectSummary> awssthreelist() {
-	 System.out.println("coming in function aws");
-	AWSCredentials credentials = new BasicAWSCredentials(
-			  "AKIAVFBWUFFL6X73WYQZ", 
-			  "R90eo6hfetKcn9kCfIKdF70FLhEg+rGUctvTqSOY"
-			);
-	AmazonS3 s3client = AmazonS3ClientBuilder
-			  .standard()
-			  .withCredentials(new AWSStaticCredentialsProvider(credentials))
-			  .withRegion(Regions.US_EAST_2)
-			  .build();
-	ObjectListing objectListing = s3client.listObjects("raceimages");
-//	for(S3ObjectSummary os : objectListing.getObjectSummaries()) {
-//	    log.info("aws response"+os.getKey());
-//	    log.debug("aws response"+os.getKey());
-//	    System.out.println("aws response"+ os.getKey());
-//	}
-    System.out.println("aws response two"+ objectListing.getObjectSummaries());
-    List test = new ArrayList();
-    //test = objectListing.getObjectSummaries();
-    return objectListing.getObjectSummaries();
-	
-}
+   
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
