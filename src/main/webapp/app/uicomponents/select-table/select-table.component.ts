@@ -25,7 +25,7 @@ export class SelectTableComponent implements OnInit {
     this.loadAll();
   }
   takeorder(table: any): any {
-    this.router.navigate(['/ui/menu/', { queryParams: table }]);
+    this.router.navigate(['/ui/menu/'], { state: table });
   }
   showVacant() {
     this.tablesService.query().subscribe(res => {
