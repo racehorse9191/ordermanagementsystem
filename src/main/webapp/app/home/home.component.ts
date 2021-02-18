@@ -61,6 +61,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     // this.loadAll();
+    // cheforderlist
     this.router.navigate(['/ui/selectTable']);
     console.log('this is tables', this.tables);
     this.registerChangeInTables();

@@ -1,6 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AccountService } from '../../core/auth/account.service';
 import { TablesService } from '../../entities/tables/tables.service';
 import { ITables } from '../../shared/model/tables.model';
 
@@ -12,7 +13,7 @@ import { ITables } from '../../shared/model/tables.model';
 export class SelectTableComponent implements OnInit {
   tables?: ITables[];
 
-  constructor(protected tablesService: TablesService, private router: Router) {}
+  constructor(protected tablesService: TablesService, private router: Router, private accountService: AccountService) {}
 
   loadAll(): void {
     this.tablesService.query().subscribe(res => {
@@ -22,7 +23,14 @@ export class SelectTableComponent implements OnInit {
     // this.tablesService.query().subscribe((res: HttpResponse<ITables[]>) => (this.tables = res.body || []));
   }
   ngOnInit(): void {
-    this.loadAll();
+    this.accountService.getAuthenticationState().subscribe(account => {
+      console.log('account', account);
+      if (account.authorities.toString().includes('ROLE_CHEF')) {
+        this.router.navigate(['/ui/cheforderlist']);
+      } else {
+        this.loadAll();
+      }
+    });
   }
   takeorder(table: any): any {
     this.router.navigate(['/ui/menu/'], { state: table });

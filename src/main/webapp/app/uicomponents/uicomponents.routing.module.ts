@@ -6,6 +6,7 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
 import { Routes } from '@angular/router';
 import { DishCategoryComponent } from './dish-category/dish-category.component';
 import { SelectTableComponent } from './select-table/select-table.component';
+import { ShefOrderlist } from './shef-orderlist/shef-orderlist.component';
 
 export const UiComponentRoutes: Routes = [
   {
@@ -49,6 +50,15 @@ export const UiComponentRoutes: Routes = [
     component: SelectTableComponent,
     data: {
       authorities: [Authority.USER, Authority.ADMIN],
+      pageTitle: 'orderManagementSystemApp.dish.home.title',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'cheforderlist',
+    component: ShefOrderlist,
+    data: {
+      authorities: [Authority.CHEF, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.dish.home.title',
     },
     canActivate: [UserRouteAccessService],
