@@ -197,11 +197,6 @@
             <artifactId>mapstruct</artifactId>
         </dependency>
         <dependency>
-    <groupId>com.amazonaws</groupId>
-    <artifactId>aws-java-sdk</artifactId>
-    <version>1.10.6</version>
-</dependency>
-        <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
             <scope>provided</scope>

@@ -1,6 +1,4 @@
 package com.oms.web.rest;
-
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.oms.config.Constants;
 import com.oms.domain.User;
 import com.oms.repository.UserRepository;
