@@ -41,7 +41,7 @@
                     <label class="form-control-label" jhiTranslate="orderManagementSystemApp.menu.dishQty" for="field_dishQty">Dish Qty</label>
                     <select class="form-control" id="field_dishQty" name="dishQty" formControlName="dishQty">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="dishQtyOption.id === editForm.get('dishQty')!.value?.id ? editForm.get('dishQty')!.value : dishQtyOption" *ngFor="let dishQtyOption of dishqties; trackBy: trackById">{{ dishQtyOption.qtyName }}</option>
+                        <option [ngValue]="dishQtyOption.id === editForm.get('dishQty')!.value?.id ? editForm.get('dishQty')!.value : dishQtyOption" *ngFor="let dishQtyOption of dishqties; trackByQty: trackById">{{ dishQtyOption.qtyName }}</option>
                     </select>
                 </div>
             </div>

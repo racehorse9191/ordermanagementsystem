@@ -19,13 +19,13 @@
                 <dt><span jhiTranslate="orderManagementSystemApp.menu.dish">Dish</span></dt>
                 <dd>
                     <div *ngIf="menu.dish">
-                        <a [routerLink]="['/dish', menu.dish?.id, 'view']">{{ menu.dish?.id }}</a>
+                        <a [routerLink]="['/dish', menu.dish.id, 'view']">{{ menu.dish.dishName }}</a>
                     </div>
                 </dd>
                 <dt><span jhiTranslate="orderManagementSystemApp.menu.dishQty">Dish Qty</span></dt>
                 <dd>
                     <div *ngIf="menu.dishQty">
-                        <a [routerLink]="['/dish-qty', menu.dishQty[0].id || 0, 'view']">{{ menu.dishQty[0].id || 0 }}</a>
+                        <a [routerLink]="['/dish-qty', menu.dishQty[0].id, 'view']">{{ menu.dishQty[0].qtyName }}</a>
                     </div>
                 </dd>
             </dl>

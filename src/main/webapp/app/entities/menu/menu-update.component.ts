@@ -12,8 +12,8 @@ import { DishService } from '../dish/dish.service';
 import { DishQtyService } from '../dish-qty/dish-qty.service';
 import { IMenu, Menu } from '../../shared/model/menu.model';
 
-type SelectableEntity = IDish | IDishQty;
-
+type SelectableEntity = IDish;
+type SelectableQtyEntity = IDishQty;
 @Component({
   selector: 'jhi-menu-update',
   templateUrl: './menu-update.component.html',
@@ -41,6 +41,7 @@ export class MenuUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ menu }) => {
+      console.log('res=>', menu);
       this.updateForm(menu);
 
       this.dishService.query().subscribe((res: HttpResponse<IDish[]>) => (this.dishes = res.body || []));
@@ -57,6 +58,8 @@ export class MenuUpdateComponent implements OnInit {
       dish: menu.dish,
       dishQty: menu.dishQty,
     });
+    console.log('dishvalue=>', this.editForm.get('dish')!.value);
+    console.log('qty=>', this.editForm.get('dishQty')!.value);
   }
 
   previousState(): void {
@@ -101,6 +104,9 @@ export class MenuUpdateComponent implements OnInit {
   }
 
   trackById(index: number, item: SelectableEntity): any {
+    return item.id;
+  }
+  trackByQty(index: number, item: SelectableQtyEntity): any {
     return item.id;
   }
 }

@@ -12,7 +12,17 @@ export class MenuDetailComponent implements OnInit {
   constructor(protected activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ menu }) => (this.menu = menu));
+    this.activatedRoute.data.subscribe(({ menu }) => {
+      console.log('menu=>', menu);
+      this.menu = menu;
+      const tempQty = {};
+      Object.keys(this.menu?.dishQty || []).forEach(key => {
+        if (menu?.dishQty) {
+          tempQty[key] = menu?.dishQty[key];
+        }
+      });
+      this.menu.dishQty = [...[tempQty]];
+    });
   }
 
   previousState(): void {
