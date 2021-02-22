@@ -7,6 +7,7 @@ import { flatMap } from 'rxjs/operators';
 import { AccountService } from '../../core/auth/account.service';
 import { OrderService } from '../../entities/order/order.service';
 import { TablesService } from '../../entities/tables/tables.service';
+import { OrderStatus } from '../../shared/model/enumerations/order-status.model';
 import { DishQtyModel } from '../../shared/model/menu-list.model';
 import { IOrder, Order } from '../../shared/model/order.model';
 import { Tables } from '../../shared/model/tables.model';
@@ -129,6 +130,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     order.orderDate = moment();
     order.tables = this.table;
     order.waiterName = this.account.firstName;
+    order.orderstatus = OrderStatus.CONFIRMED;
     this.tablesService.update(this.table).subscribe(res => {});
     this.subscribeToSaveResponse(this.orderService.create(order));
   }

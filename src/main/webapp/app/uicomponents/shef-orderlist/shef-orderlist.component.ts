@@ -1,7 +1,10 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { MatRadioChange } from '@angular/material/radio';
-import { DomSanitizer } from '@angular/platform-browser';
-
+import { Observable } from 'rxjs';
+import { OrderService } from '../../entities/order/order.service';
+import { OrderStatus } from '../../shared/model/enumerations/order-status.model';
+import { IOrder } from '../../shared/model/order.model';
+import * as moment from 'moment';
 @Component({
   selector: 'jhi-chef-orderlist',
   templateUrl: './shef-orderlist.component.html',
@@ -9,116 +12,66 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class ShefOrderlist {
   completedOrders = [];
-  orders = [
-    {
-      id: 12,
-      menuIdsandQty: [
-        {
-          id: 11,
-          name: 'Chicken Manchurian',
-          dishQty: 'half',
-          orderQty: 2,
-          price: '89',
-          allDishQty: [{ id: 12, qtyName: 'full', orderQty: 2 }],
-          orderTotal: 178,
-        },
-        {
-          id: 11,
-          name: 'Vada pav',
-          dishQty: 'full',
-          orderQty: 2,
-          price: '89',
-          allDishQty: [{ id: 12, qtyName: 'full', orderQty: 2 }],
-          orderTotal: 178,
-        },
-        {
-          id: 11,
-          name: 'Masala dosa',
-          dishQty: 'qtr',
-          orderQty: 2,
-          price: '89',
-          allDishQty: [{ id: 12, qtyName: 'full', orderQty: 2 }],
-          orderTotal: 178,
-        },
-      ],
-      waiterName: 'rohan',
-      note: 'less spicy',
-      orderDate: '2021-02-16',
-      orderstatus: null,
-      menu: null,
-      tables: {
-        id: 2,
-        tableName: 'T2',
-        tablestatus: 'ENGAGED',
-      },
-    },
-    {
-      id: 13,
-      menuIdsandQty: [
-        {
-          id: 11,
-          name: 'Chicken Manchurian',
-          dishQty: 'full',
-          orderQty: 2,
-          price: '89',
-          allDishQty: [{ id: 12, qtyName: 'full', orderQty: 2 }],
-          orderTotal: 178,
-        },
-      ],
-      waiterName: 'paul',
-      note: 'testing for table status',
-      orderDate: '2021-02-16',
-      orderstatus: null,
-      menu: null,
-      tables: {
-        id: 3,
-        tableName: 'T3',
-        tablestatus: 'ENGAGED',
-      },
-    },
-    {
-      id: 14,
-      menuIdsandQty: [
-        {
-          id: 11,
-          name: 'Chicken Manchurian',
-          dishQty: 'full',
-          orderQty: 2,
-          price: '89',
-          allDishQty: [{ id: 12, qtyName: 'full', orderQty: 2 }],
-          orderTotal: 178,
-        },
-      ],
-      waiterName: 'manju',
-      note: 'testing data orders',
-      orderDate: '2021-02-16',
-      orderstatus: null,
-      menu: null,
-      tables: {
-        id: 14,
-        tableName: 'T6',
-        tablestatus: 'ENGAGED',
-      },
-    },
-  ];
+  orders: IOrder[];
+  isDishReady: any[] = [];
   changedOrderStatus: any;
+  isSaving: boolean = false;
+  constructor(protected orderService: OrderService) {}
 
-  constructor() {}
-
-  ngOnInit(): void {}
-
+  loadAll(): void {
+    this.orderService.getByOrderStatus(OrderStatus.CONFIRMED).subscribe((res: HttpResponse<IOrder[]>) => {
+      const orders = res.body || [];
+      orders.forEach((order, index) => {
+        this.isDishReady[index] = [];
+        order.menuIdsandQty.forEach((menu, i) => {
+          if (!menu.isDishReady) {
+            this.isDishReady[index][i] = false;
+          } else {
+            this.isDishReady[index][i] = menu.isDishReady;
+          }
+        });
+      });
+      this.orders = orders;
+    });
+  }
+  ngOnInit(): void {
+    this.loadAll();
+  }
+  onDishChanged(i, j) {
+    const orders = JSON.parse(JSON.stringify(this.orders));
+    orders.forEach((res, index) => {
+      if (index == i) {
+        res.menuIdsandQty.forEach((menu, menuIndex) => {
+          if (menuIndex == j) {
+            menu.isDishReady = this.isDishReady[i][j];
+          }
+        });
+        res.menuIdsandQty = JSON.stringify(res.menuIdsandQty);
+        res.orderDate = moment(res.orderDate);
+        console.log('order=>', orders[i]);
+        this.subscribeToSaveResponse(this.orderService.update(orders[index]));
+      }
+    });
+    this.loadAll();
+  }
   ngOnDestroy() {}
 
-  radioChange(event: MatRadioChange, order) {
-    console.log(event.value, order.id);
-    this.changedOrderStatus;
-    this.changedOrderStatus = this.orders.find(OrderStatus => OrderStatus.id == order.id);
-    this.changedOrderStatus.orderstatus = event.value;
-    console.log('completed order', this.changedOrderStatus);
-    if (this.changedOrderStatus.orderstatus == 'Completed') {
-      this.completedOrders.push(order);
-      this.orders = this.orders.filter(item => item.id !== order.id);
-      console.log(' changedOrderStatus order list', this.completedOrders, this.orders);
-    }
+  updateCompleted() {
+    console.log('this is orders', this.orders);
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IOrder>>): void {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
+  }
+
+  protected onSaveSuccess(): void {
+    this.isSaving = false;
+  }
+
+  protected onSaveError(): void {
+    this.isSaving = false;
   }
 }

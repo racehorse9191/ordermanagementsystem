@@ -1,6 +1,9 @@
 package com.oms.repository;
 
 import com.oms.domain.Order;
+import com.oms.domain.enumeration.OrderStatus;
+
+import java.util.List;
 
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -11,4 +14,6 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
+	public List<Order> findByOrderstatus(OrderStatus orderStatus);
+	
 }

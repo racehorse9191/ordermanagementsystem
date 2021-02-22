@@ -7,6 +7,7 @@ import { IOrder } from '../../shared/model/order.model';
 import { SERVER_API_URL } from '../../app.constants';
 import { createRequestOption } from '../../shared/util/request-util';
 import { DATE_FORMAT } from '../../shared/constants/input.constants';
+import { OrderStatus } from '../../shared/model/enumerations/order-status.model';
 
 type EntityResponseType = HttpResponse<IOrder>;
 type EntityArrayResponseType = HttpResponse<IOrder[]>;
@@ -44,6 +45,18 @@ export class OrderService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
+  getByOrderStatus(req: OrderStatus): Observable<EntityArrayResponseType> {
+    return this.http
+      .get<IOrder[]>(`${this.resourceUrl}/status/${req}`, { observe: 'response' })
+      .pipe(
+        map((res: EntityArrayResponseType) => {
+          this.convertDateArrayFromServer(res);
+          this.convertMenuIdStringToJson(res);
+          return res;
+        })
+      );
+  }
+
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
@@ -66,6 +79,15 @@ export class OrderService {
     if (res.body) {
       res.body.forEach((order: IOrder) => {
         order.orderDate = order.orderDate ? moment(order.orderDate) : undefined;
+      });
+    }
+    return res;
+  }
+  protected convertMenuIdStringToJson(res: EntityArrayResponseType): EntityArrayResponseType {
+    if (res.body) {
+      res.body.forEach((order: IOrder) => {
+        console.log('inside service=>', order.menuIdsandQty);
+        order.menuIdsandQty = JSON.parse(order.menuIdsandQty);
       });
     }
     return res;

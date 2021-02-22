@@ -53,8 +53,6 @@ spring:
         useServerPrepStmts: true
   jpa:
     show-sql: false
-    hibernate:
-      ddl-auto: update
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod

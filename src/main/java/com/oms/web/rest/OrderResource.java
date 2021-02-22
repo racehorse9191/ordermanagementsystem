@@ -1,6 +1,7 @@
 package com.oms.web.rest;
 
 import com.oms.domain.Order;
+import com.oms.domain.enumeration.OrderStatus;
 import com.oms.repository.OrderRepository;
 import com.oms.web.rest.errors.BadRequestAlertException;
 
@@ -124,5 +125,18 @@ public class OrderResource {
         log.debug("REST request to delete Order : {}", id);
         orderRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+    
+    /**
+     * {@code GET  /orders} : get all the orders.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of orders in body.
+     */
+    @GetMapping("/orders/status/{orderStatus}")
+    public ResponseEntity<List<Order>> getAllOrdersByOrderStatus(@PathVariable OrderStatus orderStatus) {
+        log.debug("REST request to get a page of Orders by order status");
+        System.out.println("list=>"+orderRepository.findByOrderstatus(orderStatus));
+        return ResponseEntity.ok().body(orderRepository.findByOrderstatus(orderStatus));
     }
 }

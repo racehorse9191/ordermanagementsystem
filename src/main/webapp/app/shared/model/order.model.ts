@@ -5,7 +5,7 @@ import { ITables } from './tables.model';
 
 export interface IOrder {
   id?: number;
-  menuIdsandQty?: string;
+  menuIdsandQty?: any;
   waiterName?: string;
   note?: string;
   orderDate?: Moment;
@@ -17,7 +17,7 @@ export interface IOrder {
 export class Order implements IOrder {
   constructor(
     public id?: number,
-    public menuIdsandQty?: string,
+    public menuIdsandQty?: any,
     public waiterName?: string,
     public note?: string,
     public orderDate?: Moment,

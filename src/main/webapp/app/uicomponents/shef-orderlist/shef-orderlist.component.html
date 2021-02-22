@@ -1,35 +1,26 @@
-<h2>Orders</h2>
-<div *ngFor="let order of orders" layout-gt-sm="column">
-	<mat-card flex-gt-sm>
-		<mat-card-title>{{order.tables.tableName}} - {{order.waiterName}}</mat-card-title>
-		<mat-card-subtitle>note: {{order.note}}</mat-card-subtitle>
-		<!-- <mat-divider></mat-divider> -->
-		<mat-card-content>
-			<div *ngFor="let item of order.menuIdsandQty">
+<h2 class="heading">Orders</h2>
+<h3 *ngIf="orders && orders.length == 0">No new orders!</h3>
+<section class="items">
+	<div class="card" [id]="order.id" *ngFor="let order of orders;let i = index">
+			<div class="card-body">
+			  <h5 class="card-title">{{order.tables.tableName}} - {{order.waiterName}}</h5>
+			  <h6 class="card-subtitle mb-2 text-muted">note: {{order.note}}</h6>
+			  <div *ngFor="let item of order.menuIdsandQty;let j = index">
+				<input type="checkbox" name="dishCheckBox-{{i}}" id="dishCheckBox-{{i}}" (change)="onDishChanged(i,j)" [checked]="isDishReady[i][j]" [(ngModel)]="isDishReady[i][j]" labelPosition="after">
+				<label> {{item.name}} - {{item.dishQty}} - {{item.orderQty}} </label> 
+			</div>
+			</div>
+	</div>
+</section>
+<h2 class="heading" *ngIf="completedOrders && completedOrders.length !=0">Completed Orders</h2>
+<section class="items">
+	<div class="card" [id]="order.id" *ngFor="let order of completedOrders; let i = index">
+			<div class="card-body">
+			  <h5 class="card-title">{{order.tables.tableName}} - {{order.waiterName}}</h5>
+			  <h6 class="card-subtitle mb-2 text-muted">note: {{order.note}}</h6>
+			  <div *ngFor="let item of order.menuIdsandQty">
 				~ {{item.name}} - {{item.dishQty}} - {{item.orderQty}}
 			</div>
-		</mat-card-content>
-		<mat-card-actions>
-			<mat-radio-group aria-label="Select an option">
-				<mat-radio-button value="Accepted" (change)="radioChange($event, order)">Accept</mat-radio-button>
-				<mat-radio-button value="Completed" (change)="radioChange($event, order)">Completed</mat-radio-button>
-			</mat-radio-group>
-		</mat-card-actions>
-	</mat-card>
-</div>
-<br>
-<h2 *ngIf="completedOrders.length !=0">Completed Orders</h2>
-<div *ngFor="let order of completedOrders" layout-gt-sm="column">
-	<mat-card flex-gt-sm>
-		<mat-card-title>{{order.tables.tableName}} - {{order.waiterName}}</mat-card-title>
-		<mat-card-subtitle>note:{{order.note}}</mat-card-subtitle>
-		<mat-card-content>
-			<div *ngFor="let item of order.menuIdsandQty">
-				~ {{item.name}} - {{item.dishQty}} - {{item.orderQty}}
 			</div>
-		</mat-card-content>
-		<mat-card-actions>
-
-		</mat-card-actions>
-	</mat-card>
-</div>
+	</div>
+</section>

@@ -23,7 +23,7 @@ export class MenuListModel {
 
 export class OrderModel {
   id?: number;
-  menuIdsandQty?: string;
+  menuIdsandQty?: any[];
   waiterName?: string;
   note?: string;
   orderDate?: Moment;
