@@ -42,6 +42,7 @@ public class OrderResource {
     private String applicationName;
 
     private final OrderRepository orderRepository;
+    
 
     public OrderResource(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -138,5 +139,19 @@ public class OrderResource {
         log.debug("REST request to get a page of Orders by order status");
         System.out.println("list=>"+orderRepository.findByOrderstatus(orderStatus));
         return ResponseEntity.ok().body(orderRepository.findByOrderstatus(orderStatus));
+    }
+    
+    /**
+     * {@code GET  /orders} : get all the orders.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of orders in body.
+     */
+    @GetMapping("/orders/getUserOrderHistory/{id}")
+    public ResponseEntity<List<Order>> getUserOrderHistory(Pageable pageable,@PathVariable String id) {
+        log.debug("REST request to get a page of Orders");
+        Page<Order> page = orderRepository.findByWaiterName(id,pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 }
