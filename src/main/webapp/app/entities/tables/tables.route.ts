@@ -39,7 +39,7 @@ export const tablesRoute: Routes = [
     path: '',
     component: TablesComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.tables.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const tablesRoute: Routes = [
       tables: TablesResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.tables.home.title',
     },
     canActivate: [UserRouteAccessService],

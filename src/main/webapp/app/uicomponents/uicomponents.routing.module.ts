@@ -58,7 +58,7 @@ export const UiComponentRoutes: Routes = [
     path: 'cheforderlist',
     component: ShefOrderlist,
     data: {
-      authorities: [Authority.CHEF, Authority.ADMIN],
+      authorities: [Authority.CHEF, Authority.ADMIN, Authority.BARTENDER],
       pageTitle: 'orderManagementSystemApp.dish.home.title',
     },
     canActivate: [UserRouteAccessService],

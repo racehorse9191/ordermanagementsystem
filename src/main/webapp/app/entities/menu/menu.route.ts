@@ -39,7 +39,7 @@ export const menuRoute: Routes = [
     path: '',
     component: MenuComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.menu.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const menuRoute: Routes = [
       menu: MenuResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.menu.home.title',
     },
     canActivate: [UserRouteAccessService],

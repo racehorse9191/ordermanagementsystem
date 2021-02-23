@@ -39,7 +39,7 @@ export const categoryRoute: Routes = [
     path: '',
     component: CategoryComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.category.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const categoryRoute: Routes = [
       category: CategoryResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.category.home.title',
     },
     canActivate: [UserRouteAccessService],

@@ -38,7 +38,7 @@ export const orderRoute: Routes = [
     path: '',
     component: OrderComponent,
     data: {
-      authorities: [Authority.USER, Authority.BARTENDER, Authority.CHEF],
+      authorities: [Authority.USER, Authority.BARTENDER, Authority.CHEF, Authority.ADMIN],
       defaultSort: 'id,asc',
       pageTitle: 'orderManagementSystemApp.order.home.title',
     },
@@ -51,7 +51,7 @@ export const orderRoute: Routes = [
       order: OrderResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN, Authority.CHEF, Authority.BARTENDER],
       pageTitle: 'orderManagementSystemApp.order.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -63,7 +63,7 @@ export const orderRoute: Routes = [
       order: OrderResolve,
     },
     data: {
-      authorities: [Authority.ADMIN],
+      authorities: [Authority.ADMIN, Authority.USER, Authority.CHEF, Authority.BARTENDER],
       pageTitle: 'orderManagementSystemApp.order.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -75,7 +75,7 @@ export const orderRoute: Routes = [
       order: OrderResolve,
     },
     data: {
-      authorities: [Authority.ADMIN],
+      authorities: [Authority.ADMIN, Authority.USER, Authority.CHEF, Authority.BARTENDER],
       pageTitle: 'orderManagementSystemApp.order.home.title',
     },
     canActivate: [UserRouteAccessService],
