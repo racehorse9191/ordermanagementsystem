@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { OrderManagementSystemSharedModule } from 'app/shared/shared.module';
+import { OrderManagementSystemSharedModule } from '../../shared/shared.module';
 
 import { AuditsComponent } from './audits.component';
 

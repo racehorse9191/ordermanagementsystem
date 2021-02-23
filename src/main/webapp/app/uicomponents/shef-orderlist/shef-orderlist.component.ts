@@ -5,6 +5,7 @@ import { OrderService } from '../../entities/order/order.service';
 import { OrderStatus } from '../../shared/model/enumerations/order-status.model';
 import { IOrder } from '../../shared/model/order.model';
 import * as moment from 'moment';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'jhi-chef-orderlist',
   templateUrl: './shef-orderlist.component.html',
@@ -16,6 +17,7 @@ export class ShefOrderlist {
   isDishReady: any[] = [];
   changedOrderStatus: any;
   isSaving: boolean = false;
+  faCoffee = faCheckCircle;
   constructor(protected orderService: OrderService) {}
 
   loadAll(): void {

@@ -1,12 +1,14 @@
-<h2 class="heading">Orders</h2>
+<nav class="navbar sticky-top navbar-light bg-light row spaceBetween">
+
+</nav>
 <h3 *ngIf="orders && orders.length == 0">No new orders!</h3>
 <section class="items">
 	<div class="card" [id]="order.id" *ngFor="let order of orders;let i = index">
 			<div class="card-body">
-			  <h5 class="card-title">{{order.tables.tableName}} - {{order.waiterName}}</h5>
+			  <h5 class="card-title"> #{{order.id}} <br> {{order.tables.tableName}} - {{order.waiterName}}</h5>
 			  <h6 class="card-subtitle mb-2 text-muted">note: {{order.note}}</h6>
-			  <div *ngFor="let item of order.menuIdsandQty;let j = index">
-				<input type="checkbox" name="dishCheckBox-{{i}}" id="dishCheckBox-{{i}}" (change)="onDishChanged(i,j)" [checked]="isDishReady[i][j]" [(ngModel)]="isDishReady[i][j]" labelPosition="after">
+			  <div *ngFor="let item of order.menuIdsandQty;let j = index">	  
+				<span><fa-icon [icon]="faCoffee"  [styles]="{'stroke': 'green', 'color': 'green'}"></fa-icon></span>
 				<label> {{item.name}} - {{item.dishQty}} - {{item.orderQty}} </label> 
 			</div>
 			</div>

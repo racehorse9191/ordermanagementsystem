@@ -1,13 +1,11 @@
 import { Route } from '@angular/router';
-import { Authority } from 'app/shared/constants/authority.constants';
-
 import { RegisterComponent } from './register.component';
 
 export const registerRoute: Route = {
   path: 'register',
   component: RegisterComponent,
   data: {
-    authorities: [Authority.ADMIN],
+    authorities: [],
     pageTitle: 'register.title',
   },
 };
