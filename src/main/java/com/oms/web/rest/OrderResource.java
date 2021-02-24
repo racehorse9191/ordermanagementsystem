@@ -137,7 +137,6 @@ public class OrderResource {
     @GetMapping("/orders/status/{orderStatus}")
     public ResponseEntity<List<Order>> getAllOrdersByOrderStatus(@PathVariable OrderStatus orderStatus) {
         log.debug("REST request to get a page of Orders by order status");
-        System.out.println("list=>"+orderRepository.findByOrderstatus(orderStatus));
         return ResponseEntity.ok().body(orderRepository.findByOrderstatus(orderStatus));
     }
     
@@ -148,9 +147,9 @@ public class OrderResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of orders in body.
      */
     @GetMapping("/orders/getUserOrderHistory/{id}")
-    public ResponseEntity<List<Order>> getUserOrderHistory(Pageable pageable,@PathVariable String id) {
+    public ResponseEntity<List<Order>> getUserOrderHistory(Pageable pageable,@PathVariable Long id) {
         log.debug("REST request to get a page of Orders");
-        Page<Order> page = orderRepository.findByWaiterName(id,pageable);
+        Page<Order> page = orderRepository.findByWaiterId(id,pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

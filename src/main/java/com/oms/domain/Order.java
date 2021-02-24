@@ -31,6 +31,10 @@ public class Order implements Serializable {
     private String menuIdsandQty;
 
     @NotNull
+    @Column(name = "waiter_Id", nullable = false)
+    private Long waiterId;
+    
+    @NotNull
     @Column(name = "waiter_name", nullable = false)
     private String waiterName;
 
@@ -151,9 +155,18 @@ public class Order implements Serializable {
     public void setTables(Tables tables) {
         this.tables = tables;
     }
+    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
-    @Override
+    public Long getWaiterId() {
+		return waiterId;
+	}
+
+	public void setWaiterId(Long waiterId) {
+		this.waiterId = waiterId;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

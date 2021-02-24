@@ -129,7 +129,8 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     order.note = this.chefNote;
     order.orderDate = moment();
     order.tables = this.table;
-    order.waiterName = this.account.firstName;
+    order.waiterName = this.account.firstName + this.account.lastName;
+    order.waiterId = this.account.id;
     order.orderstatus = OrderStatus.CONFIRMED;
     this.tablesService.update(this.table).subscribe(res => {});
     this.subscribeToSaveResponse(this.orderService.create(order));

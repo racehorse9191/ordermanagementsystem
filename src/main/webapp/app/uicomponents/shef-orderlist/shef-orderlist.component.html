@@ -1,11 +1,11 @@
 <nav class="navbar sticky-top navbar-light bg-light row spaceBetween">
-
+	<h2>Orders</h2>
 </nav>
 <h3 *ngIf="orders && orders.length == 0">No new orders!</h3>
 <section class="items">
 	<div class="card" [id]="order.id" *ngFor="let order of orders;let i = index">
 			<div class="card-body">
-			  <h5 class="card-title"> #{{order.id}} <br> {{order.tables.tableName}} - {{order.waiterName}}</h5>
+			  <h5 class="card-title"># {{order.id}} <br> {{order.tables.tableName}} - {{order.waiterName}}</h5>
 			  <h6 class="card-subtitle mb-2 text-muted">note: {{order.note}}</h6>
 			  <div *ngFor="let item of order.menuIdsandQty;let j = index">	  
 				<span><fa-icon [icon]="faCoffee"  [styles]="{'stroke': 'green', 'color': 'green'}"></fa-icon></span>
