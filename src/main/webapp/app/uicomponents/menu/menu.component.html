@@ -1,31 +1,38 @@
 <div class="">
   <nav class="navbar sticky-top navbar-light bg-light row spaceBetween">
-        <h1>Menu</h1>
-        <div class="form-group row">
-          <div class="col-sm-12" >
-            <ng-select data-toggle="tooltip" data-placement="bottom"
-            title="Search for Dishes" id="selectDish" name="selectDish" [groupBy]="groupByFn" (remove)="onSearchItemRemove($event)" (clear)="onSearchClear()"
-            [multiple]="true" (change)="selectedItem(selectedDishes)" bindLabel="dish.dishName" notFoundText="Sry try with Different Dish Name!.."
-            [searchable]="true" [clearOnBackspace]="true" [hideSelected]="true" [items]="category" placeholder="Search for dish" [(ngModel)] = "selectedDishes"
-            [clearable]="true">
-            <ng-template ng-label-tmp let-item="item" let-clear="clear">
-              <div>
-              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">
-                ×</span>
-              <img height="15" width="15" [src]="item?.dish?.dishImage | sanitizeUrl"/>
-              <b>{{item?.dish?.dishName}} <p id="{{item.dish.id}}" class="badge badge-pill badge-success">{{ fetchOrderQty(item) }}</p> </b>
-            </div>
-          </ng-template>
-          <ng-template ng-option-tmp let-item="item">
-            <img height="15" width="15" [src]="item?.dish?.dishImage | sanitizeUrl"/>
-            <b>{{item?.dish?.dishName}}<p id="{{item.dish.dishName}}" class="badge badge-pill badge-success">{{ fetchOrderQty(item) }}</p> </b>
-        </ng-template>
-        </ng-select>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="navbar-header">
+            <h1 class="navbar-brand">Menu</h1>
+            <a class="navbar-brand">
+              <button type="button" *ngIf="showOrderButton" (click)="orderButtonClicked()" class="btn btn-primary">order List</button>
+            </a>
           </div>
+          
+        <div class="row" style="width: 100%;" >
+          <ng-select data-toggle="tooltip" data-placement="bottom"
+          title="Search for Dishes" id="selectDish" name="selectDish" [groupBy]="groupByFn" (remove)="onSearchItemRemove($event)" (clear)="onSearchClear()"
+          [multiple]="true" (change)="selectedItem(selectedDishes)" bindLabel="dish.dishName" notFoundText="Sry try with Different Dish Name!.."
+          [searchable]="true" [clearOnBackspace]="true" [hideSelected]="true" [items]="category" placeholder="Search for dish" [(ngModel)] = "selectedDishes"
+          [clearable]="true">
+          <ng-template ng-label-tmp let-item="item" let-clear="clear">
+            <div>
+            <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">
+              ×</span>
+            <img height="15" width="15" [src]="item?.dish?.dishImage | sanitizeUrl"/>
+            <b>{{item?.dish?.dishName}} <p id="{{item.dish.id}}" class="badge badge-pill badge-success">{{ fetchOrderQty(item) }}</p> </b>
+          </div>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+          <img height="15" width="15" [src]="item?.dish?.dishImage | sanitizeUrl"/>
+          <b>{{item?.dish?.dishName}}<p id="{{item.dish.dishName}}" class="badge badge-pill badge-success">{{ fetchOrderQty(item) }}</p> </b>
+      </ng-template>
+      </ng-select>
+      </div>
         </div>
-        <a class="navbar-brand">
-          <button type="button" *ngIf="showOrderButton" (click)="orderButtonClicked()" class="btn btn-primary">order</button>
-        </a>
+      </div>
+    </div>
   </nav>     
     <ngb-tabset  justify="justified"
     type="pills" (tabChange)="selectedActiveTab($event.nextId)" *ngIf="!dishSelected;else selectedBlock" #tabset [destroyOnHide]="true">
