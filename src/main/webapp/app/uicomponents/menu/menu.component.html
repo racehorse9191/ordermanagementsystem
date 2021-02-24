@@ -6,11 +6,15 @@
             <ng-select data-toggle="tooltip" data-placement="bottom"
             title="Search for Dishes" id="selectDish" name="selectDish" [groupBy]="groupByFn" (remove)="onSearchItemRemove($event)" (clear)="onSearchClear()"
             [multiple]="true" (change)="selectedItem(selectedDishes)" bindLabel="dish.dishName" notFoundText="Sry try with Different Dish Name!.."
-            [searchable]="true" [hideSelected]="true" [items]="category" placeholder="Search for dish" [(ngModel)] = "selectedDishes"
+            [searchable]="true" [clearOnBackspace]="true" [hideSelected]="true" [items]="category" placeholder="Search for dish" [(ngModel)] = "selectedDishes"
             [clearable]="true">
-            <ng-template ng-label-tmp let-item="item">
+            <ng-template ng-label-tmp let-item="item" let-clear="clear">
+              <div>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">
+                ×</span>
               <img height="15" width="15" [src]="item?.dish?.dishImage | sanitizeUrl"/>
               <b>{{item?.dish?.dishName}} <p id="{{item.dish.id}}" class="badge badge-pill badge-success">{{ fetchOrderQty(item) }}</p> </b>
+            </div>
           </ng-template>
           <ng-template ng-option-tmp let-item="item">
             <img height="15" width="15" [src]="item?.dish?.dishImage | sanitizeUrl"/>

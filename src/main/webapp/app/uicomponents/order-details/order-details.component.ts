@@ -3,14 +3,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { Observable, Subscription } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
 import { AccountService } from '../../core/auth/account.service';
 import { OrderService } from '../../entities/order/order.service';
 import { TablesService } from '../../entities/tables/tables.service';
 import { OrderStatus } from '../../shared/model/enumerations/order-status.model';
 import { DishQtyModel } from '../../shared/model/menu-list.model';
 import { IOrder, Order } from '../../shared/model/order.model';
-import { Tables } from '../../shared/model/tables.model';
 import { SubscriptionService } from '../../shared/subscription.service';
 import { Account } from './../../core/user/account.model';
 export class OrderTable {
@@ -102,7 +100,6 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
         });
       }
     });
-    console.log('order details=>', this.orderTable);
   }
 
   calculateOrderTotal(price: any, qty: any) {
@@ -143,7 +140,9 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     if (ordrQty > 0) {
       this.orderList[index].orderQty = this.orderList[index].orderQty - 1;
       if (this.orderList[index].orderQty == 0) {
-        this.orderList = this.orderList.filter(res => res.id != this.orderList[index].id);
+        this.orderList = this.orderList.filter(res =>
+          res.menus.find(menu => this.orderList[index].menus.find(resMenu => menu.id != resMenu.id))
+        );
       }
       this.subscriptionService.updateOrder(this.orderList);
     }
@@ -168,7 +167,6 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
 
     this.orderList = [];
     this.orderList = temp;
-    console.log('orderList=>', this.orderList);
     this.subscriptionService.updateOrder(this.orderList);
   }
 

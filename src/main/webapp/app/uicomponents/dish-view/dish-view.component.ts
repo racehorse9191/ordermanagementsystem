@@ -33,7 +33,6 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   }
   ngOnChanges(changes: SimpleChanges): void {
     this.orders = [];
-    console.log('on changes of view=>', this.dishes);
     this.dishes?.forEach((res, i) => {
       res.dishQty?.forEach(qty => {
         if (qty.orderQty) {
@@ -42,7 +41,6 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
         }
       });
       if (res.dishQty) {
-        console.log('res=>', res);
         if (!this.selectedQty[i]) {
           this.selectedQty.push(res.dishQty[0]);
         }
@@ -73,7 +71,6 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
         let temp =
           this.dishes[index]?.dishQty?.filter(res => {
             if (res) {
-              console.log('selected Qty=>', this.selectedQty);
               if (res?.id == this.selectedQty[index].id) {
                 res.orderQty = this.orders[index];
                 return res;
@@ -83,7 +80,6 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
         this.dishesToOrder.push(temp);
         temp = {};
       }
-      console.log('res outside=>', this.dishesToOrder);
       this.dishesToOrder = this.removeRedundentObjects(this.dishesToOrder);
       this.subscriptionService.updateOrder(this.dishesToOrder);
     }
@@ -95,7 +91,6 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
   orderMinusClicked(index: any) {
-    console.log('order minus clicked', this.selectedQty[index]);
     if (this.orders[index] > 0) {
       this.orders[index] = this.orders[index] - 1;
       if (this.orders[index] == 0) {
@@ -109,7 +104,8 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
             }
           });
         }
-        this.dishesToOrder = this.dishesToOrder.filter(res => res.id !== this.selectedQty[index].id) || [];
+        //  this.dishes =  this.dishes.filter(res=> res.id != this.selectedQty[index].id)
+        this.dishesToOrder = this.dishesToOrder.filter(res => res.menus.find(menu => menu.id !== this.selectedQty[index].id)) || [];
       } else if (this.dishes) {
         this.dishes[index]?.dishQty?.filter(res => {
           if (res) {
@@ -129,7 +125,6 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   onQtyChanged(index: any, value: any) {
-    console.log('inisde qty changed=>', this.selectedQty[index], this.dishes);
     if (value.menus.length != 0) {
       this.dishPrice[index] = value.menus[0].price;
       this.orders[index] = 0;
@@ -142,11 +137,9 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
           }
         });
       }
-      console.log('dishes =>', this.dishes);
       if (this.dishesToOrder) {
         const temp = [];
         this.dishesToOrder.forEach(res => {
-          console.log('res=>', res);
           res.menus.forEach(menu => {
             if (value.menus.find(val => menu.id != val.dish.id)) {
               res.orderQty = 0;
@@ -162,7 +155,6 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
         this.dishesToOrder = [];
         this.dishesToOrder = temp;
       }
-      console.log('dishesToOrder=>', this.dishesToOrder);
       this.subscriptionService.updateOrder(this.dishesToOrder);
     }
   }

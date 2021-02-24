@@ -52,6 +52,8 @@ export class MenuComponent implements OnInit {
         this.updateTOdaysSpl();
       } else {
         this.showOrderButton = false;
+        this.selectedDishes = [];
+        this.dishSelected = false;
       }
     });
   }
@@ -88,7 +90,8 @@ export class MenuComponent implements OnInit {
             }
           });
           if (this.categoryTemp[index]?.dishQty) {
-            newData['menus'] = [this.categoryTemp[index]];
+            res.dishQty = this.categoryTemp[index].dishQty;
+            newData['menus'] = [res];
             this.categoryTemp[index]?.dishQty?.push(newData);
           }
         } else {
@@ -113,9 +116,8 @@ export class MenuComponent implements OnInit {
 
   groupByFn = (item: any) => item?.dish?.category?.categoryName;
 
-  selectedItem(selectedApp: any[]) {
-    console.log('selected app=>', selectedApp);
-    if (selectedApp.length != 0) {
+  selectedItem(selectedDish: any[]) {
+    if (selectedDish.length != 0) {
       this.dishSelected = true;
     } else {
       this.dishSelected = false;
@@ -128,7 +130,6 @@ export class MenuComponent implements OnInit {
     }, 10);
   }
   selectedActiveTab(event: any) {
-    console.log('active tab=>', event);
     if (event == 2) {
       this.showOrderButton = false;
     } else if (this.orderList.length != 0) {
@@ -148,7 +149,7 @@ export class MenuComponent implements OnInit {
     if (qty) {
       return qty;
     } else {
-      return '';
+      return 0;
     }
   }
 
@@ -216,10 +217,18 @@ export class MenuComponent implements OnInit {
   /* the section of cooking category data ends here*/
 
   onSearchItemRemove(event: any) {
-    this.orderList = this.orderList.filter(res => res?.menus?.find(menu => menu.id != event.value.id));
-    this.subscriptionService.updateOrder(this.orderList);
+    if (this.orderList.length != 0) {
+      this.selectedDishes = this.selectedDishes.filter(res => res.id != event.value.id);
+      this.orderList = this.orderList.filter(res => res?.menus?.find(menu => menu.id != event.value.id));
+      this.subscriptionService.updateOrder(this.orderList);
+    } else {
+      this.selectedDishes = this.selectedDishes.filter(res => res.id != event.value.id);
+    }
   }
   onSearchClear() {
     this.subscriptionService.updateOrder([]);
+  }
+  clear(item) {
+    console.log('item=>', item);
   }
 }
