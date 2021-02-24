@@ -2,15 +2,15 @@
     <div class="col-md-3">
         <span class="hipster img-fluid rounded"></span>
     </div>-->
-    <h2 id="page-heading">
-        <span jhiTranslate="orderManagementSystemApp.tables.home.title">Tables</span>
+    <h2 *ngIf="tables" id="page-heading">
+        <span jhiTranslate="orderManagementSystemApp.tables.home.title">OMS HOME PAGE</span>
         </h2>
-      <mat-grid-list *ngIf="tables" [cols]="1" rowHeight="50" (window:resize)="onResize($event)" gutterSize="10px">
+      <!-- <mat-grid-list *ngIf="tables" [cols]="1" rowHeight="50" (window:resize)="onResize($event)" gutterSize="10px">
         <mat-grid-tile class="gridtile" *ngFor="let table of tables" [colspan]="1" [rowspan]="1"
           [style.background-color]="'#007AFF'" [routerLink]="['ui/menu', table.id]" [style.color]="'white'"(click)="takeorder(table.id)"> 
           {{table.tableName}}
         </mat-grid-tile>
-      </mat-grid-list>
+      </mat-grid-list> -->
     
 
    <!---- <div class="col-md-9">

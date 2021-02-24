@@ -154,4 +154,18 @@ public class OrderResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+    @GetMapping("/orders/table/{tableId}")
+    public ResponseEntity<Order> getAllOrdersByTableId(@PathVariable Long tableId) {
+        log.debug("REST request to get a page of Orders by table ID");
+        ResponseEntity<Order> orderById;
+        List<Order> orderList;
+        ResponseEntity<Order> orderOfTable = null;
+        orderList = orderRepository.findByOrderstatus(OrderStatus.CONFIRMED);
+        for (int i = 0; i < orderList.size(); i++) {
+        	if(orderList.get(i).getTables().getId() == tableId) {
+        		orderOfTable = ResponseEntity.ok().body(orderList.get(i));
+        	}
+        }
+        return orderOfTable;
+    }
 }

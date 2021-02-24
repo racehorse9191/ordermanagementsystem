@@ -15,19 +15,34 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { ShefOrderlist } from './shef-orderlist/shef-orderlist.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { OrderDailogComponent } from './select-table/order-dailog.component';
+import { MatButtonModule } from '@angular/material/button';
 @NgModule({
-  declarations: [MenuComponent, OrderDetailsComponent, DishViewComponent, DishCategoryComponent, SelectTableComponent, ShefOrderlist],
+  declarations: [
+    MenuComponent,
+    OrderDailogComponent,
+    OrderDetailsComponent,
+    DishViewComponent,
+    DishCategoryComponent,
+    SelectTableComponent,
+    ShefOrderlist,
+  ],
   imports: [
     CommonModule,
     OrderManagementSystemSharedModule,
     NgbModule,
+    MatButtonModule,
     MatGridListModule,
+    MatCheckboxModule,
     MatChipsModule,
     MatRadioModule,
     MatCardModule,
+    MatDialogModule,
     RouterModule.forChild(UiComponentRoutes),
   ],
+  entryComponents: [OrderDailogComponent],
   exports: [MenuComponent, SelectTableComponent, OrderDetailsComponent, DishViewComponent, DishCategoryComponent, ShefOrderlist],
   providers: [SubscriptionService],
 })

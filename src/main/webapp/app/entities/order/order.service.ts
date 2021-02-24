@@ -57,6 +57,17 @@ export class OrderService {
       );
   }
 
+  /**
+   *
+   * @param tableId
+   * gets orders by table Id
+   */
+  getByOrderTableId(tableId: number): Observable<EntityResponseType> {
+    return this.http
+      .get<IOrder>(`${this.resourceUrl}/table/${tableId}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

@@ -18,10 +18,13 @@ import { UicomponentsModule } from './uicomponents/uicomponents.module';
 import { OrderManagementSystemSharedModule } from './shared/shared.module';
 import { OrderManagementSystemCoreModule } from './core/core.module';
 import { SubscriptionService } from './shared/subscription.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     OrderManagementSystemSharedModule,
     OrderManagementSystemCoreModule,
     OrderManagementSystemHomeModule,
@@ -34,5 +37,6 @@ import { SubscriptionService } from './shared/subscription.service';
   ],
   declarations: [MainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
   bootstrap: [MainComponent],
+  providers: [{ provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: true } }],
 })
 export class OrderManagementSystemAppModule {}

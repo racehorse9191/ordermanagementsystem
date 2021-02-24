@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Order Details</h1>
+<div mat-dialog-content>
+    <!-- <mat-card-title>{{order.tables.tableName}} - {{order.waiterName}}</mat-card-title>
+    <mat-card-subtitle>note: {{order.note}}</mat-card-subtitle> -->
+        <div *ngFor="let item of data.menuIdsandQty">
+            <mat-checkbox [(ngModel)]="item.isdishReady" (ngModelChange)="updateCompleted()"></mat-checkbox>
+            ~ {{item.name}} - {{item.dishQty}} - {{item.orderQty}}
+        </div>
+        <p class="note">note: {{data.note}}</p>
+</div>
+<div mat-dialog-actions>
+    <!-- <button mat-button (click)="onNoClick()">No Thanks</button> -->
+    <!-- <button mat-button (click)="onNoClick()">Update Order</button>
+    <button mat-button [mat-dialog-close]="data.id" cdkFocusInitial>Close</button> -->
+    <!-- <button class="btn btn-primary">Update Order</button> -->
+    <button class="btn btn-primary" [mat-dialog-close]="data">Complete</button>
+
+    <!-- <button class="btn btn-primary" (click)="OrderComplete(data)">Complete</button> -->
+</div>

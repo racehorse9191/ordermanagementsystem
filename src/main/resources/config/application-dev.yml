@@ -47,7 +47,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql:// localhost:3306/ordermanagementsystem
     username: root
-    password:
+    password: root
     hikari:
       poolName: Hikari
       auto-commit: false
