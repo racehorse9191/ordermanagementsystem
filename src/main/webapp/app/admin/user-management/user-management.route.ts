@@ -36,13 +36,15 @@ export const userManagementRoute: Routes = [
       user: UserManagementResolve,
     },
   },
-  {
+
+  /*{
     path: 'new',
     component: UserManagementUpdateComponent,
     resolve: {
       user: UserManagementResolve,
     },
-  },
+  },*/
+
   {
     path: ':login/edit',
     component: UserManagementUpdateComponent,

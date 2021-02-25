@@ -41,7 +41,7 @@
     },
     "form": {
       "username.label": "Username",
-      "username.placeholder": "Your username",
+      "username.placeholder": "Username",
       "currentpassword.label": "Current password",
       "currentpassword.placeholder": "Current password",
       "newpassword.label": "New password",
@@ -49,7 +49,7 @@
       "confirmpassword.label": "New password confirmation",
       "confirmpassword.placeholder": "Confirm the new password",
       "email.label": "Email",
-      "email.placeholder": "Your email"
+      "email.placeholder": "Email"
     },
     "messages": {
       "info": {
