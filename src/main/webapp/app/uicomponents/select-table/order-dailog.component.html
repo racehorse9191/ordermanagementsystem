@@ -3,17 +3,14 @@
     <!-- <mat-card-title>{{order.tables.tableName}} - {{order.waiterName}}</mat-card-title>
     <mat-card-subtitle>note: {{order.note}}</mat-card-subtitle> -->
         <div *ngFor="let item of data.menuIdsandQty">
-            <mat-checkbox [(ngModel)]="item.isdishReady" (ngModelChange)="updateCompleted()"></mat-checkbox>
+            <mat-checkbox [(ngModel)]="item.isdishReady" (ngModelChange)="updateCheckbox(data)"></mat-checkbox>
             ~ {{item.name}} - {{item.dishQty}} - {{item.orderQty}}
         </div>
         <p class="note">note: {{data.note}}</p>
 </div>
 <div mat-dialog-actions>
-    <!-- <button mat-button (click)="onNoClick()">No Thanks</button> -->
-    <!-- <button mat-button (click)="onNoClick()">Update Order</button>
-    <button mat-button [mat-dialog-close]="data.id" cdkFocusInitial>Close</button> -->
-    <!-- <button class="btn btn-primary">Update Order</button> -->
-    <button class="btn btn-primary" [mat-dialog-close]="data">Complete</button>
 
-    <!-- <button class="btn btn-primary" (click)="OrderComplete(data)">Complete</button> -->
+    <button class="btn btn-primary" (click)="OrderUpdate(data)">{{btnValue}}</button>
+    <br>
+    <button class="btn btn-primary" (click)="AddMoreDishes(data)">Add more</button>
 </div>
