@@ -3,7 +3,7 @@
     <!-- <mat-card-title>{{order.tables.tableName}} - {{order.waiterName}}</mat-card-title>
     <mat-card-subtitle>note: {{order.note}}</mat-card-subtitle> -->
         <div *ngFor="let item of data.menuIdsandQty">
-            <mat-checkbox [(ngModel)]="item.isDishReady" (ngModelChange)="updateCompleted()"></mat-checkbox>
+            <mat-checkbox [(ngModel)]="item.isDishReady"></mat-checkbox>
             ~ {{item.name}} - {{item.dishQty}} - {{item.orderQty}}
         </div>
         <p class="note">note: {{data.note}}</p>
