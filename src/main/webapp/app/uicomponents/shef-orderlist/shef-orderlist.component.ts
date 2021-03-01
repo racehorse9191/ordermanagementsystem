@@ -1,12 +1,12 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { interval, Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { OrderService } from '../../entities/order/order.service';
 import { OrderStatus } from '../../shared/model/enumerations/order-status.model';
 import { IOrder } from '../../shared/model/order.model';
 import * as moment from 'moment';
 import { faCheckCircle, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
-import { setTimeout } from 'timers';
+
 @Component({
   selector: 'jhi-chef-orderlist',
   templateUrl: './shef-orderlist.component.html',
@@ -19,7 +19,6 @@ export class ShefOrderlist {
   isSaving: boolean = false;
   faCoffee = faCheckCircle;
   faSyncAlt = faSyncAlt;
-  mySubscription: Subscription;
   constructor(protected orderService: OrderService) {}
 
   loadAll(): void {
@@ -68,9 +67,7 @@ export class ShefOrderlist {
     });
     this.loadAll();
   }
-  ngOnDestroy() {
-    this.mySubscription.unsubscribe();
-  }
+  ngOnDestroy() {}
 
   updateCompleted() {
     console.log('this is orders', this.orders);
