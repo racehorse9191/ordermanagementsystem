@@ -14,6 +14,8 @@ import { OrderService } from '../../entities/order/order.service';
 })
 export class SelectTableComponent implements OnInit {
   tables?: ITables[];
+  noTablesOccupied = false;
+  noTablesAvailabe = false;
 
   constructor(
     protected tablesService: TablesService,
@@ -29,14 +31,14 @@ export class SelectTableComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.accountService.getAuthenticationState().subscribe(account => {
-      console.log('account', account);
-      if (account.authorities.toString().includes('ROLE_CHEF')) {
-        this.router.navigate(['/ui/cheforderlist']);
-      } else {
-        this.loadAll();
-      }
-    });
+    // this.accountService.getAuthenticationState().subscribe(account => {
+    //   console.log('account', account);
+    //   if (account.authorities.toString().includes('ROLE_CHEF')) {
+    //     this.router.navigate(['/ui/cheforderlist']);
+    //   } else {
+    this.loadAll();
+    //   }
+    // });
   }
   takeorder(table: any): any {
     let orderData = null;
@@ -75,6 +77,13 @@ export class SelectTableComponent implements OnInit {
         }
       });
       this.tables = tabhelper;
+      if (this.tables.length == 0) {
+        this.noTablesAvailabe = true;
+        this.noTablesOccupied = false;
+      } else {
+        this.noTablesAvailabe = false;
+        this.noTablesOccupied = false;
+      }
     });
   }
   showOccupied() {
@@ -86,9 +95,18 @@ export class SelectTableComponent implements OnInit {
         }
       });
       this.tables = tabhelper;
+      if (this.tables.length == 0) {
+        this.noTablesOccupied = true;
+        this.noTablesAvailabe = false;
+      } else {
+        this.noTablesOccupied = false;
+        this.noTablesAvailabe = false;
+      }
     });
   }
   showAll() {
+    this.noTablesOccupied = false;
+    this.noTablesAvailabe = false;
     this.loadAll();
   }
 }

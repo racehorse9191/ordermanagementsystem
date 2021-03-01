@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -57,6 +57,21 @@ export class OrderService {
       );
   }
 
+  getUserOrderHistory(id: any, status: any, req?: any): Observable<EntityArrayResponseType> {
+    let options: HttpParams = new HttpParams();
+    if (req) {
+      options = req;
+    }
+    return this.http
+      .get<IOrder[]>(`${this.resourceUrl}/getUserOrderHistory/${id}/${status}`, { params: options, observe: 'response' })
+      .pipe(
+        map((res: EntityArrayResponseType) => {
+          this.convertDateArrayFromServer(res);
+          this.convertMenuIdStringToJson(res);
+          return res;
+        })
+      );
+  }
   /**
    *
    * @param tableId

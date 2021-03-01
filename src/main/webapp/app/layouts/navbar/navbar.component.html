@@ -16,6 +16,57 @@
                     </span>
                 </a>
             </li>
+            <!-- USER MENU -->
+             <li *jhiHasAnyAuthority="'ROLE_USER'" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+                    <span>
+                        <fa-icon icon="th-list"></fa-icon>
+                        <span>
+                            My Orders
+                        </span>
+                    </span>
+                </a>
+            <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+                <li>
+                    <a class="dropdown-item" routerLink="ui/myorderList/CONFIRMED" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                        <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                        <span>Confirmed</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" routerLink="ui/myorderList/COMPLETED" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                        <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                        <span>Completed</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+            <!-- ADMIN MENU -->
+                <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+                        <span>
+                            <fa-icon icon="th-list"></fa-icon>
+                            <span>
+                                All Orders
+                            </span>
+                        </span>
+                    </a>
+                <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+                    <li>
+                        <a class="dropdown-item" routerLink="ui/myorderList/CONFIRMED" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                            <span>Confirmed</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="ui/myorderList/COMPLETED" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                            <span>Completed</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
             <!--<li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">-->
                 <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">

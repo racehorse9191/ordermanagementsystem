@@ -7,6 +7,8 @@
 		<mat-chip style="background:#4582EC;color:white" selected (click)="showAll()">Show All</mat-chip>
 	</mat-chip-list>
 	<br>
+  <h3 *ngIf="noTablesAvailabe">No Tables Available!</h3>
+  <h3 *ngIf="noTablesOccupied">No Tables Occupied!</h3>
   <mat-grid-list *ngIf="tables" [cols]="3" rowHeight="1:0.5" gutterSize="10px">
     <mat-grid-tile class="gridtile" [class.occupied]="table.tablestatus == 'ENGAGED'" *ngFor="let table of tables" [colspan]="1" [rowspan]="1"
      (click)="takeorder(table)"> 

@@ -153,6 +153,9 @@ public class OrderResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+    /**
+     * Gets order details by table Id
+     */
     @GetMapping("/orders/table/{tableId}")
     public ResponseEntity<Order> getAllOrdersByTableId(@PathVariable Long tableId) {
         log.debug("REST request to get a page of Orders by table ID");

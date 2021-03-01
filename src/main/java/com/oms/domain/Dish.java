@@ -3,6 +3,8 @@ package com.oms.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -54,6 +56,7 @@ public class Dish implements Serializable {
     private Set<Menu> menus = new HashSet<>();
 
     @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
     @JsonIgnoreProperties(value = "dishes", allowSetters = true)
     private Category category;
 

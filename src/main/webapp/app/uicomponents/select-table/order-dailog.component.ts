@@ -7,7 +7,7 @@ import { OrderService } from '../../entities/order/order.service';
 import { TablesService } from '../../entities/tables/tables.service';
 import { OrderStatus } from '../../shared/model/enumerations/order-status.model';
 import { TableStatus } from '../../shared/model/enumerations/table-status.model';
-import { IOrder } from '../../shared/model/order.model';
+import { IOrder, Order } from '../../shared/model/order.model';
 
 @Component({
   selector: 'jhi-order-dailog',
@@ -35,7 +35,7 @@ export class OrderDailogComponent implements OnInit {
    */
   updateCheckbox(data) {
     this.isAllChecked = [];
-    const uncheckedDish = data.menuIdsandQty.filter(dish => dish.isdishReady == true);
+    const uncheckedDish = data.menuIdsandQty.filter(dish => dish.isDishReady == true);
     if (uncheckedDish.length == data.menuIdsandQty.length) {
       this.btnValue = 'Complete';
     } else {
@@ -43,14 +43,26 @@ export class OrderDailogComponent implements OnInit {
     }
   }
 
+  /**
+   *
+   * @param data update order data
+   */
   OrderUpdate(data) {
+    const order: Order = new Order();
+    order.id = data.id;
+    order.menuIdsandQty = JSON.stringify(data.menuIdsandQty);
+    order.note = data.note;
+    order.orderDate = data.orderDate;
+    order.tables = data.tables;
+    order.waiterName = data.waiterName;
+    order.waiterId = data.waiterId;
+    order.orderstatus = data.orderstatus;
     if (this.btnValue.includes('Complete')) {
-      data.tables.tablestatus = TableStatus.FREE;
-      data.orderstatus = OrderStatus.COMPLETED;
+      order.orderstatus = OrderStatus.COMPLETED;
+      order.tables.tablestatus = TableStatus.FREE;
     }
-    this.tablesService.update(data.tables).subscribe(res => {});
-    data.menuIdsandQty = JSON.stringify(data.menuIdsandQty);
-    this.subscribeToSaveResponse(this.orderService.update(data));
+    this.tablesService.update(order.tables).subscribe(res => {});
+    this.subscribeToSaveResponse(this.orderService.update(order));
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IOrder>>): void {

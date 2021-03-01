@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { JhiEventManager } from 'ng-jhipster';
 import { Subscription } from 'rxjs';
@@ -21,7 +21,7 @@ export interface Tile {
   templateUrl: './home.component.html',
   styleUrls: ['home.scss'],
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit, OnDestroy, OnChanges {
   account: Account | null = null;
   authSubscription?: Subscription;
   tiles: Tile[] = [
@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   tempArr: any[] = [];
   tables?: ITables[];
   eventSubscriber?: Subscription;
+  isLoggedIn: boolean = false;
 
   constructor(
     private accountService: AccountService,
@@ -48,6 +49,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     protected tablesService: TablesService,
     private router: Router
   ) {}
+  ngOnChanges(changes: SimpleChanges): void {
+    this.isLoggedIn = this.isAuthenticated();
+    if (this.isLoggedIn) {
+      this.accountService.getAuthenticationState().subscribe(account => {
+        console.log('account', account);
+        if (account.authorities.toString().includes('ROLE_CHEF')) {
+          this.router.navigate(['/ui/cheforderlist']);
+        } else {
+          this.router.navigate(['/ui/selectTable']);
+        }
+      });
+    }
+  }
 
   loadAll(): void {
     this.tablesService.query().subscribe((res: HttpResponse<ITables[]>) => (this.tables = res.body || []));
@@ -60,10 +74,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
   ngOnInit(): void {
-    // this.loadAll();
-    // cheforderlist
-    this.router.navigate(['/ui/selectTable']);
-    console.log('this is tables', this.tables);
+    this.accountService.getAuthenticationState().subscribe(account => {
+      console.log('account', account);
+      if (account) {
+        if (account.authorities.toString().includes('ROLE_CHEF')) {
+          this.router.navigate(['/ui/cheforderlist']);
+        } else {
+          this.router.navigate(['/ui/selectTable']);
+        }
+      } else {
+        this.login();
+      }
+    });
     this.registerChangeInTables();
     this.breakpoint = window.innerWidth <= 400 ? 1 : 6;
     this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account || null));

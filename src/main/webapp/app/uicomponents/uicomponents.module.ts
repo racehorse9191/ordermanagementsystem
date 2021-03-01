@@ -19,6 +19,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { OrderDailogComponent } from './select-table/order-dailog.component';
 import { MatButtonModule } from '@angular/material/button';
+import { MyOrderlist } from './my-orders/my-orders.component';
 @NgModule({
   declarations: [
     MenuComponent,
@@ -28,6 +29,7 @@ import { MatButtonModule } from '@angular/material/button';
     DishCategoryComponent,
     SelectTableComponent,
     ShefOrderlist,
+    MyOrderlist,
   ],
   imports: [
     CommonModule,
@@ -43,7 +45,15 @@ import { MatButtonModule } from '@angular/material/button';
     RouterModule.forChild(UiComponentRoutes),
   ],
   entryComponents: [OrderDailogComponent],
-  exports: [MenuComponent, SelectTableComponent, OrderDetailsComponent, DishViewComponent, DishCategoryComponent, ShefOrderlist],
+  exports: [
+    MenuComponent,
+    SelectTableComponent,
+    OrderDetailsComponent,
+    DishViewComponent,
+    DishCategoryComponent,
+    ShefOrderlist,
+    MyOrderlist,
+  ],
   providers: [SubscriptionService],
 })
 export class UicomponentsModule {}
