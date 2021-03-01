@@ -11,7 +11,6 @@ export class MenuListModel {
   dish?: DishModel;
   dishQty?: DishQtyModel[];
   constructor(params?: MenuListModel) {
-    console.log('params=>', params);
     this.id = params?.id;
     this.price = params?.price;
     this.orders = params?.orders;

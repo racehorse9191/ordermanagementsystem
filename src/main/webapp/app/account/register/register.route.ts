@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
+import { UserRouteAccessService } from '../../core/auth/user-route-access-service';
 import { Authority } from '../../shared/constants/authority.constants';
 import { RegisterComponent } from './register.component';
-import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 
 export const registerRoute: Route = {
   path: 'register',

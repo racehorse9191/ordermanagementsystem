@@ -97,7 +97,6 @@ export class OrderService {
   protected convertMenuIdStringToJson(res: EntityArrayResponseType): EntityArrayResponseType {
     if (res.body) {
       res.body.forEach((order: IOrder) => {
-        console.log('inside service=>', order.menuIdsandQty);
         order.menuIdsandQty = JSON.parse(order.menuIdsandQty);
       });
     }

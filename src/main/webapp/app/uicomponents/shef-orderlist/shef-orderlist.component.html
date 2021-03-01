@@ -1,6 +1,8 @@
-<nav class="navbar sticky-top navbar-light bg-light row spaceBetween">
-	<h2>Orders</h2>
+<nav class="navbar sticky-top navbar-light bg-light row">
+	<h2>Orders
+		<span><fa-icon [icon]="faSyncAlt" (click)="loadAll()" style="width: 30%;"></fa-icon></span> </h2>
 </nav>
+<p *ngIf="orders">{{orders.length}} </p>
 <h3 *ngIf="orders && orders.length == 0">No new orders!</h3>
 <section class="items">
 	<div class="card" [id]="order.id" *ngFor="let order of orders;let i = index">
@@ -8,20 +10,8 @@
 			  <h5 class="card-title"># {{order.id}} <br> {{order.tables.tableName}} - {{order.waiterName}}</h5>
 			  <h6 class="card-subtitle mb-2 text-muted">note: {{order.note}}</h6>
 			  <div *ngFor="let item of order.menuIdsandQty;let j = index">	  
-				<span><fa-icon [icon]="faCoffee"  [styles]="{'stroke': 'green', 'color': 'green'}"></fa-icon></span>
+				<span *ngIf="item.isDishReady"><fa-icon [icon]="faCoffee"  [styles]="{'stroke': 'green', 'color': 'green'}"></fa-icon></span>
 				<label> {{item.name}} - {{item.dishQty}} - {{item.orderQty}} </label> 
-			</div>
-			</div>
-	</div>
-</section>
-<h2 class="heading" *ngIf="completedOrders && completedOrders.length !=0">Completed Orders</h2>
-<section class="items">
-	<div class="card" [id]="order.id" *ngFor="let order of completedOrders; let i = index">
-			<div class="card-body">
-			  <h5 class="card-title">{{order.tables.tableName}} - {{order.waiterName}}</h5>
-			  <h6 class="card-subtitle mb-2 text-muted">note: {{order.note}}</h6>
-			  <div *ngFor="let item of order.menuIdsandQty">
-				~ {{item.name}} - {{item.dishQty}} - {{item.orderQty}}
 			</div>
 			</div>
 	</div>
