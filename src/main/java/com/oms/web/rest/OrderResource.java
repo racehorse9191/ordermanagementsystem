@@ -146,10 +146,10 @@ public class OrderResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of orders in body.
      */
-    @GetMapping("/orders/getUserOrderHistory/{id}")
-    public ResponseEntity<List<Order>> getUserOrderHistory(Pageable pageable,@PathVariable Long id) {
+    @GetMapping("/orders/getUserOrderHistory/{id}/{orderStatus}")
+    public ResponseEntity<List<Order>> getUserOrderHistory(Pageable pageable,@PathVariable Long id,@PathVariable OrderStatus orderStatus ) {
         log.debug("REST request to get a page of Orders");
-        Page<Order> page = orderRepository.findByWaiterId(id,pageable);
+        Page<Order> page = orderRepository.findByWaiterIdAndOrderstatus(id,orderStatus,pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
