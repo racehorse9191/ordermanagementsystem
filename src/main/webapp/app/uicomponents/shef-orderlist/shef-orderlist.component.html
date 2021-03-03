@@ -1,6 +1,8 @@
 <nav class="navbar sticky-top navbar-light bg-light row">
-	<h2>Orders
-		<span><fa-icon [icon]="faSyncAlt" (click)="loadAll()" style="width: 30%;"></fa-icon></span> </h2>
+	<h2>Orders</h2>
+		<button class="btn btn-primary float-right" (click)="loadAll()">
+            <fa-icon icon="sync"></fa-icon> <span jhiTranslate="metrics.refresh.button">Refresh</span>
+        </button>
 </nav>
 <!-- <p *ngIf="orders">{{orders.length}} </p> -->
 <h3 *ngIf="orders && orders.length == 0">No new orders!</h3>

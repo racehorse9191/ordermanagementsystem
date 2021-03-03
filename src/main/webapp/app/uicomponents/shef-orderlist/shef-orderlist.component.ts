@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { interval, Observable, Subscription } from 'rxjs';
 import { OrderService } from '../../entities/order/order.service';
 import { OrderStatus } from '../../shared/model/enumerations/order-status.model';
 import { IOrder } from '../../shared/model/order.model';
@@ -19,6 +19,7 @@ export class ShefOrderlist {
   isSaving: boolean = false;
   faCoffee = faCheckCircle;
   faSyncAlt = faSyncAlt;
+  sub: Subscription;
   constructor(protected orderService: OrderService) {}
 
   loadAll(): void {
@@ -48,6 +49,10 @@ export class ShefOrderlist {
   }
   ngOnInit(): void {
     console.log('Inside onint');
+    this.sub = interval(30000).subscribe(val => {
+      this.loadAll();
+      console.log('called');
+    });
     this.loadAll();
   }
   onDishChanged(i, j) {
@@ -67,7 +72,9 @@ export class ShefOrderlist {
     });
     this.loadAll();
   }
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
 
   updateCompleted() {
     console.log('this is orders', this.orders);
@@ -86,5 +93,6 @@ export class ShefOrderlist {
 
   protected onSaveError(): void {
     this.isSaving = false;
+    this.sub.unsubscribe();
   }
 }
