@@ -6,5 +6,18 @@
   background: white;
 }
 .occupied {
-  background: linear-gradient(90deg, white 90%, #4caf50 10%);
+  background: linear-gradient(90deg, white 65%, #4caf50 35%);
+}
+
+.statusColor {
+  color: white;
+  margin-top: 0.5%;
+}
+
+.items {
+  cursor: pointer;
+}
+
+.center-Btn {
+  align-self: center;
 }

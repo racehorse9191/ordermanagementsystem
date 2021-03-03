@@ -1,17 +1,28 @@
-<h2 id="page-heading">
+<div class="card gridtile">
+  <h2 class="text-center" id="page-heading">
     <span jhiTranslate="orderManagementSystemApp.selectTable">Select Table</span>
     </h2>
-    	<mat-chip-list aria-label="Fish selection">
-		<mat-chip class="btn btn-primary" style="background:#4582EC;color:white" (click)="showVacant()">Vacant</mat-chip>
-		<mat-chip style="background: #4582EC;color:white" selected (click)="showOccupied()">Occupied</mat-chip>
-		<mat-chip style="background:#4582EC;color:white" selected (click)="showAll()">Show All</mat-chip>
-	</mat-chip-list>
+    <div class="center-Btn">
+      <mat-chip-list class="text-center" aria-label="Fish selection">
+        <mat-chip class="btn btn-primary" style="background:#4582EC;color:white" (click)="showVacant()">Vacant</mat-chip>
+        <mat-chip style="background: #4582EC;color:white" selected (click)="showOccupied()">Occupied</mat-chip>
+        <mat-chip style="background:#4582EC;color:white" selected (click)="showAll()">Show All</mat-chip>
+      </mat-chip-list>
+    </div>
 	<br>
   <h3 *ngIf="noTablesAvailabe">No Tables Available!</h3>
   <h3 *ngIf="noTablesOccupied">No Tables Occupied!</h3>
-  <mat-grid-list *ngIf="tables" [cols]="3" rowHeight="1:0.5" gutterSize="10px">
-    <mat-grid-tile class="gridtile" [class.occupied]="table.tablestatus == 'ENGAGED'" *ngFor="let table of tables" [colspan]="1" [rowspan]="1"
-     (click)="takeorder(table)"> 
-      {{table.tableName}}
-    </mat-grid-tile>
-</mat-grid-list>
+
+</div>  
+<section class="items">
+  <div class="card gridtile" [class.occupied]="table.tablestatus == 'ENGAGED'"  [id]="table.id" *ngFor="let table of tables; let i = index">
+    <div  (click)="takeorder(table)" class="card-body">
+      <div class="message">
+        <span class="">
+         {{table.tableName}}  <fa-icon *ngIf="table.tablestatus == 'ENGAGED'" (click)="takeorder(table)" class="primary" icon="pencil-alt"></fa-icon>
+        </span>
+        <h6 class="card-subtitle mb-2 float-right statusColor">{{ table.tablestatus}}</h6>
+      </div>
+    </div>
+  </div>
+</section>

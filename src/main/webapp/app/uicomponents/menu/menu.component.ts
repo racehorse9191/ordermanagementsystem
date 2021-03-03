@@ -9,6 +9,8 @@ import { Subscription } from 'rxjs';
 import { SubscriptionService } from '../../shared/subscription.service';
 import { DisplayCategory } from '../dish-category/dish-category.component';
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute } from '@angular/router';
+import { ITables } from '../../shared/model/tables.model';
 
 @Component({
   selector: 'jhi-menu',
@@ -35,13 +37,19 @@ export class MenuComponent implements OnInit {
   categoryList: DisplayCategory[] = [];
   activeTab: any;
   singleCategoryList: DisplayCategory = new DisplayCategory();
+  currentTable: ITables;
+  private routeSub: Subscription = new Subscription();
   constructor(
     protected dishService: DishService,
     protected menuService: MenuService,
     protected subscriptionService: SubscriptionService,
-    protected cd: ChangeDetectorRef
+    protected cd: ChangeDetectorRef,
+    private route: ActivatedRoute
   ) {
     this.loadDishes();
+    this.routeSub = this.route.params.subscribe(params => {
+      this.currentTable = history.state;
+    });
   }
 
   ngOnInit(): void {
