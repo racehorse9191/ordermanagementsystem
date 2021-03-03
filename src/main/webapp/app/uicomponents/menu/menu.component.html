@@ -18,7 +18,7 @@
           [clearable]="true">
           <ng-template ng-label-tmp let-item="item" let-clear="clear">
             <div>
-            <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">
+            <span class="ng-value-icon right" (click)="orderList.length == 0?clear(item):clearItem(item);clear(item)" aria-hidden="true">
               ×</span>
             <img height="15" width="15" [src]="item?.dish?.dishImage | sanitizeUrl"/>
             <b>{{item?.dish?.dishName}} <p id="{{item.dish.id}}" class="badge badge-pill badge-success">{{ fetchOrderQty(item) }}</p> </b>

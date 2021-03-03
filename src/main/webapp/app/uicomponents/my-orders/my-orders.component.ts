@@ -32,7 +32,7 @@ export class MyOrderlist {
     size: this.itemsPerPage,
     sort: 'id,desc',
   };
-  constructor(protected orderService: OrderService, private readonly route: ActivatedRoute, private accountService: AccountService) {}
+  constructor(protected orderService: OrderService, private route: ActivatedRoute, private accountService: AccountService) {}
 
   /**
    *

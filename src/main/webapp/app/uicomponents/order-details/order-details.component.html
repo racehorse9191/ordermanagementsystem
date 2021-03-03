@@ -89,6 +89,8 @@
             <li> CGST(9%) : {{ totalorderDetails()  | totalGst:9:false  | currency:'INR' }}   </li>
             <li> SGST(9%) : {{ totalorderDetails()  | totalGst:9:false  | currency:'INR' }} </li>
             <li><span>Grand Total Price:  {{ totalorderDetails()  | totalGst:18:true  | currency:'INR'}}</span></li>
+            <li> <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="button" onclick="window.print()"
+              class="btn btn-danger btn-sm">Print</button> </li>
           </ul>
         </div>
         <button type="submit" class="btn btn-primary" for="orderForm" [disabled]="orderTable.length == 0" (click) ="confirmOrder()">Confirm Order</button>

@@ -113,6 +113,9 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     });
     return total.reduce((a, b) => a + b, 0);
   }
+  print() {
+    window.print();
+  }
   confirmOrder() {
     const order: Order = new Order();
     delete this.table['navigationId'];
@@ -153,18 +156,19 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
 
   onQtyChanged(opt1: any, opt2: any) {}
   delete(order: any) {
+    console.log('order=>', order);
+    console.log('orderlist=>', this.orderList);
     const temp = [];
     this.orderList.forEach(res => {
       res.menus.forEach(menu => {
-        if (menu.id != order.id) {
+        console.log('menu=>', menu);
+        console.log('order=>', order.id);
+        if (menu.id === order.id) {
           res.orderQty = 0;
+        }
+        if (menu.id != order.id) {
           temp.push(res);
         }
-        menu.dishQty.forEach(orQty => {
-          if (orQty.id == res.id) {
-            orQty.orderQty = 0;
-          }
-        });
       });
     });
 

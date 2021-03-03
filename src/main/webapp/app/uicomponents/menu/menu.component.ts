@@ -33,6 +33,7 @@ export class MenuComponent implements OnInit {
   showOrderButton: boolean = false;
   orderList: DishQtyModel[] = [];
   categoryList: DisplayCategory[] = [];
+  activeTab: any;
   singleCategoryList: DisplayCategory = new DisplayCategory();
   constructor(
     protected dishService: DishService,
@@ -46,11 +47,16 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
     this.detailRecivedSubscription = this.subscriptionService.selectedorderOrderObservable.subscribe((obj: any[]) => {
       if (obj.length != 0) {
-        this.showOrderButton = true;
+        if (this.activeTab == 2) {
+          this.showOrderButton = false;
+        } else {
+          this.showOrderButton = true;
+        }
         this.orderList = obj;
         this.updateMenuCategoryDishes();
         this.updateTOdaysSpl();
       } else {
+        this.orderList = [];
         this.showOrderButton = false;
         this.selectedDishes = [];
         this.dishSelected = false;
@@ -130,6 +136,7 @@ export class MenuComponent implements OnInit {
     }, 10);
   }
   selectedActiveTab(event: any) {
+    this.activeTab = event;
     if (event == 2) {
       this.showOrderButton = false;
     } else if (this.orderList.length != 0) {
@@ -217,6 +224,7 @@ export class MenuComponent implements OnInit {
   /* the section of cooking category data ends here*/
 
   onSearchItemRemove(event: any) {
+    console.log('search item clear');
     if (this.orderList.length != 0) {
       this.selectedDishes = this.selectedDishes.filter(res => res.id != event.value.id);
       this.orderList = this.orderList.filter(res => res?.menus?.find(menu => menu.id != event.value.id));
@@ -226,9 +234,23 @@ export class MenuComponent implements OnInit {
     }
   }
   onSearchClear() {
+    console.log('search clear');
+    this.orderList.filter(res => {
+      res.orderQty = 0;
+    });
     this.subscriptionService.updateOrder([]);
   }
-  clear(item) {
+  clearItem(item) {
     console.log('item=>', item);
+    if (this.orderList.length != 0) {
+      this.orderList.filter(res => {
+        res.menus.forEach(menu => {
+          if (menu.id == item.id) {
+            res.orderQty = 0;
+          }
+        });
+      });
+    }
+    this.subscriptionService.updateOrder(this.orderList);
   }
 }
