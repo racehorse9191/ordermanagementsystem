@@ -23,7 +23,7 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   vegType: string = 'VEG';
   selectedQty: any[] = [];
   dishPrice: any[] = [];
-  dishesToOrder: DishQtyModel[] = [];
+  dishesToOrder: MenuListModel[] = [];
   constructor(protected subscriptionService: SubscriptionService, config: NgbCarouselConfig, protected cd: ChangeDetectorRef) {
     config.interval = 5000;
     config.wrap = false;
@@ -113,9 +113,13 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
           }
         });
         this.dishesToOrder.filter(res => {
-          if (res.id === this.selectedQty[index].id) {
-            res.orderQty = this.orders[index];
-          }
+          res.dishQty.forEach(qty => {
+            if (qty.id === this.selectedQty[index].id) {
+              if (qty.orderQty) {
+                qty.orderQty = this.orders[index];
+              }
+            }
+          });
         });
       }
       this.subscriptionService.updateOrder(this.dishesToOrder);
@@ -135,23 +139,9 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
         });
       }
       if (this.dishesToOrder) {
-        const temp = [];
-        this.dishesToOrder.forEach(res => {
-          res.menus.forEach(menu => {
-            if (value.menus.find(val => menu.id != val.dish.id)) {
-              res.orderQty = 0;
-              temp.push(res);
-            }
-            menu.dishQty.forEach(orQty => {
-              if (orQty.id == res.id) {
-                orQty.orderQty = 0;
-              }
-            });
-          });
-        });
-        this.dishesToOrder = [];
-        this.dishesToOrder = temp;
+        this.dishesToOrder = this.dishesToOrder.filter(res => value.menus.find(val => res.dish.id != val.dish.id));
       }
+      console.log('Before Update=>', this.dishesToOrder);
       this.subscriptionService.updateOrder(this.dishesToOrder);
     }
   }
