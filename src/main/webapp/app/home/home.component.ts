@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy, OnChanges {
     if (this.isLoggedIn) {
       this.accountService.getAuthenticationState().subscribe(account => {
         console.log('account', account);
-        if (account.authorities.toString().includes('ROLE_CHEF')) {
+        if (account.authorities.toString().includes('ROLE_CHEF') || account.authorities.toString().includes('ROLE_BARTENDER')) {
           this.router.navigate(['/ui/cheforderlist']);
         } else {
           this.router.navigate(['/ui/selectTable']);
@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit, OnDestroy, OnChanges {
     this.accountService.getAuthenticationState().subscribe(account => {
       console.log('account', account);
       if (account) {
-        if (account.authorities.toString().includes('ROLE_CHEF')) {
+        if (account.authorities.toString().includes('ROLE_CHEF') || account.authorities.toString().includes('ROLE_BARTENDER')) {
           this.router.navigate(['/ui/cheforderlist']);
         } else {
           this.router.navigate(['/ui/selectTable']);

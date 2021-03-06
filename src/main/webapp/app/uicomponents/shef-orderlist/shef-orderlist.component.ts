@@ -6,6 +6,8 @@ import { OrderStatus } from '../../shared/model/enumerations/order-status.model'
 import { IOrder } from '../../shared/model/order.model';
 import * as moment from 'moment';
 import { faCheckCircle, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+import { Account } from './../../core/user/account.model';
+import { AccountService } from '../../core/auth/account.service';
 
 @Component({
   selector: 'jhi-chef-orderlist',
@@ -13,6 +15,7 @@ import { faCheckCircle, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./shef-orderlist.component.scss'],
 })
 export class ShefOrderlist {
+  account!: Account;
   orders: IOrder[];
   isDishReady: any[] = [];
   changedOrderStatus: any;
@@ -20,7 +23,13 @@ export class ShefOrderlist {
   faCoffee = faCheckCircle;
   faSyncAlt = faSyncAlt;
   sub: Subscription;
-  constructor(protected orderService: OrderService) {}
+  constructor(protected orderService: OrderService, private accountService: AccountService) {
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        this.account = account;
+      }
+    });
+  }
 
   loadAll(): void {
     console.log('inside loadALL');
@@ -40,7 +49,8 @@ export class ShefOrderlist {
             }
           });
         });
-        this.orders = orders;
+
+        this.orders = this.authoritiesOrder(orders);
       },
       error => {
         console.log('error=>', error);
@@ -48,7 +58,8 @@ export class ShefOrderlist {
     );
   }
   ngOnInit(): void {
-    console.log('Inside onint');
+    console.log('Inside onint=>', this.account);
+
     this.sub = interval(30000).subscribe(val => {
       this.loadAll();
       console.log('called');
@@ -71,6 +82,55 @@ export class ShefOrderlist {
       }
     });
     this.loadAll();
+  }
+  authoritiesOrder(order: IOrder[]) {
+    console.log('orders=>', order);
+    let authority = '';
+    if (this.account.authorities) {
+      this.account.authorities.forEach(res => {
+        if (res == 'ROLE_CHEF') {
+          authority = 'ROLE_CHEF';
+        }
+      });
+    }
+    if (authority == 'ROLE_CHEF') {
+      console.log('inside chef authority');
+      order.forEach(res => {
+        const menuIdQty = [];
+        res.menuIdsandQty.forEach(menuIds => {
+          if (menuIds.allDishQty) {
+            menuIds.allDishQty.forEach(element => {
+              console.log('alldishqty=>', element);
+              console.log('alldishqty condition=>', element.dish.category.categoryName.toLowerCase());
+              if (element.dish.category.categoryName.toLowerCase() != 'beverages') {
+                menuIdQty.push(menuIds);
+              }
+            });
+          }
+        });
+        res.menuIdsandQty = menuIdQty;
+      });
+    } else {
+      console.log('inside Bartender authority');
+      order.forEach(res => {
+        const menuIdQty = [];
+        res.menuIdsandQty.forEach(menuIds => {
+          if (menuIds.allDishQty) {
+            menuIds.allDishQty.forEach(element => {
+              console.log('alldishqty=>', element);
+              console.log('alldishqty condition=>', element.dish.category.categoryName.toLowerCase());
+              if (element.dish.category.categoryName.toLowerCase() === 'beverages') {
+                menuIdQty.push(menuIds);
+              }
+            });
+          }
+        });
+        res.menuIdsandQty = menuIdQty;
+      });
+    }
+    console.log('returning order=>', order);
+    order = order.filter(res => res.menuIdsandQty.length != 0);
+    return order;
   }
   ngOnDestroy() {
     this.sub.unsubscribe();
