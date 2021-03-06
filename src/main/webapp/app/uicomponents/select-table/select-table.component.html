@@ -1,8 +1,18 @@
 <div class="card gridtile">
-  <h2 class="text-center" id="page-heading">
+  <h2 class=" center-Btn" id="page-heading">
     <span jhiTranslate="orderManagementSystemApp.selectTable">Select Table</span>
     </h2>
     <div class="center-Btn">
+      <div class="md-form input-group input-group-lg">
+        <div class="search"> <input type="text" class="search-input form-control" placeholder="Search..." name="tableSearch" (keyup)="filterItem($event)"> <span class="search-icon">  <i class="bi bi-search"></i> </span> </div>
+      </div><!-- 
+        <div class="input-group-btn">
+          <button class="btn btn-default" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </div> -->
+      <!-- </div> -->
+      <br>
       <mat-chip-list class="text-center" aria-label="Fish selection">
         <mat-chip class="btn btn-primary" style="background:#4582EC;color:white" (click)="showVacant()">Vacant</mat-chip>
         <mat-chip style="background: #4582EC;color:white" selected (click)="showOccupied()">Occupied</mat-chip>
@@ -15,7 +25,7 @@
 
 </div>  
 <section class="items">
-  <div class="card gridtile" [class.occupied]="table.tablestatus == 'ENGAGED'"  [id]="table.id" *ngFor="let table of tables; let i = index">
+  <div class="card gridtile" [class.occupied]="table.tablestatus == 'ENGAGED'"  [id]="table.id" *ngFor="let table of filteredItems; let i = index">
     <div  (click)="takeorder(table)" class="card-body">
       <div class="message">
         <span class="">
@@ -26,3 +36,28 @@
     </div>
   </div>
 </section>
+<modal #modal [modalConfig]="modalConfig" (dismissClicked)="onDismissedClicked($event)" (closeClicked)="onCloseClicked($event)" >
+  <!--  body of the modal  -->
+  <div *ngIf="orderData" class="alert alert-class" role="alert">
+    <h4 class="alert-heading">Note!</h4>
+    <p> {{orderData.note}}</p>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Dish Name</th>
+        <th class="text-center" scope="col">Dish Qty</th>
+        <th class="text-center" scope="col">Order Qty</th> 
+      </tr>
+    </thead>
+      <tbody *ngIf="orderData">
+        <tr *ngFor="let item of orderData.menuIdsandQty" >
+          <td> <input type="checkbox" [(ngModel)]="item.isDishReady" (ngModelChange)="updateCheckbox(orderData)"></td>
+          <td> {{item.name}}  </td>
+          <td class="text-center"> {{item.dishQty}} </td>
+          <td class="text-center"> X {{item.orderQty}}  </td>
+         </tr>
+      </tbody>
+      </table>
+</modal>

@@ -36,6 +36,7 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
     this.dishes?.forEach((res, i) => {
       res.dishQty?.forEach(qty => {
         if (qty.orderQty) {
+          console.log('orderQty=>', res.dish.dishName);
           this.orders.push(qty.orderQty);
           this.selectedQty.push(qty);
         }
@@ -50,6 +51,7 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
         this.orders.push(0);
       }
     });
+    console.log('dishes=>', this.dishes);
   }
 
   ngOnInit(): void {
@@ -68,17 +70,14 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
     this.orders[index] = this.orders[index] + 1;
     if (this.orders[index] > 0) {
       if (this.dishes) {
-        let temp =
-          this.dishes[index]?.dishQty?.filter(res => {
-            if (res) {
-              if (res?.id == this.selectedQty[index].id) {
-                res.orderQty = this.orders[index];
-                return res;
-              }
+        this.dishes[index]?.dishQty?.filter(res => {
+          if (res) {
+            if (res?.id == this.selectedQty[index].id) {
+              res.orderQty = this.orders[index];
             }
-          })[0] || {};
-        this.dishesToOrder.push(temp);
-        temp = {};
+          }
+        })[0] || {};
+        this.dishesToOrder.push(this.dishes[index]);
       }
       this.dishesToOrder = this.removeRedundentObjects(this.dishesToOrder);
       this.subscriptionService.updateOrder(this.dishesToOrder);
@@ -99,19 +98,17 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
             if (res) {
               if (res?.id == this.selectedQty[index].id) {
                 res.orderQty = this.orders[index];
-                return res;
               }
             }
           });
         }
         //  this.dishes =  this.dishes.filter(res=> res.id != this.selectedQty[index].id)
-        this.dishesToOrder = this.dishesToOrder.filter(res => res.menus.find(menu => menu.id !== this.selectedQty[index].id)) || [];
+        this.dishesToOrder = this.dishesToOrder.filter(res => res.id !== this.selectedQty[index].id) || [];
       } else if (this.dishes) {
         this.dishes[index]?.dishQty?.filter(res => {
           if (res) {
             if (res?.id == this.selectedQty[index].id) {
               res.orderQty = this.orders[index];
-              return res;
             }
           }
         });

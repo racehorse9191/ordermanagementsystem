@@ -7,7 +7,7 @@ import { AccountService } from '../../core/auth/account.service';
 import { OrderService } from '../../entities/order/order.service';
 import { TablesService } from '../../entities/tables/tables.service';
 import { OrderStatus } from '../../shared/model/enumerations/order-status.model';
-import { DishQtyModel } from '../../shared/model/menu-list.model';
+import { MenuListModel } from '../../shared/model/menu-list.model';
 import { IOrder, Order } from '../../shared/model/order.model';
 import { SubscriptionService } from '../../shared/subscription.service';
 import { Account } from './../../core/user/account.model';
@@ -18,7 +18,7 @@ export class OrderTable {
   orderQty?: any;
   price?: any;
   orderTotal?: any;
-  allDishQty?: DishQtyModel[];
+  allDishQty?: MenuListModel[];
   constructor(params?: OrderTable) {
     this.id = params?.id;
     this.name = params?.name;
@@ -38,7 +38,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   account!: Account;
   isSaving = false;
   detailRecivedSubscription: Subscription = new Subscription();
-  orderList: DishQtyModel[] = [];
+  orderList: MenuListModel[] = [];
   orderTable: OrderTable[] = [];
   order: OrderTable = new OrderTable();
   private routeSub: Subscription = new Subscription();
@@ -86,9 +86,25 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   constructTable() {
     this.orderTable = [];
     this.orderList.forEach(res => {
-      if (res.menus) {
+      console.log('res=>', res);
+      if (res) {
+        this.order = new OrderTable();
+        this.order.id = res.id;
+        this.order.price = res.price;
+        this.order.name = res.dish?.dishName;
+        if (res.dishQty.length != 0) {
+          res.dishQty.forEach(qty => {
+            if (qty.orderQty) {
+              this.order.dishQty = qty.qtyName;
+              this.order.orderQty = qty.orderQty;
+              this.order.orderTotal = this.calculateOrderTotal(res.price, qty.orderQty);
+              this.order.allDishQty = qty.menus;
+            }
+          });
+          this.orderTable.push(this.order);
+        }
+        /* this.order.dishQty = res.qtyName;
         res?.menus?.forEach(menu => {
-          this.order = new OrderTable();
           this.order.id = menu.id;
           this.order.dishQty = res.qtyName;
           this.order.orderQty = res.orderQty;
@@ -97,7 +113,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
           this.order.allDishQty = menu.dishQty;
           this.order.orderTotal = this.calculateOrderTotal(menu.price, res.orderQty);
           this.orderTable.push(this.order);
-        });
+        }); */
       }
     });
   }
@@ -120,14 +136,11 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     const order: Order = new Order();
     delete this.table['navigationId'];
     this.table.tablestatus = 'ENGAGED';
+    console.log('order table=>', this.orderTable);
     this.orderTable.forEach(res => {
-      res.allDishQty.forEach(qty => {
-        qty.menus.forEach(menu => {
-          delete menu.dishQty;
-        });
-      });
+      console.log('res=>', res);
     });
-    order.menuIdsandQty = JSON.stringify(this.orderTable);
+    order.menuIdsandQty = this.customStringify(this.orderTable);
     order.note = this.chefNote;
     order.orderDate = moment();
     order.tables = this.table;
@@ -138,17 +151,51 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     this.subscriptionService.updateOrder([]);
     this.subscribeToSaveResponse(this.orderService.create(order));
   }
+
+  customStringify(v) {
+    const cache = new Set();
+    return JSON.stringify(v, function (key, value) {
+      if (typeof value === 'object' && value !== null) {
+        if (cache.has(value)) {
+          // Circular reference found
+          try {
+            // If this value does not reference a parent it can be deduped
+            return JSON.parse(JSON.stringify(value));
+          } catch (err) {
+            // discard key if value cannot be deduped
+            return;
+          }
+        }
+        // Store value in our set
+        cache.add(value);
+      }
+      return value;
+    });
+  }
   orderPlusClicked(index: any) {
-    this.orderList[index].orderQty = this.orderList[index].orderQty + 1;
+    this.orderList[index].dishQty.forEach(res => {
+      if (res.orderQty) {
+        res.orderQty = res.orderQty + 1;
+      }
+    });
     this.subscriptionService.updateOrder(this.orderList);
   }
   orderMinusClicked(ordrQty: any, index: any) {
     if (ordrQty > 0) {
-      this.orderList[index].orderQty = this.orderList[index].orderQty - 1;
-      if (this.orderList[index].orderQty == 0) {
-        this.orderList = this.orderList.filter(res =>
-          res.menus.find(menu => this.orderList[index].menus.find(resMenu => menu.id != resMenu.id))
-        );
+      const menuId = this.orderList[index].id;
+      let deleteIndex = false;
+      this.orderList[index].dishQty.forEach(res => {
+        if (res.orderQty) {
+          res.orderQty = res.orderQty - 1;
+          if (res.orderQty == 0) {
+            deleteIndex = true;
+          }
+        }
+      });
+      console.log('orderList=>', this.orderList);
+      this.subscriptionService.updateOrder(this.orderList);
+      if (deleteIndex) {
+        this.orderList = this.orderList.filter(menu => menu.id != menuId);
       }
       this.subscriptionService.updateOrder(this.orderList);
     }
@@ -156,24 +203,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
 
   onQtyChanged(opt1: any, opt2: any) {}
   delete(order: any) {
-    console.log('order=>', order);
-    console.log('orderlist=>', this.orderList);
-    const temp = [];
-    this.orderList.forEach(res => {
-      res.menus.forEach(menu => {
-        console.log('menu=>', menu);
-        console.log('order=>', order.id);
-        if (menu.id === order.id) {
-          res.orderQty = 0;
-        }
-        if (menu.id != order.id) {
-          temp.push(res);
-        }
-      });
-    });
-
-    this.orderList = [];
-    this.orderList = temp;
+    this.orderList = this.orderList.filter(res => res.id != order.id);
     this.subscriptionService.updateOrder(this.orderList);
   }
 

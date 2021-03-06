@@ -1,4 +1,4 @@
-import { DishQtyModel, MenuListModel } from './../../shared/model/menu-list.model';
+import { MenuListModel } from './../../shared/model/menu-list.model';
 import { HttpResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { DishService } from '../../entities/dish/dish.service';
@@ -33,7 +33,7 @@ export class MenuComponent implements OnInit {
   singleCategory: MenuListModel = new MenuListModel();
   detailRecivedSubscription: Subscription = new Subscription();
   showOrderButton: boolean = false;
-  orderList: DishQtyModel[] = [];
+  orderList: MenuListModel[] = [];
   categoryList: DisplayCategory[] = [];
   activeTab: any;
   singleCategoryList: DisplayCategory = new DisplayCategory();
@@ -54,6 +54,7 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.detailRecivedSubscription = this.subscriptionService.selectedorderOrderObservable.subscribe((obj: any[]) => {
+      console.log('obj=>', obj);
       if (obj.length != 0) {
         if (this.activeTab == 2) {
           this.showOrderButton = false;
@@ -173,9 +174,9 @@ export class MenuComponent implements OnInit {
     const tempTodaysSPl = this.todaySplMenu;
     tempTodaysSPl.forEach(res => {
       this.orderList.forEach(order => {
-        order?.menus?.forEach(ordMenu => {
-          if (res.id == ordMenu.id) {
-            res = ordMenu;
+        order?.dishQty?.forEach(ordMenu => {
+          if (res.id == order.id) {
+            res = order;
           }
         });
       });
@@ -194,13 +195,39 @@ export class MenuComponent implements OnInit {
     tempCategoryList.forEach(res => {
       this.orderList.forEach(order => {
         res.menus.forEach(catMenu => {
-          order?.menus?.forEach(ordMenu => {
-            if (ordMenu.id == catMenu.id) {
-              catMenu = ordMenu;
-            }
-          });
+          if (order.id == catMenu.id) {
+            catMenu.dishQty.forEach(catQty => {
+              order.dishQty.forEach(ordrQty => {
+                if (catQty.id == ordrQty.id && ordrQty.orderQty) {
+                  catQty.orderQty = ordrQty.orderQty;
+                }
+              });
+            });
+          }
         });
       });
+    });
+    tempCategoryList.filter(res => {
+      if (res.menus) {
+        res.menus.filter(menu => {
+          let found = false;
+          for (let i = 0; i < this.orderList.length; i++) {
+            if (this.orderList[i].id == menu.id) {
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            if (menu.dishQty.length != 0) {
+              menu.dishQty.forEach(menuQty => {
+                if (menuQty.orderQty) {
+                  menuQty.orderQty = 0;
+                }
+              });
+            }
+          }
+        });
+      }
     });
     this.categoryList = [];
     this.categoryList = tempCategoryList;
@@ -228,6 +255,8 @@ export class MenuComponent implements OnInit {
       }
     });
     this.categoryList = tempCatergoryList;
+    this.updateMenuCategoryDishes();
+    this.updateTOdaysSpl();
   }
   /* the section of cooking category data ends here*/
 
@@ -235,7 +264,7 @@ export class MenuComponent implements OnInit {
     console.log('search item clear');
     if (this.orderList.length != 0) {
       this.selectedDishes = this.selectedDishes.filter(res => res.id != event.value.id);
-      this.orderList = this.orderList.filter(res => res?.menus?.find(menu => menu.id != event.value.id));
+      this.orderList = this.orderList.filter(res => res.id != event.value.id);
       this.subscriptionService.updateOrder(this.orderList);
     } else {
       this.selectedDishes = this.selectedDishes.filter(res => res.id != event.value.id);
@@ -244,7 +273,11 @@ export class MenuComponent implements OnInit {
   onSearchClear() {
     console.log('search clear');
     this.orderList.filter(res => {
-      res.orderQty = 0;
+      res.dishQty.forEach(qty => {
+        if (qty.orderQty) {
+          qty.orderQty = 0;
+        }
+      });
     });
     this.subscriptionService.updateOrder([]);
   }
@@ -252,11 +285,13 @@ export class MenuComponent implements OnInit {
     console.log('item=>', item);
     if (this.orderList.length != 0) {
       this.orderList.filter(res => {
-        res.menus.forEach(menu => {
-          if (menu.id == item.id) {
-            res.orderQty = 0;
-          }
-        });
+        if (res.id == item.id) {
+          res.dishQty.forEach(qty => {
+            if (qty.orderQty) {
+              qty.orderQty = 0;
+            }
+          });
+        }
       });
     }
     this.subscriptionService.updateOrder(this.orderList);
