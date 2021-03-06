@@ -70,13 +70,13 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
     this.orders[index] = this.orders[index] + 1;
     if (this.orders[index] > 0) {
       if (this.dishes) {
-        this.dishes[index]?.dishQty?.filter(res => {
-          if (res) {
-            if (res?.id == this.selectedQty[index].id) {
-              res.orderQty = this.orders[index];
-            }
+        const temp =
+          this.dishes[index]?.dishQty?.filter(res => res?.id == this.selectedQty[index].id).map(mapData => mapData.menus)[0] || {};
+        temp[0].dishQty.forEach(qty => {
+          if (qty.id == this.selectedQty[index].id) {
+            qty.orderQty = this.orders[index];
           }
-        })[0] || {};
+        });
         this.dishesToOrder.push(this.dishes[index]);
       }
       this.dishesToOrder = this.removeRedundentObjects(this.dishesToOrder);
