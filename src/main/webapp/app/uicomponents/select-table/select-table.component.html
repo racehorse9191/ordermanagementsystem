@@ -3,15 +3,13 @@
     <span jhiTranslate="orderManagementSystemApp.selectTable">Select Table</span>
     </h2>
     <div class="center-Btn">
-      <div class="md-form input-group input-group-lg">
+     <!--  <div class="md-form input-group input-group-lg">
         <div class="search"> <input type="text" class="search-input form-control" placeholder="Search..." name="tableSearch" (keyup)="filterItem($event)"> <span class="search-icon">  <i class="bi bi-search"></i> </span> </div>
-      </div><!-- 
-        <div class="input-group-btn">
-          <button class="btn btn-default" type="submit">
-            <i class="bi bi-search"></i>
-          </button>
-        </div> -->
-      <!-- </div> -->
+      </div> -->
+      <div class="form-group has-search">
+        <span class="bi bi-search form-control-feedback"></span>
+        <input type="text" class="form-control"placeholder="Search..." name="tableSearch" (keyup)="filterItem($event)">
+      </div>
       <br>
       <mat-chip-list class="text-center" aria-label="Fish selection">
         <mat-chip class="btn btn-primary" style="background:#4582EC;color:white" (click)="showVacant()">Vacant</mat-chip>

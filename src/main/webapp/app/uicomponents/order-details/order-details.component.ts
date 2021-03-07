@@ -136,10 +136,6 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     const order: Order = new Order();
     delete this.table['navigationId'];
     this.table.tablestatus = 'ENGAGED';
-    console.log('order table=>', this.orderTable);
-    this.orderTable.forEach(res => {
-      console.log('res=>', res);
-    });
     order.menuIdsandQty = this.customStringify(this.orderTable);
     order.note = this.chefNote;
     order.orderDate = moment();
@@ -147,13 +143,24 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     order.waiterName = this.account.firstName + this.account.lastName;
     order.waiterId = this.account.id;
     order.orderstatus = OrderStatus.CONFIRMED;
-    this.tablesService.update(this.table).subscribe(res => {});
     this.subscriptionService.updateOrder([]);
     this.subscribeToSaveResponse(this.orderService.create(order));
   }
 
   customStringify(v) {
     const cache = new Set();
+    v.forEach(res => {
+      res.allDishQty.forEach(dish => {
+        delete dish.dish.dishImage;
+        dish.dishQty.forEach(qty => {
+          if (qty.menus) {
+            qty.menus.forEach(element => {
+              delete element.dish.dishImage;
+            });
+          }
+        });
+      });
+    });
     return JSON.stringify(v, function (key, value) {
       if (typeof value === 'object' && value !== null) {
         if (cache.has(value)) {
@@ -216,7 +223,9 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
 
   protected onSaveSuccess(): void {
     this.isSaving = false;
-    this.router.navigate(['/']);
+    this.tablesService.update(this.table).subscribe(res => {
+      this.router.navigate(['/']);
+    });
   }
 
   protected onSaveError(): void {
