@@ -89,16 +89,24 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
       console.log('res=>', res);
       if (res) {
         this.order = new OrderTable();
-        this.order.id = res.id;
-        this.order.price = res.price;
         this.order.name = res.dish?.dishName;
         if (res.dishQty.length != 0) {
           res.dishQty.forEach(qty => {
-            if (qty.orderQty) {
-              this.order.dishQty = qty.qtyName;
-              this.order.orderQty = qty.orderQty;
-              this.order.orderTotal = this.calculateOrderTotal(res.price, qty.orderQty);
-              this.order.allDishQty = qty.menus;
+            if (qty.orderQty && qty.orderQty != 0) {
+              qty.menus.forEach(menu => {
+                if (menu.dishQty) {
+                  this.order.id = menu.id;
+                  this.order.price = menu.price;
+                  this.order.allDishQty = qty.menus;
+                  menu.dishQty.forEach(menuQty => {
+                    if (menuQty.orderQty && menuQty.orderQty != 0) {
+                      this.order.dishQty = menuQty.qtyName;
+                      this.order.orderQty = menuQty.orderQty;
+                      this.order.orderTotal = this.calculateOrderTotal(menu.price, menuQty.orderQty);
+                    }
+                  });
+                }
+              });
             }
           });
           this.orderTable.push(this.order);

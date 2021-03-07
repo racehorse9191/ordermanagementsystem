@@ -57,6 +57,8 @@ export class SelectTableComponent implements OnInit {
     //   if (account.authorities.toString().includes('ROLE_CHEF')) {
     //     this.router.navigate(['/ui/cheforderlist']);
     //   } else {
+
+    this.subscriptionService.updateOrder([]);
     this.loadAll();
     //   }
     // });
