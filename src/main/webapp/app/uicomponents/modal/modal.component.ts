@@ -12,6 +12,9 @@ export class ModalComponent implements OnInit {
   @Input() public modalConfig: ModalConfig;
   @Output() dismissClicked = new EventEmitter<any>();
   @Output() closeClicked = new EventEmitter<any>();
+  @Output() emptyTableclicked = new EventEmitter<any>();
+  @Output() printBtnClick = new EventEmitter<any>();
+
   @ViewChild('modal') private modalContent: TemplateRef<ModalComponent>;
   private modalRef: NgbModalRef;
 
@@ -21,7 +24,7 @@ export class ModalComponent implements OnInit {
 
   open(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      this.modalRef = this.modalService.open(this.modalContent);
+      this.modalRef = this.modalService.open(this.modalContent, { size: 'lg' });
       this.modalRef.result.then(resolve, resolve);
     });
   }
@@ -40,5 +43,13 @@ export class ModalComponent implements OnInit {
       this.dismissClicked.emit(true);
       this.modalRef.dismiss(result);
     }
+  }
+
+  onEmptyTableclicked() {
+    this.emptyTableclicked.emit();
+  }
+
+  onPrintBtnClick() {
+    this.printBtnClick.emit();
   }
 }

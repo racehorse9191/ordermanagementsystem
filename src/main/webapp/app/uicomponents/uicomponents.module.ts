@@ -20,6 +20,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MyOrderlist } from './my-orders/my-orders.component';
 import { ModalComponent } from './modal/modal.component';
+import { NgxPrintModule } from 'ngx-print';
 @NgModule({
   declarations: [
     MenuComponent,
@@ -44,6 +45,7 @@ import { ModalComponent } from './modal/modal.component';
     MatDialogModule,
     NgbModalModule,
     RouterModule.forChild(UiComponentRoutes),
+    NgxPrintModule,
   ],
   exports: [
     MenuComponent,

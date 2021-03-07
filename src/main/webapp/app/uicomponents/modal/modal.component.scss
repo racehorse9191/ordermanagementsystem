@@ -2,7 +2,7 @@
   padding: 1.25rem;
   border: none;
   margin-top: 30%;
-
+  width: 100%;
   a {
     color: teal;
   }
@@ -12,6 +12,7 @@
     flex-direction: column;
     border: none;
     text-align: center;
+    width: 100%;
   }
 
   .modal-title {

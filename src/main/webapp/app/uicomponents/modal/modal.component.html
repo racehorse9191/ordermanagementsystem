@@ -1,6 +1,23 @@
-<ng-template class="modal-dialog modal-dialog-centered" #modal>
-    <div class="modal-header">
+<ng-template class="modal-dialog modal-lg" #modal>
+    <div  *ngIf="modalConfig.hidePrintButton === undefined || !modalConfig.hidePrintButton()" class="modal-header">
       <h5 class="modal-title">{{ modalConfig.modalTitle }}</h5>
+      <div *jhiHasAnyAuthority="'ROLE_ADMIN'" >
+        <button type="button"
+        class="btn btn-outline-primary"
+        (click)="onPrintBtnClick()"
+        *ngIf="modalConfig.hidePrintButton === undefined || !modalConfig.hidePrintButton()"
+        [disabled]="modalConfig.disablePrintButton !== undefined && modalConfig.disablePrintButton()"
+       >
+        Print
+    </button>
+    <button type="button"
+        class="btn btn-outline-primary"
+        (click)="onEmptyTableclicked()"
+        *ngIf="modalConfig.hideEmptyTableButton === undefined || !modalConfig.hideEmptyTableButton()"
+       >
+        Empty Table
+    </button>
+      </div>
     </div>
     <div class="modal-body">
       <ng-content></ng-content>

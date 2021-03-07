@@ -10,4 +10,7 @@ export interface ModalConfig {
   disableDismissButton?(): boolean;
   hideCloseButton?(): boolean;
   hideDismissButton?(): boolean;
+  disablePrintButton?(): boolean;
+  hidePrintButton?(): boolean;
+  hideEmptyTableButton?(): boolean;
 }

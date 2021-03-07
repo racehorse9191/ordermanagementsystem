@@ -21,13 +21,23 @@ import { SubscriptionService } from '../../shared/subscription.service';
 })
 export class SelectTableComponent implements OnInit {
   @ViewChild('modal') private modalComponent: ModalComponent;
+  @ViewChild('printmodal') private printmodalComponent: ModalComponent;
   btnValue = 'Update';
   modalConfig: ModalConfig = {
     modalTitle: 'Current Order Details',
     closeButtonLabel: 'Add more',
     dismissButtonLabel: this.btnValue,
+    disableDismissButton: () => true,
+    disablePrintButton: () => true,
     onDismiss: () => true,
     onClose: () => true,
+  };
+  printModalConfig: ModalConfig = {
+    modalTitle: '',
+    hideCloseButton: () => true,
+    hideDismissButton: () => true,
+    hideEmptyTableButton: () => true,
+    hidePrintButton: () => true,
   };
   tables?: ITables[];
   noTablesOccupied = false;
@@ -36,6 +46,8 @@ export class SelectTableComponent implements OnInit {
   isAllChecked;
   filteredItems = [];
   selectedTable;
+  emptyTableClicked = false;
+  today: Date = new Date();
   constructor(
     protected tablesService: TablesService,
     protected orderService: OrderService,
@@ -52,16 +64,8 @@ export class SelectTableComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    // this.accountService.getAuthenticationState().subscribe(account => {
-    //   console.log('account', account);
-    //   if (account.authorities.toString().includes('ROLE_CHEF')) {
-    //     this.router.navigate(['/ui/cheforderlist']);
-    //   } else {
-
     this.subscriptionService.updateOrder([]);
     this.loadAll();
-    //   }
-    // });
   }
 
   takeorder(table: any): any {
@@ -75,6 +79,25 @@ export class SelectTableComponent implements OnInit {
           console.log('elemt=>', response.body.menuIdsandQty);
           response.body.menuIdsandQty = JSON.parse(response.body.menuIdsandQty);
           this.orderData = response.body;
+          if (this.orderData) {
+            const uncheckedDish = this.orderData.menuIdsandQty.filter(dish => dish.isDishReady == true);
+            if (uncheckedDish.length == this.orderData.menuIdsandQty.length) {
+              this.btnValue = 'Complete';
+            } else {
+              this.btnValue = 'Update';
+            }
+            if (uncheckedDish.length != 0 && this.btnValue == 'Complete') {
+              this.modalConfig = {
+                modalTitle: 'Current Order Details',
+                closeButtonLabel: 'Add more',
+                dismissButtonLabel: this.btnValue,
+                onDismiss: () => true,
+                onClose: () => true,
+                disableDismissButton: () => true,
+                disablePrintButton: () => false,
+              };
+            }
+          }
           this.modalComponent.open();
         }
       });
@@ -133,6 +156,27 @@ export class SelectTableComponent implements OnInit {
   updateCheckbox(data) {
     this.isAllChecked = [];
     const uncheckedDish = data.menuIdsandQty.filter(dish => dish.isDishReady == true);
+    if (uncheckedDish.length != 0) {
+      this.modalConfig = {
+        modalTitle: 'Current Order Details',
+        closeButtonLabel: 'Add more',
+        dismissButtonLabel: this.btnValue,
+        onDismiss: () => true,
+        onClose: () => true,
+        disableDismissButton: () => false,
+        disablePrintButton: () => true,
+      };
+    } else {
+      this.modalConfig = {
+        modalTitle: 'Current Order Details',
+        closeButtonLabel: 'Add more',
+        dismissButtonLabel: this.btnValue,
+        onDismiss: () => true,
+        onClose: () => true,
+        disableDismissButton: () => true,
+        disablePrintButton: () => false,
+      };
+    }
     if (uncheckedDish.length == data.menuIdsandQty.length) {
       this.btnValue = 'Complete';
     } else {
@@ -155,11 +199,6 @@ export class SelectTableComponent implements OnInit {
     order.waiterName = data.waiterName;
     order.waiterId = data.waiterId;
     order.orderstatus = data.orderstatus;
-    if (this.btnValue.includes('Complete')) {
-      order.orderstatus = OrderStatus.COMPLETED;
-      order.tables.tablestatus = TableStatus.FREE;
-    }
-    this.tablesService.update(order.tables).subscribe(res => {});
     this.subscribeToSaveResponse(this.orderService.update(order));
   }
 
@@ -171,8 +210,14 @@ export class SelectTableComponent implements OnInit {
   }
 
   protected onSaveSuccess(): void {
-    if (this.btnValue == 'Complete') {
-      this.loadAll();
+    if (this.emptyTableClicked) {
+      this.orderData.tables.tablestatus = TableStatus.FREE;
+      this.tablesService.update(this.orderData.tables).subscribe(res => {
+        if (this.btnValue == 'Complete') {
+          this.loadAll();
+          this.modalComponent.close();
+        }
+      });
     }
   }
 
@@ -185,14 +230,16 @@ export class SelectTableComponent implements OnInit {
   }
   onCloseClicked(event) {
     console.log('close clicked');
-    const temp = [];
-    this.orderData.menuIdsandQty.forEach(res => {
-      res.allDishQty.forEach(qty => {
-        temp.push(qty);
+    if (!this.emptyTableClicked) {
+      const temp = [];
+      this.orderData.menuIdsandQty.forEach(res => {
+        res.allDishQty.forEach(qty => {
+          temp.push(qty);
+        });
       });
-    });
-    this.subscriptionService.updateOrder(temp);
-    this.router.navigate(['/ui/menu/'], { state: this.selectedTable });
+      this.subscriptionService.updateOrder(temp);
+      this.router.navigate(['/ui/menu/'], { state: this.selectedTable });
+    }
   }
   assignCopy() {
     this.filteredItems = Object.assign([], this.tables);
@@ -204,5 +251,39 @@ export class SelectTableComponent implements OnInit {
     this.filteredItems = Object.assign([], this.tables).filter(
       item => item.tableName.toLowerCase().indexOf(Value.target.value.toLowerCase()) > -1
     );
+  }
+
+  onPrintBtnClick() {
+    this.emptyTableClicked = true;
+    this.modalComponent.close();
+    this.printmodalComponent.open();
+    this.orderData;
+    // this.router.navigate(['/ui/print']);
+  }
+  onPrintClose() {
+    this.printmodalComponent.close();
+  }
+  onEmptyTableclicked() {
+    const order: Order = new Order();
+    this.emptyTableClicked = true;
+    const menuIdsQty = JSON.stringify(this.orderData.menuIdsandQty);
+    order.id = this.orderData.id;
+    order.menuIdsandQty = menuIdsQty;
+    order.note = this.orderData.note;
+    order.orderDate = this.orderData.orderDate;
+    order.tables = this.orderData.tables;
+    order.waiterName = this.orderData.waiterName;
+    order.waiterId = this.orderData.waiterId;
+    order.orderstatus = this.orderData.orderstatus;
+    order.orderstatus = OrderStatus.COMPLETED;
+    this.subscribeToSaveResponse(this.orderService.update(order));
+  }
+
+  totalorderDetails() {
+    const total: any[] = [];
+    this.orderData.menuIdsandQty.forEach(res => {
+      total.push(res.orderTotal);
+    });
+    return total.reduce((a, b) => a + b, 0);
   }
 }

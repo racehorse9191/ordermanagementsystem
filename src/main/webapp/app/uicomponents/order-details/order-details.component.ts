@@ -111,17 +111,6 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
           });
           this.orderTable.push(this.order);
         }
-        /* this.order.dishQty = res.qtyName;
-        res?.menus?.forEach(menu => {
-          this.order.id = menu.id;
-          this.order.dishQty = res.qtyName;
-          this.order.orderQty = res.orderQty;
-          this.order.name = menu.dish?.dishName;
-          this.order.price = menu.price;
-          this.order.allDishQty = menu.dishQty;
-          this.order.orderTotal = this.calculateOrderTotal(menu.price, res.orderQty);
-          this.orderTable.push(this.order);
-        }); */
       }
     });
   }
@@ -137,9 +126,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     });
     return total.reduce((a, b) => a + b, 0);
   }
-  print() {
-    window.print();
-  }
+
   confirmOrder() {
     const order: Order = new Order();
     delete this.table['navigationId'];
