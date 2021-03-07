@@ -69,6 +69,8 @@ export class MenuComponent implements OnInit {
         this.showOrderButton = false;
         this.selectedDishes = [];
         this.dishSelected = false;
+        this.updateMenuCategoryDishes();
+        this.updateTOdaysSpl();
       }
     });
   }

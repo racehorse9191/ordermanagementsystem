@@ -168,7 +168,11 @@ export class SelectTableComponent implements OnInit {
     );
   }
 
-  protected onSaveSuccess(): void {}
+  protected onSaveSuccess(): void {
+    if (this.btnValue == 'Complete') {
+      this.loadAll();
+    }
+  }
 
   protected onSaveError(): void {
     console.log('in on save error');
@@ -176,9 +180,6 @@ export class SelectTableComponent implements OnInit {
 
   onDismissedClicked(event) {
     this.OrderUpdate(this.orderData);
-    if (this.btnValue == 'Complete') {
-      this.loadAll();
-    }
   }
   onCloseClicked(event) {
     console.log('close clicked');
