@@ -62,6 +62,7 @@ export class SelectTableComponent implements OnInit {
     this.tablesService.query().subscribe(res => {
       this.tables = res.body;
       this.assignCopy();
+      this.getAllConfirmedOrderList();
     });
   }
   ngOnInit(): void {
@@ -72,6 +73,25 @@ export class SelectTableComponent implements OnInit {
     });
   }
 
+  getAllConfirmedOrderList() {
+    console.log('inside loadALL');
+    this.orderService.getByOrderStatus(OrderStatus.CONFIRMED).subscribe(
+      (res: HttpResponse<IOrder[]>) => {
+        const orders = res.body || [];
+        console.log('orders=>', orders);
+        orders.forEach((order, index) => {
+          this.tables.forEach(table => {
+            if (order.tables.id == table.id) {
+              table.waiterName = order.waiterName;
+            }
+          });
+        });
+      },
+      error => {
+        console.log('error=>', error);
+      }
+    );
+  }
   takeorder(table: any): any {
     this.orderData = null;
     this.selectedTable = table;
@@ -230,6 +250,7 @@ export class SelectTableComponent implements OnInit {
   }
 
   onDismissedClicked(event) {
+    console.log('on update clicked=>', this.orderData);
     this.OrderUpdate(this.orderData);
   }
   onCloseClicked(event) {
@@ -243,6 +264,8 @@ export class SelectTableComponent implements OnInit {
       });
       this.subscriptionService.updateOrder(temp);
       this.router.navigate(['/ui/menu/'], { state: this.selectedTable });
+    } else {
+      this.emptyTableClicked = false;
     }
   }
   assignCopy() {

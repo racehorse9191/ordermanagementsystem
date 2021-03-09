@@ -6,8 +6,15 @@ export interface ITables {
   tableName?: string;
   tablestatus?: TableStatus;
   orders?: IOrder[];
+  waiterName?: string;
 }
 
 export class Tables implements ITables {
-  constructor(public id?: number, public tableName?: string, public tablestatus?: TableStatus, public orders?: IOrder[]) {}
+  constructor(
+    public id?: number,
+    public tableName?: string,
+    public tablestatus?: TableStatus,
+    public orders?: IOrder[],
+    public waiterName?: string
+  ) {}
 }

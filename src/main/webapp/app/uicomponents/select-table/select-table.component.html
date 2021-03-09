@@ -26,10 +26,10 @@
   <div class="card gridtile" [class.occupied]="table.tablestatus == 'ENGAGED'"  [id]="table.id" *ngFor="let table of filteredItems; let i = index">
     <div  (click)="takeorder(table)" class="card-body">
       <div class="message">
-        <span class="">
+        <span>
          {{table.tableName}}  <fa-icon *ngIf="table.tablestatus == 'ENGAGED'" (click)="takeorder(table)" class="primary" icon="pencil-alt"></fa-icon>
         </span>
-        <h6 class="card-subtitle mb-2 float-right statusColor">{{ table.tablestatus}}</h6>
+        <h6 class="card-subtitle mb-2 float-right statusColor">{{ table.waiterName}} </h6>
       </div>
     </div>
   </div>
