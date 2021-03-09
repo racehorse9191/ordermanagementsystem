@@ -124,6 +124,7 @@ export class SelectTableComponent implements OnInit {
         this.noTablesAvailabe = false;
         this.noTablesOccupied = false;
       }
+      this.assignCopy();
     });
   }
   showOccupied() {
@@ -142,6 +143,7 @@ export class SelectTableComponent implements OnInit {
         this.noTablesOccupied = false;
         this.noTablesAvailabe = false;
       }
+      this.assignCopy();
     });
   }
   showAll() {

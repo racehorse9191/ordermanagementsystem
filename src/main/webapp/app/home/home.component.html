@@ -1,14 +1,14 @@
-
+<!-- 
     <h2 *ngIf="tables" id="page-heading">
         <span jhiTranslate="orderManagementSystemApp.tables.home.title">OMS HOME PAGE</span>
         </h2>
         <div class="modal-header">
             <h4 class="modal-title" jhiTranslate="login.title">Sign in</h4>
         
-            <!-- <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')">
+             <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')">
                 <span aria-hidden="true">x</span>
-            </button> -->
-        </div>
+            </button> 
+         </div>
         
         <div class="modal-body">
             <div class="row justify-content-center">
@@ -44,13 +44,69 @@
         
                     <div class="mt-3 alert alert-warning">
                         <a class="alert-link" (click)="requestResetPassword()" jhiTranslate="login.password.forgot">Did you forget your password?</a>
-                    </div>
+                    </div> -->
         
                     <!-- <div class="alert alert-warning">
                         <span jhiTranslate="global.messages.info.register.noaccount">You don't have an account yet?</span>
                         <a class="alert-link" (click)="register()" jhiTranslate="global.messages.info.register.link">Register a new account</a>
                     </div> -->
-                </div>
+                <!-- </div>
             </div>
-        </div>
+        </div> -->
+        <body>
+	
+            <div class="limiter">
+                <div class="container-login100">
+                    <div class="wrap-login100">
+                        <div class="login100-form-title bg">
+                            <span class="login100-form-title-1" jhiTranslate="login.title">
+                                Sign In
+                            </span>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication">
+                                <strong>Failed to sign in!</strong> Please check your credentials and try again.
+                            </div>
+                        </div>
+                        <form class="login100-form validate-form" (ngSubmit)="login()" [formGroup]="loginForm">
+                            <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+                                <span class="label-input100" jhiTranslate="global.form.username.label">Username</span>
+                                <input class="input100" type="text" name="username" id="username"
+                                 placeholder="{{ 'global.form.username.placeholder' | translate }}"
+                                formControlName="username" #username>
+                                <span class="focus-input100"></span>
+                            </div>
+        
+                            <div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
+                                <span class="label-input100" jhiTranslate="login.form.password" >Password</span>
+                                <input class="input100" type="password" name="password" id="password" placeholder="{{ 'login.form.password.placeholder' | translate }}"
+                                formControlName="password">
+                                <span class="focus-input100"></span>
+                            </div>
+        
+                            <div class="flex-sb-m w-full p-b-30">
+                                <div class="contact100-form-checkbox">
+                                    <input class="" id="ckb1" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe">
+                                    <label class="label-checkbox100" for="ckb1" jhiTranslate="login.form.rememberme">
+                                        Remember me
+                                    </label>
+                                </div>
+        
+                                <div>
+                                    <a href="#" class="txt1">
+                                        Forgot Password?
+                                    </a>
+                                </div>
+                            </div>
+        
+                            <div class="container-login100-form-btn">
+                                <button class="login100-form-btn" type="submit" jhiTranslate="login.form.button">
+                                    Login
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>        
+        </body>
         
