@@ -102,8 +102,8 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
             }
           });
         }
-        //  this.dishes =  this.dishes.filter(res=> res.id != this.selectedQty[index].id)
-        this.dishesToOrder = this.dishesToOrder.filter(res => res.id !== this.selectedQty[index].id) || [];
+        // this.dishes =  this.dishes.filter(res=> res.id != this.selectedQty[index].id)
+        this.dishesToOrder = this.dishesToOrder.filter(res => res.id !== this.dishes[index].id) || [];
       } else if (this.dishes) {
         this.dishes[index]?.dishQty?.filter(res => {
           if (res) {
