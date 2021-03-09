@@ -9,7 +9,7 @@ import { ModalConfig } from '../../shared/model/modal-config.model';
 import { ModalComponent } from '../modal/modal.component';
 import { OrderStatus } from '../../shared/model/enumerations/order-status.model';
 import { TableStatus } from '../../shared/model/enumerations/table-status.model';
-import { Observable } from 'rxjs';
+import { interval, Observable, Subscription } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { IOrder, Order } from '../../shared/model/order.model';
 import { SubscriptionService } from '../../shared/subscription.service';
@@ -48,6 +48,7 @@ export class SelectTableComponent implements OnInit {
   selectedTable;
   emptyTableClicked = false;
   today: Date = new Date();
+  sub: Subscription;
   constructor(
     protected tablesService: TablesService,
     protected orderService: OrderService,
@@ -66,6 +67,9 @@ export class SelectTableComponent implements OnInit {
   ngOnInit(): void {
     this.subscriptionService.updateOrder([]);
     this.loadAll();
+    this.sub = interval(30000).subscribe(val => {
+      this.loadAll();
+    });
   }
 
   takeorder(table: any): any {
@@ -76,7 +80,6 @@ export class SelectTableComponent implements OnInit {
       // calling getOrderBytableId to get data
       this.orderService.getByOrderTableId(table.id).subscribe(response => {
         if (response.body.menuIdsandQty) {
-          console.log('elemt=>', response.body.menuIdsandQty);
           response.body.menuIdsandQty = JSON.parse(response.body.menuIdsandQty);
           this.orderData = response.body;
           if (this.orderData) {
@@ -215,16 +218,15 @@ export class SelectTableComponent implements OnInit {
     if (this.emptyTableClicked) {
       this.orderData.tables.tablestatus = TableStatus.FREE;
       this.tablesService.update(this.orderData.tables).subscribe(res => {
-        if (this.btnValue == 'Complete') {
-          this.loadAll();
-          this.modalComponent.close();
-        }
+        this.modalComponent.close();
+        this.loadAll();
       });
     }
   }
 
   protected onSaveError(): void {
     console.log('in on save error');
+    this.sub.unsubscribe();
   }
 
   onDismissedClicked(event) {
@@ -287,5 +289,9 @@ export class SelectTableComponent implements OnInit {
       total.push(res.orderTotal);
     });
     return total.reduce((a, b) => a + b, 0);
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }
