@@ -142,18 +142,43 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   }
 
   confirmOrder() {
-    const order: Order = new Order();
-    delete this.table['navigationId'];
-    this.table.tablestatus = 'ENGAGED';
-    order.menuIdsandQty = this.customStringify(this.orderTable);
-    order.note = this.chefNote;
-    order.orderDate = moment();
-    order.tables = this.table;
-    order.waiterName = this.account.firstName + this.account.lastName;
-    order.waiterId = this.account.id;
-    order.orderstatus = OrderStatus.CONFIRMED;
-    this.subscriptionService.updateOrder([]);
-    this.subscribeToSaveResponse(this.orderService.create(order));
+    this.orderService.getByOrderTableId(this.table.id).subscribe(
+      response => {
+        if (response.body) {
+          const order: Order = new Order();
+          delete this.table['navigationId'];
+          this.table.tablestatus = 'ENGAGED';
+          order.id = response.body.id;
+          order.menuIdsandQty = this.customStringify(this.orderTable);
+          order.note = this.chefNote;
+          order.orderDate = moment();
+          order.tables = this.table;
+          order.waiterName = this.account.firstName + this.account.lastName;
+          order.waiterId = this.account.id;
+          order.orderstatus = OrderStatus.CONFIRMED;
+          this.subscriptionService.updateOrder([]);
+          // this.orderService.update()
+          this.subscribeToSaveResponse(this.orderService.update(order));
+        } else {
+          const order: Order = new Order();
+          delete this.table['navigationId'];
+          this.table.tablestatus = 'ENGAGED';
+          order.menuIdsandQty = this.customStringify(this.orderTable);
+          order.note = this.chefNote;
+          order.orderDate = moment();
+          order.tables = this.table;
+          order.waiterName = this.account.firstName + this.account.lastName;
+          order.waiterId = this.account.id;
+          order.orderstatus = OrderStatus.CONFIRMED;
+          this.subscriptionService.updateOrder([]);
+          // this.orderService.update()
+          this.subscribeToSaveResponse(this.orderService.create(order));
+        }
+      },
+      error => {
+        console.log('err=>', error);
+      }
+    );
   }
 
   customStringify(v) {
