@@ -1,3 +1,4 @@
+import { ToastService } from './../shared/util/toast.service';
 import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -21,6 +22,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MyOrderlist } from './my-orders/my-orders.component';
 import { ModalComponent } from './modal/modal.component';
 import { NgxPrintModule } from 'ngx-print';
+import { ToastComponent } from './toast/toast.component';
 @NgModule({
   declarations: [
     MenuComponent,
@@ -31,6 +33,7 @@ import { NgxPrintModule } from 'ngx-print';
     ShefOrderlist,
     MyOrderlist,
     ModalComponent,
+    ToastComponent,
   ],
   imports: [
     CommonModule,
@@ -56,6 +59,6 @@ import { NgxPrintModule } from 'ngx-print';
     ShefOrderlist,
     MyOrderlist,
   ],
-  providers: [SubscriptionService],
+  providers: [SubscriptionService, ToastService],
 })
 export class UicomponentsModule {}

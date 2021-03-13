@@ -54,7 +54,6 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.detailRecivedSubscription = this.subscriptionService.selectedorderOrderObservable.subscribe((obj: any[]) => {
-      console.log('obj=>', obj);
       if (obj.length != 0) {
         if (this.activeTab == 2) {
           this.showOrderButton = false;
@@ -263,7 +262,6 @@ export class MenuComponent implements OnInit {
   /* the section of cooking category data ends here*/
 
   onSearchItemRemove(event: any) {
-    console.log('search item clear');
     if (this.orderList.length != 0) {
       this.selectedDishes = this.selectedDishes.filter(res => res.id != event.value.id);
       this.orderList = this.orderList.filter(res => res.id != event.value.id);
@@ -273,7 +271,6 @@ export class MenuComponent implements OnInit {
     }
   }
   onSearchClear() {
-    console.log('search clear');
     this.orderList.filter(res => {
       res.dishQty.forEach(qty => {
         if (qty.orderQty) {
@@ -284,7 +281,6 @@ export class MenuComponent implements OnInit {
     this.subscriptionService.updateOrder([]);
   }
   clearItem(item) {
-    console.log('item=>', item);
     if (this.orderList.length != 0) {
       this.orderList.filter(res => {
         if (res.id == item.id) {

@@ -19,6 +19,7 @@ export class OrderTable {
   price?: any;
   orderTotal?: any;
   allDishQty?: MenuListModel[];
+  isDishReady?: boolean;
   constructor(params?: OrderTable) {
     this.id = params?.id;
     this.name = params?.name;
@@ -27,6 +28,7 @@ export class OrderTable {
     this.price = params?.price;
     this.allDishQty = params?.allDishQty;
     this.orderTotal = params?.orderTotal;
+    this.isDishReady = params?.isDishReady;
   }
 }
 @Component({
@@ -86,10 +88,10 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   constructTable() {
     this.orderTable = [];
     this.orderList.forEach(res => {
-      console.log('res=>', res);
       if (res) {
         this.order = new OrderTable();
         this.order.name = res.dish?.dishName;
+        this.order.isDishReady = res?.isDishReady;
         if (res.dishQty.length != 0) {
           res.dishQty.forEach(qty => {
             if (qty.orderQty && qty.orderQty != 0) {
@@ -206,7 +208,6 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
           }
         }
       });
-      console.log('orderList=>', this.orderList);
       this.subscriptionService.updateOrder(this.orderList);
       if (deleteIndex) {
         this.orderList = this.orderList.filter(menu => menu.id != menuId);

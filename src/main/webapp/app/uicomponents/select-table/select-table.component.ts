@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '../../core/auth/account.service';
 import { TablesService } from '../../entities/tables/tables.service';
@@ -13,6 +13,8 @@ import { interval, Observable, Subscription } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { IOrder, Order } from '../../shared/model/order.model';
 import { SubscriptionService } from '../../shared/subscription.service';
+import { ToastService } from '../../shared/util/toast.service';
+import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'jhi-select-table',
@@ -22,15 +24,26 @@ import { SubscriptionService } from '../../shared/subscription.service';
 export class SelectTableComponent implements OnInit {
   @ViewChild('modal') private modalComponent: ModalComponent;
   @ViewChild('printmodal') private printmodalComponent: ModalComponent;
+  @ViewChild('confirmModal') private confirmModalComponent: TemplateRef<any>;
   btnValue = 'Update';
   modalConfig: ModalConfig = {
-    modalTitle: 'Current Order Details',
+    modalTitle: 'Order Details',
     closeButtonLabel: 'Add more',
     dismissButtonLabel: this.btnValue,
     disableDismissButton: () => true,
     disablePrintButton: () => true,
     onDismiss: () => true,
     onClose: () => true,
+  };
+  confirmModalConfig: ModalConfig = {
+    modalTitle: 'Confirm Table Empty',
+    closeButtonLabel: 'Cancel',
+    dismissButtonLabel: 'ok',
+    disableDismissButton: () => true,
+    onDismiss: () => true,
+    onClose: () => true,
+    hideEmptyTableButton: () => true,
+    hidePrintButton: () => true,
   };
   printModalConfig: ModalConfig = {
     modalTitle: '',
@@ -55,7 +68,8 @@ export class SelectTableComponent implements OnInit {
     public dialog: MatDialog,
     private router: Router,
     protected subscriptionService: SubscriptionService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    public toastService: ToastService
   ) {}
 
   loadAll(): void {
@@ -74,11 +88,9 @@ export class SelectTableComponent implements OnInit {
   }
 
   getAllConfirmedOrderList() {
-    console.log('inside loadALL');
     this.orderService.getByOrderStatus(OrderStatus.CONFIRMED).subscribe(
       (res: HttpResponse<IOrder[]>) => {
         const orders = res.body || [];
-        console.log('orders=>', orders);
         orders.forEach((order, index) => {
           this.tables.forEach(table => {
             if (order.tables.id == table.id) {
@@ -104,6 +116,11 @@ export class SelectTableComponent implements OnInit {
           this.orderData = response.body;
           if (this.orderData) {
             const uncheckedDish = this.orderData.menuIdsandQty.filter(dish => dish.isDishReady == true);
+            this.orderData.menuIdsandQty.map(dish => {
+              if (dish.isDishReady) {
+                dish.allDishQty[0].isDishReady = dish.isDishReady;
+              }
+            });
             if (uncheckedDish.length == this.orderData.menuIdsandQty.length) {
               this.btnValue = 'Complete';
             } else {
@@ -111,13 +128,18 @@ export class SelectTableComponent implements OnInit {
             }
             if (uncheckedDish.length != 0 && this.btnValue == 'Complete') {
               this.modalConfig = {
-                modalTitle: 'Current Order Details',
+                modalTitle: 'Order Details',
                 closeButtonLabel: 'Add more',
                 dismissButtonLabel: this.btnValue,
                 onDismiss: () => true,
                 onClose: () => true,
                 disableDismissButton: () => true,
                 disablePrintButton: () => false,
+              };
+              this.modalComponent.modalSettings = {
+                centered: true,
+                scrollable: true,
+                size: 'lg',
               };
             }
           }
@@ -181,9 +203,14 @@ export class SelectTableComponent implements OnInit {
   updateCheckbox(data) {
     this.isAllChecked = [];
     const uncheckedDish = data.menuIdsandQty.filter(dish => dish.isDishReady == true);
+    data.menuIdsandQty.map(dish => {
+      if (dish.isDishReady) {
+        dish.allDishQty[0].isDishReady = dish.isDishReady;
+      }
+    });
     if (uncheckedDish.length != 0) {
       this.modalConfig = {
-        modalTitle: 'Current Order Details',
+        modalTitle: 'Order Details',
         closeButtonLabel: 'Add more',
         dismissButtonLabel: this.btnValue,
         onDismiss: () => true,
@@ -193,7 +220,7 @@ export class SelectTableComponent implements OnInit {
       };
     } else {
       this.modalConfig = {
-        modalTitle: 'Current Order Details',
+        modalTitle: 'Order Details',
         closeButtonLabel: 'Add more',
         dismissButtonLabel: this.btnValue,
         onDismiss: () => true,
@@ -250,11 +277,9 @@ export class SelectTableComponent implements OnInit {
   }
 
   onDismissedClicked(event) {
-    console.log('on update clicked=>', this.orderData);
     this.OrderUpdate(this.orderData);
   }
   onCloseClicked(event) {
-    console.log('close clicked');
     if (!this.emptyTableClicked) {
       const temp = [];
       this.orderData.menuIdsandQty.forEach(res => {
@@ -291,6 +316,34 @@ export class SelectTableComponent implements OnInit {
     this.printmodalComponent.close();
   }
   onEmptyTableclicked() {
+    this.showStandard();
+    this.modalComponent.modalSettings = {
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      scrollable: true,
+      size: 'lg',
+    };
+  }
+
+  showStandard() {
+    this.toastService.show(this.confirmModalComponent, {
+      delay: 2000,
+      autohide: false,
+      headertext: 'Confirm Table Empty',
+    });
+  }
+
+  totalorderDetails() {
+    const total: any[] = [];
+    this.orderData.menuIdsandQty.forEach(res => {
+      total.push(res.orderTotal);
+    });
+    return total.reduce((a, b) => a + b, 0);
+  }
+
+  onConfirmEmptyTableClicked() {
+    this.toastService.removeAll();
     const order: Order = new Order();
     this.emptyTableClicked = true;
     const menuIdsQty = JSON.stringify(this.orderData.menuIdsandQty);
@@ -305,15 +358,20 @@ export class SelectTableComponent implements OnInit {
     order.orderstatus = OrderStatus.COMPLETED;
     this.subscribeToSaveResponse(this.orderService.update(order));
   }
-
-  totalorderDetails() {
-    const total: any[] = [];
-    this.orderData.menuIdsandQty.forEach(res => {
-      total.push(res.orderTotal);
-    });
-    return total.reduce((a, b) => a + b, 0);
+  onConfirmCloseClicked() {
+    this.toastService.removeAll();
+    this.modalComponent.modalSettings = {
+      backdrop: true,
+      keyboard: true,
+      centered: true,
+      scrollable: true,
+      size: 'lg',
+    };
+    // this.confirmModalComponent.close();
   }
-
+  onBackButtonCLicked() {
+    this.toastService.removeAll();
+  }
   ngOnDestroy() {
     this.sub.unsubscribe();
   }

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Injectable, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalConfig } from '../../shared/model/modal-config.model';
 
 @Component({
@@ -10,10 +10,12 @@ import { ModalConfig } from '../../shared/model/modal-config.model';
 @Injectable()
 export class ModalComponent implements OnInit {
   @Input() public modalConfig: ModalConfig;
+  modalSettings: NgbModalOptions = {};
   @Output() dismissClicked = new EventEmitter<any>();
   @Output() closeClicked = new EventEmitter<any>();
   @Output() emptyTableclicked = new EventEmitter<any>();
   @Output() printBtnClick = new EventEmitter<any>();
+  @Output() backBtnClick = new EventEmitter<any>();
 
   @ViewChild('modal') private modalContent: TemplateRef<ModalComponent>;
   private modalRef: NgbModalRef;
@@ -24,7 +26,12 @@ export class ModalComponent implements OnInit {
 
   open(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      this.modalRef = this.modalService.open(this.modalContent, { size: 'lg' });
+      console.log('settings=>', this.modalSettings);
+      this.modalRef = this.modalService.open(this.modalContent, {
+        size: 'lg',
+        scrollable: true,
+        beforeDismiss: () => (this.modalSettings.backdrop == 'static' ? false : true),
+      });
       this.modalRef.result.then(resolve, resolve);
     });
   }
@@ -47,6 +54,11 @@ export class ModalComponent implements OnInit {
 
   onEmptyTableclicked() {
     this.emptyTableclicked.emit();
+  }
+
+  onclickBackButton() {
+    this.backBtnClick.emit();
+    this.modalRef.close('back clicked');
   }
 
   onPrintBtnClick() {

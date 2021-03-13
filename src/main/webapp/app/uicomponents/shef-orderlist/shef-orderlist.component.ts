@@ -32,13 +32,11 @@ export class ShefOrderlist {
   }
 
   loadAll(): void {
-    console.log('inside loadALL');
     this.orderService.getByOrderStatus(OrderStatus.CONFIRMED).subscribe(
       (res: HttpResponse<IOrder[]>) => {
         let orders = [];
         this.orders = [];
         orders = res.body || [];
-        console.log('orders=>', orders);
         orders.forEach((order, index) => {
           this.isDishReady[index] = [];
           order.menuIdsandQty.forEach((menu, i) => {
@@ -58,11 +56,8 @@ export class ShefOrderlist {
     );
   }
   ngOnInit(): void {
-    console.log('Inside onint=>', this.account);
-
     this.sub = interval(30000).subscribe(val => {
       this.loadAll();
-      console.log('called');
     });
     this.loadAll();
   }
@@ -77,14 +72,12 @@ export class ShefOrderlist {
         });
         res.menuIdsandQty = JSON.stringify(res.menuIdsandQty);
         res.orderDate = moment(res.orderDate);
-        console.log('order=>', orders[i]);
         this.subscribeToSaveResponse(this.orderService.update(orders[index]));
       }
     });
     this.loadAll();
   }
   authoritiesOrder(order: IOrder[]) {
-    console.log('orders=>', order);
     let authority = '';
     if (this.account.authorities) {
       this.account.authorities.forEach(res => {
@@ -94,14 +87,11 @@ export class ShefOrderlist {
       });
     }
     if (authority == 'ROLE_CHEF') {
-      console.log('inside chef authority');
       order.forEach(res => {
         const menuIdQty = [];
         res.menuIdsandQty.forEach(menuIds => {
           if (menuIds.allDishQty) {
             menuIds.allDishQty.forEach(element => {
-              console.log('alldishqty=>', element);
-              console.log('alldishqty condition=>', element.dish.category.categoryName.toLowerCase());
               if (element.dish.category.categoryName.toLowerCase() != 'beverages') {
                 menuIdQty.push(menuIds);
               }
@@ -111,14 +101,11 @@ export class ShefOrderlist {
         res.menuIdsandQty = menuIdQty;
       });
     } else {
-      console.log('inside Bartender authority');
       order.forEach(res => {
         const menuIdQty = [];
         res.menuIdsandQty.forEach(menuIds => {
           if (menuIds.allDishQty) {
             menuIds.allDishQty.forEach(element => {
-              console.log('alldishqty=>', element);
-              console.log('alldishqty condition=>', element.dish.category.categoryName.toLowerCase());
               if (element.dish.category.categoryName.toLowerCase() === 'beverages') {
                 menuIdQty.push(menuIds);
               }
@@ -128,7 +115,6 @@ export class ShefOrderlist {
         res.menuIdsandQty = menuIdQty;
       });
     }
-    console.log('returning order=>', order);
     order = order.filter(res => res.menuIdsandQty.length != 0);
     return order;
   }

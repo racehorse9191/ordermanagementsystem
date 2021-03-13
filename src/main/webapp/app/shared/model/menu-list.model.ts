@@ -10,6 +10,7 @@ export class MenuListModel {
   orders?: OrderModel[];
   dish?: DishModel;
   dishQty?: DishQtyModel[];
+  isDishReady?: boolean;
   constructor(params?: MenuListModel) {
     this.id = params?.id;
     this.price = params?.price;
@@ -17,6 +18,7 @@ export class MenuListModel {
     this.dish = params?.dish;
     this.dishQty = params?.dishQty;
     this.isAvailable = params?.isAvailable || false;
+    this.isDishReady = params?.isDishReady || false;
   }
 }
 

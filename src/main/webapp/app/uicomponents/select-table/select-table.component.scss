@@ -264,4 +264,13 @@ a:link {
     page-break-before: always;
   }
 }
+
+::ng-deep .toast-header {
+  color: black;
+  font-weight: 500;
+}
+
+::ng-deep .toast-body {
+  background-color: white;
+}
 /*  */
