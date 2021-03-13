@@ -151,7 +151,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
           order.id = response.body.id;
           order.menuIdsandQty = this.customStringify(this.orderTable);
           order.note = this.chefNote;
-          order.orderDate = moment();
+          order.orderDate = response.body.orderDate;
           order.tables = this.table;
           order.waiterName = this.account.firstName + this.account.lastName;
           order.waiterId = this.account.id;

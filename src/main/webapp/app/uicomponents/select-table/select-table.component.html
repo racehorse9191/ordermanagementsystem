@@ -150,10 +150,11 @@
       <button  class="btn btn-outline-primary" (click) ="onPrintClose()">Close</button>
   </modal>
   <ng-template #confirmModal>  <!--  body of the modal  -->
+    <div>
     <p> Are you sure you want to empty the table!. </p>
+    </div>
     <button class="btn btn-outline-primary" (click) ="onConfirmEmptyTableClicked()"> Ok     </button>
     <button class="btn btn-outline-primary" (click)="onConfirmCloseClicked()" > Cancel </button>
-    </div>
   </ng-template>  
   <router-outlet></router-outlet> 
   <app-toasts></app-toasts>
