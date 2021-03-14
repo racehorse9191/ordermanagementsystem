@@ -176,14 +176,16 @@ export class MenuComponent implements OnInit {
     tempTodaysSPl.forEach(res => {
       this.orderList.forEach(order => {
         order?.dishQty?.forEach(ordMenu => {
-          if (res.id == order.id) {
-            res = order;
-          }
+          res.dishQty.forEach(qty => {
+            if (order.dish.id == res.dish.id && ordMenu.id == qty.id && ordMenu.orderQty) {
+              qty.orderQty = ordMenu.orderQty;
+            }
+          });
         });
       });
     });
     this.todaySplMenu = [];
-    this.todaySplMenu = tempTodaysSPl;
+    this.todaySplMenu = [...tempTodaysSPl];
     this.cd.detectChanges();
   }
   fetchTodaysSpl() {
