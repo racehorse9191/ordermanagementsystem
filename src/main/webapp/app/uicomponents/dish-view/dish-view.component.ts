@@ -33,22 +33,21 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   }
   ngOnChanges(changes: SimpleChanges): void {
     this.orders = [];
-    this.selectedQty = [];
     this.dishes?.forEach((res, i) => {
-      let matching = false;
       res.dishQty?.forEach(qty => {
         if (qty.orderQty) {
-          matching = true;
           this.orders.push(qty.orderQty);
           this.selectedQty.push(qty);
         }
       });
       if (res.dishQty) {
-        if (!matching) {
+        if (!this.selectedQty[i]) {
           this.selectedQty.push(res.dishQty[0]);
-          this.orders.push(0);
         }
         this.dishPrice[i] = res.price;
+      }
+      if (!this.orders[i]) {
+        this.orders.push(0);
       }
     });
   }
