@@ -98,7 +98,8 @@
                           <tr>
                               <th>#</th>
                               <th class="text-left">item Name</th>
-                              <th class="text-right">Qty</th>
+                              <th class="text-right">Dish Qty</th>
+                              <th class="text-right">order Qty</th>
                               <th class="text-right">Rate</th>
                               <th class="text-right">Amount</th>
                           </tr>
@@ -107,31 +108,32 @@
                           <tr [id]= "order.name"  *ngFor="let order of orderData.menuIdsandQty; let i = index">
                               <td> {{ i + 1 }} </td>
                               <td class="text-left">{{ order.name }} </td>
-                              <td class="Unit">  {{order.dishQty}} </td>
-                              <td class="qty"> {{ order.orderQty }} </td>
-                              <td class="total"> {{ order.price }} </td>
+                              <td class="text-center">  {{order.dishQty}} </td>
+                              <td class="text-center Unit"> {{ order.orderQty }} </td>
+                              <td class="text-center"> {{ order.price }} </td>
+                              <td class="total"> {{ order.orderTotal }}  </td>
                           </tr>
                       </tbody>
                       <tfoot *ngIf="orderData">
                           <tr>
-                              <td colspan="2"></td>
+                              <td colspan="3"></td>
                               <td colspan="2"> SUBTOTAL </td>
                               <td> {{ totalorderDetails()  | currency:'INR' }}  </td>
                           </tr>
                           <tr>
-                              <td colspan="2"></td>
-                              <td colspan="2"> CGST(9%) </td>
-                              <td>  {{ totalorderDetails()  | totalGst:9:false  | currency:'INR' }}</td>
+                              <td colspan="3"></td>
+                              <td colspan="2"> CGST(2.5%) </td>
+                              <td>  {{ totalorderDetails()  | totalGst:2.5:false  | currency:'INR' }}</td>
                           </tr>
                           <tr>
-                            <td colspan="2"></td>
-                            <td colspan="2"> SGST(9%) </td>
-                            <td> {{ totalorderDetails()  | totalGst:9:false  | currency:'INR' }} </td>
+                            <td colspan="3"></td>
+                            <td colspan="2"> SGST(2.5%) </td>
+                            <td> {{ totalorderDetails()  | totalGst:2.5:false  | currency:'INR' }} </td>
                         </tr>
                           <tr>
-                              <td colspan="2"></td>
+                              <td colspan="3"></td>
                               <td colspan="2"> GRAND TOTAL </td>
-                              <td>  {{ totalorderDetails()  | totalGst:18:true  | currency:'INR'}} </td>
+                              <td>  {{ totalorderDetails()  | totalGst:5:true  | currency:'INR'}} </td>
                           </tr>
                       </tfoot>
                   </table>

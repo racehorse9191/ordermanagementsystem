@@ -8,14 +8,14 @@
         *ngIf="modalConfig.hidePrintButton === undefined || !modalConfig.hidePrintButton()"
         [disabled]="modalConfig.disablePrintButton !== undefined && modalConfig.disablePrintButton()"
        >
-        Print
+      Print <span> </span> <i class="bi bi-printer"></i>
     </button>
     <button type="button"
         class="btn btn-outline-primary"
         (click)="onEmptyTableclicked()"
         *ngIf="modalConfig.hideEmptyTableButton === undefined || !modalConfig.hideEmptyTableButton()"
        >
-        Empty
+        Empty<span> </span><i class="bi bi-box-arrow-down-right"></i>
     </button>
       </div>
     </div>

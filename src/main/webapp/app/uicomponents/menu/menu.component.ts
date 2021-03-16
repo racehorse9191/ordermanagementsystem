@@ -187,7 +187,19 @@ export class MenuComponent implements OnInit {
     this.cd.detectChanges();
   }
   fetchTodaysSpl() {
-    this.todaySplMenu = this.category?.filter(res => res?.dish?.isTodaysSpecial);
+    const tempTodaysSPl = this.category?.filter(res => res?.dish?.isTodaysSpecial);
+    tempTodaysSPl.forEach(res => {
+      this.orderList.forEach(order => {
+        order?.dishQty?.forEach(ordMenu => {
+          if (res.id == order.id) {
+            res = order;
+          }
+        });
+      });
+    });
+    this.todaySplMenu = [];
+    this.todaySplMenu = tempTodaysSPl;
+    this.cd.detectChanges();
   }
   /* the section of cooking today's spl ends here*/
   /* this section is for cooking category data */

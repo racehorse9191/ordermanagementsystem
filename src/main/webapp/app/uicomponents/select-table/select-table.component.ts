@@ -62,6 +62,9 @@ export class SelectTableComponent implements OnInit {
   emptyTableClicked = false;
   today: Date = new Date();
   sub: Subscription;
+  vacantFilter: boolean = false;
+  occupiedFilter: boolean = false;
+  showAllFilter: boolean = true;
   constructor(
     protected tablesService: TablesService,
     protected orderService: OrderService,
@@ -73,11 +76,17 @@ export class SelectTableComponent implements OnInit {
   ) {}
 
   loadAll(): void {
-    this.tablesService.query().subscribe(res => {
-      this.tables = res.body;
-      this.assignCopy();
-      this.getAllConfirmedOrderList();
-    });
+    if (this.showAllFilter) {
+      this.tablesService.query().subscribe(res => {
+        this.tables = res.body;
+        this.assignCopy();
+        this.getAllConfirmedOrderList();
+      });
+    } else if (this.vacantFilter) {
+      this.showVacant();
+    } else if (this.occupiedFilter) {
+      this.showOccupied();
+    }
   }
   ngOnInit(): void {
     this.subscriptionService.updateOrder([]);
@@ -154,6 +163,9 @@ export class SelectTableComponent implements OnInit {
   }
 
   showVacant() {
+    this.vacantFilter = true;
+    this.occupiedFilter = false;
+    this.showAllFilter = false;
     this.tablesService.query().subscribe(res => {
       const tabhelper = [];
       res.body.forEach(tab => {
@@ -170,9 +182,13 @@ export class SelectTableComponent implements OnInit {
         this.noTablesOccupied = false;
       }
       this.assignCopy();
+      this.getAllConfirmedOrderList();
     });
   }
   showOccupied() {
+    this.vacantFilter = false;
+    this.occupiedFilter = true;
+    this.showAllFilter = false;
     this.tablesService.query().subscribe(res => {
       const tabhelper = [];
       res.body.forEach(tab => {
@@ -189,9 +205,13 @@ export class SelectTableComponent implements OnInit {
         this.noTablesAvailabe = false;
       }
       this.assignCopy();
+      this.getAllConfirmedOrderList();
     });
   }
   showAll() {
+    this.vacantFilter = false;
+    this.occupiedFilter = false;
+    this.showAllFilter = true;
     this.noTablesOccupied = false;
     this.noTablesAvailabe = false;
     this.loadAll();
@@ -288,6 +308,7 @@ export class SelectTableComponent implements OnInit {
         });
       });
       this.subscriptionService.updateOrder(temp);
+      console.log('temp=>', temp);
       this.router.navigate(['/ui/menu/'], { state: this.selectedTable });
     } else {
       this.emptyTableClicked = false;
