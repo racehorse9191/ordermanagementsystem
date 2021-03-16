@@ -190,13 +190,23 @@ export class MenuComponent implements OnInit {
     const tempTodaysSPl = this.category?.filter(res => res?.dish?.isTodaysSpecial);
     tempTodaysSPl.forEach(res => {
       this.orderList.forEach(order => {
-        order?.dishQty?.forEach(ordMenu => {
-          if (res.id == order.id) {
-            res = order;
+        console.log('order=>', order);
+        res?.dishQty?.forEach(ordMenu => {
+          if (ordMenu.menus[0].id == order.id) {
+            order.dish.dishImage = res.dish.dishImage;
+            order.dishQty.forEach(ordQty => {
+              if (ordQty.orderQty && ordQty.orderQty != 0) {
+                ordQty.menus = ordMenu.menus;
+              }
+            });
+            Object.assign(res, order);
+
+            console.log('res in if=>', res);
           }
         });
       });
     });
+    console.log('temp=>', tempTodaysSPl);
     this.todaySplMenu = [];
     this.todaySplMenu = tempTodaysSPl;
     this.cd.detectChanges();
