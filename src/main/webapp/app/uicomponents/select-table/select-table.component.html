@@ -27,7 +27,7 @@
     <div  (click)="takeorder(table)" class="card-body">
       <div class="message">
         <span>
-         {{table.tableName}}  <fa-icon *ngIf="table.tablestatus == 'ENGAGED'" (click)="takeorder(table)" class="primary" icon="pencil-alt"></fa-icon>
+         {{table.tableName}}  <fa-icon *ngIf="table.tablestatus == 'ENGAGED'" class="primary" icon="pencil-alt"></fa-icon>
         </span>
         <h6 class="card-subtitle mb-2 float-right statusColor">{{ table.waiterName}} </h6>
       </div>
