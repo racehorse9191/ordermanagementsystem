@@ -1,4 +1,4 @@
-<nav class="navbar navbar-light navbar-expand-md bg-light">
+<nav *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_USER','ROLE_BARTENDER','ROLE_CHEF']" class="navbar navbar-light navbar-expand-md bg-light">
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
         <span class="logo-img"></span>
         <span jhiTranslate="global.title" class="navbar-title">OMS</span> <span class="navbar-version">{{ version }}</span>
