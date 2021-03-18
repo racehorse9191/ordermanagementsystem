@@ -54,7 +54,7 @@ export class NavbarComponent implements OnInit {
   }
 
   login(): void {
-    this.loginModalService.open();
+    this.router.navigate(['']);
   }
 
   logout(): void {
