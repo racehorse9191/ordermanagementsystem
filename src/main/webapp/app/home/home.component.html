@@ -53,16 +53,19 @@
                 <!-- </div>
             </div>
         </div> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <body>
 	
             <div class="limiter">
                 <div class="container-login100">
                     <div class="wrap-login100">
-                        <div class="login100-form-title bg">
-                            <span class="login100-form-title-1" jhiTranslate="login.title">
-                                Sign In
-                            </span>
-                        </div>
+                        <!-- <div class="login100-form-title bg"> -->
+                            <!-- <span class="login100-form-title-1"> -->
+                                <img class="login100-form-title bg" src="./../../assests/oms_logo.png">
+
+                                <!-- Sign In -->
+                            <!-- </span> -->
+                        <!-- </div> -->
                         <div class="col-md-8">
                             <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication">
                                 <strong>Failed to sign in!</strong> Please check your credentials and try again.
