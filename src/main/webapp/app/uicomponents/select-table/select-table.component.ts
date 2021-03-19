@@ -14,7 +14,6 @@ import { HttpResponse } from '@angular/common/http';
 import { IOrder, Order } from '../../shared/model/order.model';
 import { SubscriptionService } from '../../shared/subscription.service';
 import { ToastService } from '../../shared/util/toast.service';
-import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'jhi-select-table',
@@ -125,9 +124,22 @@ export class SelectTableComponent implements OnInit {
           this.orderData = response.body;
           if (this.orderData) {
             const uncheckedDish = this.orderData.menuIdsandQty.filter(dish => dish.isDishReady == true);
+            const tempOrder = this.orderData;
+            this.orderData.menuIdsandQty.forEach(res => {
+              if (res.allDishQty[0] == null) {
+                tempOrder.menuIdsandQty.forEach(temp => {
+                  if (temp.name == res.name && res.allDishQty[0] != null) {
+                    Object.assign(res.allDishQty, temp.allDishQty);
+                    console.log('res=>', res);
+                  }
+                });
+              }
+            });
             this.orderData.menuIdsandQty.map(dish => {
               if (dish.isDishReady) {
                 dish.allDishQty[0].isDishReady = dish.isDishReady;
+              } else {
+                dish.isDishReady = false;
               }
             });
             if (uncheckedDish.length == this.orderData.menuIdsandQty.length) {
@@ -224,6 +236,7 @@ export class SelectTableComponent implements OnInit {
     this.isAllChecked = [];
     const uncheckedDish = data.menuIdsandQty.filter(dish => dish.isDishReady == true);
     data.menuIdsandQty.map(dish => {
+      console.log('dish=>', dish);
       if (dish.isDishReady) {
         dish.allDishQty[0].isDishReady = dish.isDishReady;
       }
@@ -303,9 +316,9 @@ export class SelectTableComponent implements OnInit {
     if (!this.emptyTableClicked) {
       const temp = [];
       this.orderData.menuIdsandQty.forEach(res => {
-        res.allDishQty.forEach(qty => {
-          temp.push(qty);
-        });
+        if (res.allDishQty.length != 0 && res.allDishQty[0] != null) {
+          temp.push(res.allDishQty[0]);
+        }
       });
       this.subscriptionService.updateOrder(temp);
       console.log('temp=>', temp);

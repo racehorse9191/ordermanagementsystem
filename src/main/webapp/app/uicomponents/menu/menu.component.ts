@@ -156,30 +156,15 @@ export class MenuComponent implements OnInit {
     }
   }
 
-  fetchOrderQty(menu: any) {
-    let qty: any = null;
-    menu.dishQty.forEach((res: any) => {
-      if (res.orderQty) {
-        qty = res.orderQty;
-      }
-    });
-    if (qty) {
-      return qty;
-    } else {
-      return 0;
-    }
-  }
-
   /* section to cooks for todays spl */
   updateTOdaysSpl() {
-    const tempTodaysSPl = this.todaySplMenu;
+    const tempTodaysSPl = [];
+    Object.assign(tempTodaysSPl, this.todaySplMenu);
     tempTodaysSPl.forEach(res => {
       this.orderList.forEach(order => {
-        order?.dishQty?.forEach(ordMenu => {
-          if (res.id == order.id) {
-            res = order;
-          }
-        });
+        if (res.id == order.id) {
+          res = order;
+        }
       });
     });
     this.todaySplMenu = [];
@@ -190,17 +175,15 @@ export class MenuComponent implements OnInit {
     const tempTodaysSPl = this.category?.filter(res => res?.dish?.isTodaysSpecial);
     tempTodaysSPl.forEach(res => {
       this.orderList.forEach(order => {
-        res?.dishQty?.forEach(ordMenu => {
-          if (ordMenu.menus[0].id == order.id) {
-            order.dish.dishImage = res.dish.dishImage;
-            order.dishQty.forEach(ordQty => {
-              if (ordQty.orderQty && ordQty.orderQty != 0) {
-                ordQty.menus = ordMenu.menus;
-              }
-            });
-            Object.assign(res, order);
-          }
-        });
+        if (res.id == order.id) {
+          order.dish.dishImage = res.dish.dishImage;
+          order.dishQty.forEach(qty => {
+            if (qty.menus[0] == null) {
+              qty.menus = res.dishQty[0].menus;
+            }
+          });
+          Object.assign(res, order);
+        }
       });
     });
     this.todaySplMenu = [];
@@ -215,38 +198,10 @@ export class MenuComponent implements OnInit {
       this.orderList.forEach(order => {
         res.menus.forEach(catMenu => {
           if (order.id == catMenu.id) {
-            catMenu.dishQty.forEach(catQty => {
-              order.dishQty.forEach(ordrQty => {
-                if (catQty.id == ordrQty.id && ordrQty.orderQty) {
-                  catQty.orderQty = ordrQty.orderQty;
-                }
-              });
-            });
+            catMenu = order;
           }
         });
       });
-    });
-    tempCategoryList.filter(res => {
-      if (res.menus) {
-        res.menus.filter(menu => {
-          let found = false;
-          for (let i = 0; i < this.orderList.length; i++) {
-            if (this.orderList[i].id == menu.id) {
-              found = true;
-              break;
-            }
-          }
-          if (!found) {
-            if (menu.dishQty.length != 0) {
-              menu.dishQty.forEach(menuQty => {
-                if (menuQty.orderQty) {
-                  menuQty.orderQty = 0;
-                }
-              });
-            }
-          }
-        });
-      }
     });
     this.categoryList = [];
     this.categoryList = tempCategoryList;

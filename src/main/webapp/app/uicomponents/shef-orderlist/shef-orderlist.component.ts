@@ -37,6 +37,7 @@ export class ShefOrderlist {
         let orders = [];
         this.orders = [];
         orders = res.body || [];
+        console.log('orders=>', JSON.parse(JSON.stringify(res.body)));
         orders.forEach((order, index) => {
           this.isDishReady[index] = [];
           order.menuIdsandQty.forEach((menu, i) => {
@@ -47,7 +48,6 @@ export class ShefOrderlist {
             }
           });
         });
-
         this.orders = this.authoritiesOrder(orders);
       },
       error => {
@@ -88,12 +88,26 @@ export class ShefOrderlist {
     }
     if (authority == 'ROLE_CHEF') {
       order.forEach(res => {
-        const menuIdQty = [];
+        let menuIdQty = [];
         res.menuIdsandQty.forEach(menuIds => {
-          if (menuIds.allDishQty) {
+          if (menuIds.allDishQty && menuIds.allDishQty[0] != null) {
             menuIds.allDishQty.forEach(element => {
-              if (element.dish.category.categoryName.toLowerCase() != 'beverages') {
+              if (element && element.dish.category.categoryName.toLowerCase() != 'beverages') {
                 menuIdQty.push(menuIds);
+              }
+            });
+          } else {
+            res.menuIdsandQty.forEach(menus => {
+              if (menus.name == menuIds.name && menus.allDishQty[0] != null) {
+                Object.assign(menuIds.allDishQty, menus.allDishQty);
+                menuIds.allDishQty.forEach(element => {
+                  if (element && element.dish.category.categoryName.toLowerCase() != 'beverages') {
+                    menuIdQty.push(menuIds);
+                    console.log('menuIdQty=>', menuIdQty);
+                    const ids = menuIdQty.map(o => o.id);
+                    menuIdQty = menuIdQty.filter(({ id }, index) => !ids.includes(id, index + 1));
+                  }
+                });
               }
             });
           }
@@ -102,12 +116,27 @@ export class ShefOrderlist {
       });
     } else {
       order.forEach(res => {
-        const menuIdQty = [];
+        let menuIdQty = [];
         res.menuIdsandQty.forEach(menuIds => {
-          if (menuIds.allDishQty) {
+          if (menuIds.allDishQty && menuIds.allDishQty[0] != null) {
             menuIds.allDishQty.forEach(element => {
-              if (element.dish.category.categoryName.toLowerCase() === 'beverages') {
+              if (element && element.dish.category.categoryName.toLowerCase() === 'beverages') {
+                console.log('menuIds=>', menuIds);
                 menuIdQty.push(menuIds);
+              }
+            });
+          } else {
+            res.menuIdsandQty.forEach(menus => {
+              if (menus.name == menuIds.name && menus.allDishQty[0] != null) {
+                Object.assign(menuIds.allDishQty, menus.allDishQty);
+                menuIds.allDishQty.forEach(element => {
+                  if (element && element.dish.category.categoryName.toLowerCase() === 'beverages') {
+                    menuIdQty.push(menuIds);
+                    console.log('menuIdQty=>', menuIdQty);
+                    const ids = menuIdQty.map(o => o.id);
+                    menuIdQty = menuIdQty.filter(({ id }, index) => !ids.includes(id, index + 1));
+                  }
+                });
               }
             });
           }
@@ -115,6 +144,7 @@ export class ShefOrderlist {
         res.menuIdsandQty = menuIdQty;
       });
     }
+    console.log('res=>', order);
     order = order.filter(res => res.menuIdsandQty.length != 0);
     return order;
   }

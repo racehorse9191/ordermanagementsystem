@@ -33,27 +33,27 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   }
   ngOnChanges(changes: SimpleChanges): void {
     this.orders = [];
+    this.selectedQty = [];
+    console.log('on changes=>', this.dishes);
     this.dishes?.forEach((res, i) => {
-      res.dishQty?.forEach(qty => {
-        if (qty.orderQty) {
-          this.orders.push(qty.orderQty);
-          this.selectedQty.push(qty);
-        }
-      });
-      if (res.dishQty) {
-        if (!this.selectedQty[i]) {
-          this.selectedQty.push(res.dishQty[0]);
-        }
-        this.dishPrice[i] = res.price;
-      }
-      if (!this.orders[i]) {
+      if (res.dishQty[0].orderQty) {
+        this.orders.push(res.dishQty[0].orderQty);
+      } else {
         this.orders.push(0);
       }
+      this.selectedQty.push(res.dishQty[0]);
+      this.dishPrice[i] = res.price;
+      res.dishQty?.forEach((qty, index) => {
+        if (index != 0) {
+          qty.disabled = true;
+        }
+      });
     });
   }
 
   ngOnInit(): void {
     this.detailRecivedSubscription = this.subscriptionService.selectedorderOrderObservable.subscribe((obj: any[]) => {
+      console.log('res=>', obj);
       if (obj && obj.length != 0) {
         this.dishesToOrder = obj;
       }
@@ -70,85 +70,69 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
       if (this.dishes) {
         const temp =
           this.dishes[index]?.dishQty?.filter(res => res?.id == this.selectedQty[index].id).map(mapData => mapData.menus)[0] || {};
-        temp[0].dishQty.forEach(qty => {
+        temp[0].dishQty.forEach((qty, i) => {
           if (qty.id == this.selectedQty[index].id) {
             qty.orderQty = this.orders[index];
           }
         });
-        let found = false;
-        this.dishesToOrder.map((mapData, i) => {
-          if (mapData.id == this.dishes[index].id) {
-            found = true;
-            Object.assign(this.dishesToOrder[i], this.dishes[index]);
-          }
-        });
-        if (!found) {
-          found = false;
-          this.dishesToOrder.push(this.dishes[index]);
-        }
+        console.log('pushing in dishes to order=>', this.dishes[index]);
+
+        this.dishesToOrder.push(this.dishes[index]);
       }
       this.dishesToOrder = this.removeRedundentObjects(this.dishesToOrder);
+      console.log('plus clicked=>', this.dishesToOrder);
       this.subscriptionService.updateOrder(this.dishesToOrder);
     }
   }
 
-  removeRedundentObjects(arr: any[]) {
-    return arr.filter(function (item, index) {
-      return arr.indexOf(item) >= index;
+  suborderPlusClicked(index) {
+    console.log('sub index=>', index);
+
+    if (index.orderQty) {
+      Object.assign(index.orderQty, index.orderQty++);
+    } else {
+      index.orderQty = 1;
+    }
+    this.selectedQty.forEach(res => {
+      console.log('plus qty res=>', res);
+      if (res.menus[0].dish.id == index.menus[0].dish.id) {
+        this.dishesToOrder.push(res.menus[0]);
+      }
     });
+    this.dishesToOrder = this.removeRedundentObjects(this.dishesToOrder);
+    console.log('dishes to order=>', this.dishesToOrder);
+    this.subscriptionService.updateOrder(this.dishesToOrder);
+  }
+
+  subOrderMinusClicked(index) {
+    Object.assign(index.orderQty, index.orderQty--);
+    this.selectedQty.forEach(res => {
+      if (res.menus[0].dish.id == index.menus[0].dish.id) {
+        this.dishesToOrder.push(res.menus[0]);
+      }
+    });
+    this.dishesToOrder = this.removeRedundentObjects(this.dishesToOrder);
+    this.subscriptionService.updateOrder(this.dishesToOrder);
+  }
+
+  removeRedundentObjects(arr: any[]) {
+    const ids = arr.map(o => o.id);
+    return arr.filter(({ id }, index) => !ids.includes(id, index + 1));
   }
   orderMinusClicked(index: any) {
     if (this.orders[index] > 0) {
       this.orders[index] = this.orders[index] - 1;
-      if (this.orders[index] == 0) {
-        if (this.dishes) {
-          this.dishes[index]?.dishQty?.filter(res => {
-            if (res) {
-              if (res?.id == this.selectedQty[index].id) {
-                res.orderQty = this.orders[index];
-              }
-            }
-          });
-        }
-        // this.dishes =  this.dishes.filter(res=> res.id != this.selectedQty[index].id)
-        this.dishesToOrder = this.dishesToOrder.filter(res => res.id !== this.dishes[index].id) || [];
-      } else if (this.dishes) {
-        this.dishes[index]?.dishQty?.filter(res => {
-          if (res) {
-            if (res?.id == this.selectedQty[index].id) {
-              res.orderQty = this.orders[index];
-            }
-          }
-        });
-        this.dishesToOrder.filter(res => {
-          res.dishQty.forEach(qty => {
-            if (qty.id === this.selectedQty[index].id) {
-              if (qty.orderQty) {
-                qty.orderQty = this.orders[index];
-              }
-            }
-          });
-        });
-      }
-      this.subscriptionService.updateOrder(this.dishesToOrder);
-    }
-  }
-  onQtyChanged(index: any, value: any) {
-    if (value.menus.length != 0) {
-      this.dishPrice[index] = value.menus[0].price;
-      this.orders[index] = 0;
       if (this.dishes) {
-        this.dishes[index]?.dishQty?.filter(res => {
-          if (res) {
-            if (res?.id == this.selectedQty[index].id) {
-              res.orderQty = this.orders[index];
-            }
+        const temp =
+          this.dishes[index]?.dishQty?.filter(res => res?.id == this.selectedQty[index].id).map(mapData => mapData.menus)[0] || {};
+        temp[0].dishQty.forEach((qty, i) => {
+          if (qty.id == this.selectedQty[index].id) {
+            qty.orderQty = this.orders[index];
           }
         });
+        this.dishesToOrder.push(this.dishes[index]);
       }
-      if (this.dishesToOrder) {
-        this.dishesToOrder = this.dishesToOrder.filter(res => value.menus.find(val => res.dish.id != val.dish.id));
-      }
+      this.dishesToOrder = this.removeRedundentObjects(this.dishesToOrder);
       this.subscriptionService.updateOrder(this.dishesToOrder);
     }
   }

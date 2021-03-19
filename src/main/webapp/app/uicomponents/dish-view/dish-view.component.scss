@@ -1,26 +1,43 @@
 /* --breakpoint-md */
-@media (min-width: 768px) {
-  /*   .items .item {
-    width: calc(100% / 4);
-  } */
-}
 
 /* --breakpoint-lg */
-@media (min-width: 992px) {
-  /*  .items .item {
-    width: calc(100% / 6);
-  } */
+@media (min-width: 320px) {
+  /* smartphones, iPhone, portrait 480x320 phones */
+  .QtyDropDown {
+    width: calc(100% / 1.5);
+  }
+}
+@media (min-width: 481px) {
+  /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+  .QtyDropDown {
+    width: calc(100% / 3);
+  }
+}
+@media (min-width: 641px) {
+  /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+  .QtyDropDown {
+    width: calc(100% / 3);
+  }
+}
+@media (min-width: 961px) {
+  /* tablet, landscape iPad, lo-res laptops ands desktops */
+  .QtyDropDown {
+    width: calc(100% / 3);
+  }
+}
+@media (min-width: 1025px) {
+  /* big landscape tablets, laptops, and desktops */
+  .QtyDropDown {
+    width: calc(100% / 3);
+  }
+}
+@media (min-width: 1281px) {
+  /* hi-res laptops and desktops */
+  .QtyDropDown {
+    width: calc(100% / 3);
+  }
 }
 
-/* --breakpoint-sm */
-@media (min-width: 576px) {
-  /*  .items .item {
-    width: calc(100% / 3);
-  } */
-}
-.QtyDropDown {
-  width: 33%;
-}
 .card-text {
   font-size: small;
 }
@@ -152,7 +169,7 @@ ngb-carousel .carousel-caption {
   align-items: center;
   -webkit-box-pack: center;
   justify-content: center;
-  width: 8.2rem;
+  width: 5.2rem;
   height: 2.2rem;
   border: 1px solid rgb(28, 28, 28);
   border-radius: 6.9px;
@@ -160,6 +177,14 @@ ngb-carousel .carousel-caption {
   cursor: initial;
   user-select: none;
   background: rgb(255, 255, 255);
+}
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-disabled {
+  color: rgba(0, 0, 0, 0.87);
+  cursor: default;
+}
+::ng-deep .ng-select.ng-select-single .ng-select-container .ng-value-container,
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-value {
+  display: flow-root;
 }
 .base-Qty {
   height: 100%;

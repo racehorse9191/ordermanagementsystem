@@ -81,11 +81,13 @@ export class DishQtyModel {
   qtyName?: string;
   menus?: MenuListModel[];
   orderQty?: number;
+  disabled?: boolean;
   constructor(params?: DishQtyModel) {
     this.id = params?.id;
     this.qtyName = params?.qtyName;
     this.menus = params?.menus || [];
     this.orderQty = params?.orderQty;
+    this.disabled = params?.disabled;
   }
 }
 

@@ -93,3 +93,9 @@ button.close {
     text-align: center;
   }
 }
+::ng-selecy .ng-select {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+}

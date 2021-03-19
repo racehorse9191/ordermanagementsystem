@@ -70,7 +70,9 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     this.collapsed = !this.collapsed;
   }
   ngOnInit(): void {
+    this.orderTable = [];
     this.detailRecivedSubscription = this.subscriptionService.selectedorderOrderObservable.subscribe((obj: any[]) => {
+      console.log('order list=>', obj);
       if (obj.length != 0) {
         this.orderList = obj;
         this.constructTable();
@@ -89,41 +91,31 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     this.orderTable = [];
     this.orderList.forEach(res => {
       if (res) {
-        this.order = new OrderTable();
-        this.order.name = res.dish?.dishName;
-        this.order.isDishReady = res?.isDishReady;
+        console.log('res=>', res);
         if (res.dishQty.length != 0) {
           res.dishQty.forEach(qty => {
             if (qty.orderQty && qty.orderQty != 0) {
-              if (qty.menus) {
-                qty.menus.forEach(menu => {
-                  if (menu.dishQty) {
-                    this.order.id = menu.id;
-                    this.order.price = menu.price;
-                    this.order.allDishQty = qty.menus;
-                    menu.dishQty.forEach(menuQty => {
-                      if (menuQty.orderQty && menuQty.orderQty != 0) {
-                        this.order.dishQty = menuQty.qtyName;
-                        this.order.orderQty = menuQty.orderQty;
-                        this.order.orderTotal = this.calculateOrderTotal(menu.price, menuQty.orderQty);
-                      }
-                    });
-                  }
-                });
+              this.order = new OrderTable();
+              if (qty.menus[0] != null) {
+                this.order.name = qty.menus[0].dish.dishName;
+                this.order.isDishReady = qty.menus[0]?.isDishReady;
+                this.order.id = qty.menus[0].id;
+                this.order.price = qty.menus[0].price;
+                this.order.orderTotal = this.calculateOrderTotal(qty.menus[0].price, qty.orderQty);
               } else {
+                this.order.name = res.dish.dishName;
+                this.order.isDishReady = res.isDishReady;
                 this.order.id = res.id;
                 this.order.price = res.price;
-                this.order.allDishQty = [res];
-                this.order.dishQty = qty.qtyName;
-                if (qty.orderQty && qty.orderQty != 0) {
-                  this.order.dishQty = qty.qtyName;
-                  this.order.orderQty = qty.orderQty;
-                  this.order.orderTotal = this.calculateOrderTotal(res.price, qty.orderQty);
-                }
+                this.order.orderTotal = this.calculateOrderTotal(res.price, qty.orderQty);
               }
+              this.order.allDishQty = [res];
+              this.order.dishQty = qty.qtyName;
+              this.order.dishQty = qty.qtyName;
+              this.order.orderQty = qty.orderQty;
+              this.orderTable.push(this.order);
             }
           });
-          this.orderTable.push(this.order);
         }
       }
     });
@@ -189,7 +181,9 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
         dish.dishQty.forEach(qty => {
           if (qty.menus) {
             qty.menus.forEach(element => {
-              delete element.dish.dishImage;
+              if (element && element.dish && element.dish.dishImage) {
+                delete element.dish.dishImage;
+              }
             });
           }
         });
@@ -213,37 +207,44 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
       return value;
     });
   }
-  orderPlusClicked(index: any) {
-    this.orderList[index].dishQty.forEach(res => {
-      if (res.orderQty) {
-        res.orderQty = res.orderQty + 1;
+  orderPlusClicked(order: OrderTable) {
+    this.orderList.forEach(orderList => {
+      if (orderList.dish.id == order.allDishQty[0].dish.id) {
+        orderList.dishQty.forEach(qty => {
+          if (qty.qtyName == order.dishQty) {
+            Object.assign(qty.orderQty, qty.orderQty++);
+          }
+        });
       }
     });
     this.subscriptionService.updateOrder(this.orderList);
   }
-  orderMinusClicked(ordrQty: any, index: any) {
-    if (ordrQty > 0) {
-      const menuId = this.orderList[index].id;
-      let deleteIndex = false;
-      this.orderList[index].dishQty.forEach(res => {
-        if (res.orderQty) {
-          res.orderQty = res.orderQty - 1;
-          if (res.orderQty == 0) {
-            deleteIndex = true;
-          }
+
+  orderMinusClicked(order: OrderTable, index: any) {
+    if (order.orderQty > 0) {
+      this.orderList.forEach(orderList => {
+        if (orderList.dish.id == order.allDishQty[0].dish.id) {
+          orderList.dishQty.forEach(qty => {
+            if (qty.qtyName == order.dishQty) {
+              Object.assign(qty.orderQty, qty.orderQty--);
+            }
+          });
         }
       });
-      this.subscriptionService.updateOrder(this.orderList);
-      if (deleteIndex) {
-        this.orderList = this.orderList.filter(menu => menu.id != menuId);
-      }
       this.subscriptionService.updateOrder(this.orderList);
     }
   }
 
-  onQtyChanged(opt1: any, opt2: any) {}
   delete(order: any) {
-    this.orderList = this.orderList.filter(res => res.id != order.id);
+    this.orderList.forEach(orderList => {
+      if (orderList.dish.id == order.allDishQty[0].dish.id) {
+        orderList.dishQty.forEach(qty => {
+          if (qty.qtyName == order.dishQty) {
+            qty.orderQty = 0;
+          }
+        });
+      }
+    });
     this.subscriptionService.updateOrder(this.orderList);
   }
 
