@@ -16,7 +16,6 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showDescription?: boolean = true;
   @Input() todaysSpl?: boolean = false;
   orders: any[] = [];
-  dishToOrder: DishToOrder[] = [];
   detailRecivedSubscription: Subscription = new Subscription();
   images: any[] = [];
   nonVegType: string = 'NON_VEG';
@@ -105,12 +104,32 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   subOrderMinusClicked(index) {
-    Object.assign(index.orderQty, index.orderQty--);
-    this.selectedQty.forEach(res => {
-      if (res.menus[0].dish.id == index.menus[0].dish.id) {
-        this.dishesToOrder.push(res.menus[0]);
+    if (index.orderQty > 0) {
+      Object.assign(index.orderQty, index.orderQty--);
+      if (index.orderQty == 0) {
+        let count = 0;
+        this.selectedQty.forEach(res => {
+          if (res.menus[0].dish.id == index.menus[0].dish.id) {
+            res.menus[0].dishQty.forEach(qty => {
+              if (qty.orderQty == 0) {
+                count = count + 1;
+              }
+            });
+            if (res.menus[0].dishQty.length == count) {
+              this.dishesToOrder = this.dishesToOrder.filter(menu => menu.id != res.menus[0].id);
+            } else {
+              this.dishesToOrder.push(res.menus[0]);
+            }
+          }
+        });
+      } else {
+        this.selectedQty.forEach(res => {
+          if (res.menus[0].dish.id == index.menus[0].dish.id) {
+            this.dishesToOrder.push(res.menus[0]);
+          }
+        });
       }
-    });
+    }
     this.dishesToOrder = this.removeRedundentObjects(this.dishesToOrder);
     this.subscriptionService.updateOrder(this.dishesToOrder);
   }
@@ -123,16 +142,27 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
     if (this.orders[index] > 0) {
       this.orders[index] = this.orders[index] - 1;
       if (this.dishes) {
+        let count = 0;
         const temp =
           this.dishes[index]?.dishQty?.filter(res => res?.id == this.selectedQty[index].id).map(mapData => mapData.menus)[0] || {};
         temp[0].dishQty.forEach((qty, i) => {
           if (qty.id == this.selectedQty[index].id) {
             qty.orderQty = this.orders[index];
+            if (qty.orderQty == 0) {
+              count = count++;
+            }
           }
         });
-        this.dishesToOrder.push(this.dishes[index]);
+        console.log('count =>', count);
+        console.log('dishQty.length=>', this.dishes[index].dishQty.length);
+        if (this.dishes[index].dishQty.length == count) {
+          this.dishesToOrder = this.dishesToOrder.filter(res => res.id != this.dishes[index].id);
+        } else {
+          this.dishesToOrder.push(this.dishes[index]);
+        }
       }
       this.dishesToOrder = this.removeRedundentObjects(this.dishesToOrder);
+
       this.subscriptionService.updateOrder(this.dishesToOrder);
     }
   }
