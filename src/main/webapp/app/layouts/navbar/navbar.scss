@@ -49,9 +49,14 @@ Logo styles
   width: 60px;
   display: inline-block;
   vertical-align: middle;
-  background: url('../../../content/images/header_logo2.png') no-repeat center center;
+  background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
   background-size: contain;
 }
 .dropdown-menu.show {
   z-index: 1021;
+}
+.navbar-brand {
+  color: #57b846 !important;
+  // font-family: fantasy !important;
+  font-weight: 200 !important;
 }
