@@ -41,8 +41,6 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
     this.selectedQty = [];
     this.tempDish = this.dishes;
     this.tempDish = this.filterByDishName(this.tempDish);
-    console.log('changes=>', this.tempDish);
-    console.log('changes dish=>', this.dishes);
     this.constructCorosol();
     this.constructQtyGroup();
     this.defaultSelectedQty();
@@ -76,6 +74,15 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
     const ids = arr.map(o => o.dish.id);
     return arr.filter((res, index) => !ids.includes(res.dish.id, index + 1));
   }
+  qtyItems(menu: MenuListModel) {
+    let qty = [];
+    this.qtyGroup.forEach(res => {
+      if (res.dishId == menu.dish.id) {
+        qty = res.quantities;
+      }
+    });
+    return qty;
+  }
   constructQtyGroup() {
     this.dishes.forEach(res => {
       const groupQty: QtyGroupModel = new QtyGroupModel();
@@ -90,7 +97,6 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
       groupQty.quantities.push(qtyModel);
       this.qtyGroup.push(groupQty);
     });
-
     this.qtyGroup = this.groupBy(this.qtyGroup);
     console.log('qty=>', this.qtyGroup);
   }
@@ -100,17 +106,7 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
       const index = acc.findIndex(el => el.dishId === val.dishId);
       if (index !== -1) {
         const key = Object.keys(val)[1];
-        console.log('val=>', val);
-        let addVal = true;
-        acc[index]['quantities'].forEach(res => {
-          if (res.qtyId == val['quantities'][0].qtyId) {
-            addVal = false;
-          }
-        });
-        if (addVal) {
-          addVal = true;
-          acc[index]['quantities'].push(val['quantities'][0]);
-        }
+        acc[index]['quantities'].push(val['quantities'][0]);
       } else {
         acc.push(val);
       }
@@ -120,11 +116,12 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
 
   defaultSelectedQty() {
     this.tempDish.forEach((menu, index) => {
-      console.log('dish=>', menu);
-      this.qtyGroup[index].quantities.forEach(qty => {
-        if (menu.id == qty.menuId) {
-          this.selectedQty.push(qty);
-        }
+      this.qtyGroup.forEach(grp => {
+        grp.quantities.forEach(qty => {
+          if (menu.id == qty.menuId) {
+            this.selectedQty.push(qty);
+          }
+        });
       });
     });
   }

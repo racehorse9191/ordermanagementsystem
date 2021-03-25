@@ -30,7 +30,7 @@
         <div class="row">
           <ng-select class="QtyDropDown" data-toggle="tooltip" data-placement="bottom"
             title="Select Dish Qty" id="selectDish" name="selectDish" bindLabel="qtyName" [(ngModel)]="selectedQty[i]" 
-            [items]="qtyGroup[i].quantities || []" [hideSelected]="true" [clearable]="false" [searchable]="false" placeholder="dish Qty">
+            [items]="qtyItems(menu) || []" [hideSelected]="true" [clearable]="false" [searchable]="false" placeholder="dish Qty">
             <ng-template ng-option-tmp let-item="item" let-index="index"> 
              <div class="wrapping-option">
               <div class="float-left"> <b>{{item?.qtyName}}</b> &nbsp; <b>{{ item?.price | currency:'INR'}}</b>  </div>
