@@ -378,7 +378,7 @@ export class SelectTableComponent implements OnInit {
   totalorderDetails() {
     const total: any[] = [];
     this.orderData.menuIdsandQty.forEach(res => {
-      total.push(res.orderTotal);
+      total.push(this.calculateOrderTotal(res.price, res.dishQty.orderQty));
     });
     return total.reduce((a, b) => a + b, 0);
   }
@@ -409,6 +409,9 @@ export class SelectTableComponent implements OnInit {
       size: 'lg',
     };
     // this.confirmModalComponent.close();
+  }
+  calculateOrderTotal(price: any, qty: any) {
+    return price * qty;
   }
   onBackButtonCLicked() {
     this.toastService.removeAll();
