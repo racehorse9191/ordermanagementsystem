@@ -8,7 +8,7 @@ export interface IMenu {
   isAvailable?: boolean;
   orders?: IOrder[];
   dish?: IDish;
-  dishQty?: IDishQty[];
+  dishQty?: IDishQty;
 }
 
 export class Menu implements IMenu {
@@ -18,7 +18,7 @@ export class Menu implements IMenu {
     public isAvailable?: boolean,
     public orders?: IOrder[],
     public dish?: IDish,
-    public dishQty?: IDishQty[]
+    public dishQty?: IDishQty
   ) {
     this.isAvailable = this.isAvailable || false;
   }

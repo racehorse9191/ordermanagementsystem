@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IDishQty } from 'app/shared/model/dish-qty.model';
+import { IDishQty } from './../../shared/model/dish-qty.model';
 import { DishQtyService } from './dish-qty.service';
 import { DishQtyDeleteDialogComponent } from './dish-qty-delete-dialog.component';
 

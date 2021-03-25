@@ -21,15 +21,6 @@ export class MenuComponent implements OnInit, OnDestroy {
   loadAll(): void {
     this.menuService.query().subscribe((res: HttpResponse<IMenu[]>) => {
       this.menus = res.body || [];
-      this.menus?.forEach(menu => {
-        const tempQty = {};
-        Object.keys(menu?.dishQty || []).forEach(key => {
-          if (menu?.dishQty) {
-            tempQty[key] = menu?.dishQty[key];
-          }
-        });
-        menu.dishQty = [...[tempQty]];
-      });
     });
   }
 

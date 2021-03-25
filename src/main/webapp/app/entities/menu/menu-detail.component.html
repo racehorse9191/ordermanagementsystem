@@ -25,7 +25,7 @@
                 <dt><span jhiTranslate="orderManagementSystemApp.menu.dishQty">Dish Qty</span></dt>
                 <dd>
                     <div *ngIf="menu.dishQty">
-                        <a [routerLink]="['/dish-qty', menu.dishQty[0].id, 'view']">{{ menu.dishQty[0].qtyName }}</a>
+                        <a [routerLink]="['/dish-qty', menu.dishQty.id, 'view']">{{ menu.dishQty.qtyName }}</a>
                     </div>
                 </dd>
             </dl>

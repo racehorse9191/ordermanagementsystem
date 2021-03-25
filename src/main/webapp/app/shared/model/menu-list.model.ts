@@ -9,7 +9,7 @@ export class MenuListModel {
   isAvailable?: boolean;
   orders?: OrderModel[];
   dish?: DishModel;
-  dishQty?: DishQtyModel[];
+  dishQty?: DishQtyModel;
   isDishReady?: boolean;
   constructor(params?: MenuListModel) {
     this.id = params?.id;
@@ -79,13 +79,11 @@ export class CategoryModel {
 export class DishQtyModel {
   id?: number;
   qtyName?: string;
-  menus?: MenuListModel[];
   orderQty?: number;
   disabled?: boolean;
   constructor(params?: DishQtyModel) {
     this.id = params?.id;
     this.qtyName = params?.qtyName;
-    this.menus = params?.menus || [];
     this.orderQty = params?.orderQty;
     this.disabled = params?.disabled;
   }

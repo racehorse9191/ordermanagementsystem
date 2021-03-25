@@ -4,6 +4,8 @@ import { Subscription } from 'rxjs';
 import { DishToOrder } from '../../shared/model/dish-to-order';
 import { SubscriptionService } from '../../shared/subscription.service';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
+import { CorosalModal } from '../../shared/model/corosal.model';
+import { QtyGroupModel, QuantitiesModel } from '../../shared/model/qty-group.model';
 
 @Component({
   selector: 'jhi-dish-view',
@@ -23,6 +25,10 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   selectedQty: any[] = [];
   dishPrice: any[] = [];
   dishesToOrder: MenuListModel[] = [];
+  /* New vaiables*/
+  corosal: CorosalModal[] = [];
+  qtyGroup: QtyGroupModel[] = [];
+  tempDish: MenuListModel[] = [];
   constructor(protected subscriptionService: SubscriptionService, config: NgbCarouselConfig, protected cd: ChangeDetectorRef) {
     config.interval = 5000;
     config.wrap = false;
@@ -33,21 +39,13 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     this.orders = [];
     this.selectedQty = [];
-    console.log('on changes=>', this.dishes);
-    this.dishes?.forEach((res, i) => {
-      if (res.dishQty[0].orderQty) {
-        this.orders.push(res.dishQty[0].orderQty);
-      } else {
-        this.orders.push(0);
-      }
-      this.selectedQty.push(res.dishQty[0]);
-      this.dishPrice[i] = res.price;
-      res.dishQty?.forEach((qty, index) => {
-        if (index != 0) {
-          qty.disabled = true;
-        }
-      });
-    });
+    this.tempDish = this.dishes;
+    this.tempDish = this.filterByDishName(this.tempDish);
+    console.log('changes=>', this.tempDish);
+    console.log('changes dish=>', this.dishes);
+    this.constructCorosol();
+    this.constructQtyGroup();
+    this.defaultSelectedQty();
   }
 
   ngOnInit(): void {
@@ -62,108 +60,148 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy() {
     this.detailRecivedSubscription.unsubscribe();
   }
+  constructCorosol() {
+    this.dishes.forEach(res => {
+      const corosal: CorosalModal = new CorosalModal();
+      corosal.dishId = res.dish.id;
+      corosal.dishDescription = res.dish.dishDescription;
+      corosal.dishImage = res.dish.dishImage;
+      corosal.dishName = res.dish.dishName;
+      this.corosal.push(corosal);
+    });
+    const ids = this.corosal.map(o => o.dishName);
+    this.corosal = [...this.corosal.filter(({ dishName }, index) => !ids.includes(dishName, index + 1))];
+  }
+  filterByDishName(arr) {
+    const ids = arr.map(o => o.dish.id);
+    return arr.filter((res, index) => !ids.includes(res.dish.id, index + 1));
+  }
+  constructQtyGroup() {
+    this.dishes.forEach(res => {
+      const groupQty: QtyGroupModel = new QtyGroupModel();
+      const qtyModel: QuantitiesModel = new QuantitiesModel();
+      qtyModel.menuId = res.id;
+      qtyModel.qtyId = res.dishQty.id;
+      qtyModel.qtyName = res.dishQty.qtyName;
+      qtyModel.orderQty = res.dishQty.orderQty;
+      qtyModel.price = res.price;
+      qtyModel.disabled = true;
+      groupQty.dishId = res.dish.id;
+      groupQty.quantities.push(qtyModel);
+      this.qtyGroup.push(groupQty);
+    });
 
-  orderPlusClicked(index: any) {
-    this.orders[index] = this.orders[index] + 1;
-    if (this.orders[index] > 0) {
-      if (this.dishes) {
-        const temp =
-          this.dishes[index]?.dishQty?.filter(res => res?.id == this.selectedQty[index].id).map(mapData => mapData.menus)[0] || {};
-        temp[0].dishQty.forEach((qty, i) => {
-          if (qty.id == this.selectedQty[index].id) {
-            qty.orderQty = this.orders[index];
-          }
-        });
-        console.log('pushing in dishes to order=>', this.dishes[index]);
-
-        this.dishesToOrder.push(this.dishes[index]);
-      }
-      this.dishesToOrder = this.removeRedundentObjects(this.dishesToOrder);
-      console.log('plus clicked=>', this.dishesToOrder);
-      this.subscriptionService.updateOrder(this.dishesToOrder);
-    }
+    this.qtyGroup = this.groupBy(this.qtyGroup);
+    console.log('qty=>', this.qtyGroup);
   }
 
-  suborderPlusClicked(index) {
-    console.log('sub index=>', index);
+  groupBy(array) {
+    return array.reduce((acc, val, ind) => {
+      const index = acc.findIndex(el => el.dishId === val.dishId);
+      if (index !== -1) {
+        const key = Object.keys(val)[1];
+        console.log('val=>', val);
+        let addVal = true;
+        acc[index]['quantities'].forEach(res => {
+          if (res.qtyId == val['quantities'][0].qtyId) {
+            addVal = false;
+          }
+        });
+        if (addVal) {
+          addVal = true;
+          acc[index]['quantities'].push(val['quantities'][0]);
+        }
+      } else {
+        acc.push(val);
+      }
+      return acc;
+    }, []);
+  }
 
-    if (index.orderQty) {
-      Object.assign(index.orderQty, index.orderQty++);
-    } else {
-      index.orderQty = 1;
-    }
-    this.selectedQty.forEach(res => {
-      console.log('plus qty res=>', res);
-      if (res.menus[0].dish.id == index.menus[0].dish.id) {
-        this.dishesToOrder.push(res.menus[0]);
+  defaultSelectedQty() {
+    this.tempDish.forEach((menu, index) => {
+      console.log('dish=>', menu);
+      this.qtyGroup[index].quantities.forEach(qty => {
+        if (menu.id == qty.menuId) {
+          this.selectedQty.push(qty);
+        }
+      });
+    });
+  }
+  orderPlusClicked(index: any, menuId: any) {
+    /*  if(!this.tempDish[index].dishQty.orderQty){
+      this.tempDish[index].dishQty.orderQty = 1;
+    }else{
+      this.tempDish[index].dishQty.orderQty = this.tempDish[index].dishQty.orderQty+1 ;
+    } */
+    this.dishes.forEach(res => {
+      if (res.id == menuId) {
+        if (!res.dishQty.orderQty) {
+          res.dishQty.orderQty = 1;
+        } else {
+          res.dishQty.orderQty = res.dishQty.orderQty + 1;
+        }
       }
     });
-    this.dishesToOrder = this.removeRedundentObjects(this.dishesToOrder);
-    console.log('dishes to order=>', this.dishesToOrder);
-    this.subscriptionService.updateOrder(this.dishesToOrder);
+    this.subscriptionService.updateOrder(this.dishes);
+  }
+  orderMinusClicked(index: any, menuId: any) {
+    /*  if(!this.tempDish[index].dishQty.orderQty){
+      this.tempDish[index].dishQty.orderQty = 0
+    }else{
+      if(this.tempDish[index].dishQty.orderQty > 0 ){
+        this.tempDish[index].dishQty.orderQty = this.tempDish[index].dishQty.orderQty -1;
+      }
+    } */
+    this.dishes.forEach(res => {
+      if (res.id == menuId) {
+        if (!res.dishQty.orderQty) {
+          res.dishQty.orderQty = 0;
+        } else {
+          res.dishQty.orderQty = res.dishQty.orderQty - 1;
+        }
+      }
+    });
+    this.subscriptionService.updateOrder(this.dishes);
+  }
+  suborderPlusClicked(item: any) {
+    if (!item.orderQty) {
+      item.orderQty = 1;
+    } else {
+      item.orderQty = item.orderQty + 1;
+    }
+    this.dishes.forEach(res => {
+      if (res.id == item.menuId) {
+        if (!res.dishQty.orderQty) {
+          res.dishQty.orderQty = 1;
+        } else {
+          res.dishQty.orderQty = res.dishQty.orderQty + 1;
+        }
+      }
+    });
+    this.subscriptionService.updateOrder(this.dishes);
   }
 
-  subOrderMinusClicked(index) {
-    if (index.orderQty > 0) {
-      Object.assign(index.orderQty, index.orderQty--);
-      if (index.orderQty == 0) {
-        let count = 0;
-        this.selectedQty.forEach(res => {
-          if (res.menus[0].dish.id == index.menus[0].dish.id) {
-            res.menus[0].dishQty.forEach(qty => {
-              if (qty.orderQty == 0) {
-                count = count + 1;
-              }
-            });
-            if (res.menus[0].dishQty.length == count) {
-              this.dishesToOrder = this.dishesToOrder.filter(menu => menu.id != res.menus[0].id);
-            } else {
-              this.dishesToOrder.push(res.menus[0]);
-            }
-          }
-        });
-      } else {
-        this.selectedQty.forEach(res => {
-          if (res.menus[0].dish.id == index.menus[0].dish.id) {
-            this.dishesToOrder.push(res.menus[0]);
-          }
-        });
-      }
+  subOrderMinusClicked(item: any) {
+    if (!item.orderQty) {
+      item.orderQty = 0;
+    } else {
+      item.orderQty = item.orderQty - 1;
     }
-    this.dishesToOrder = this.removeRedundentObjects(this.dishesToOrder);
-    this.subscriptionService.updateOrder(this.dishesToOrder);
+    this.dishes.forEach(res => {
+      if (res.id == item.menuId) {
+        if (!res.dishQty.orderQty) {
+          res.dishQty.orderQty = 0;
+        } else {
+          res.dishQty.orderQty = res.dishQty.orderQty - 1;
+        }
+      }
+    });
+    this.subscriptionService.updateOrder(this.dishes);
   }
 
   removeRedundentObjects(arr: any[]) {
     const ids = arr.map(o => o.id);
     return arr.filter(({ id }, index) => !ids.includes(id, index + 1));
-  }
-  orderMinusClicked(index: any) {
-    if (this.orders[index] > 0) {
-      this.orders[index] = this.orders[index] - 1;
-      if (this.dishes) {
-        let count = 0;
-        const temp =
-          this.dishes[index]?.dishQty?.filter(res => res?.id == this.selectedQty[index].id).map(mapData => mapData.menus)[0] || {};
-        temp[0].dishQty.forEach((qty, i) => {
-          if (qty.id == this.selectedQty[index].id) {
-            qty.orderQty = this.orders[index];
-            if (qty.orderQty == 0) {
-              count = count++;
-            }
-          }
-        });
-        console.log('count =>', count);
-        console.log('dishQty.length=>', this.dishes[index].dishQty.length);
-        if (this.dishes[index].dishQty.length == count) {
-          this.dishesToOrder = this.dishesToOrder.filter(res => res.id != this.dishes[index].id);
-        } else {
-          this.dishesToOrder.push(this.dishes[index]);
-        }
-      }
-      this.dishesToOrder = this.removeRedundentObjects(this.dishesToOrder);
-
-      this.subscriptionService.updateOrder(this.dishesToOrder);
-    }
   }
 }
