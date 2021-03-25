@@ -4,13 +4,12 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-
-import { IOrder, Order } from 'app/shared/model/order.model';
+import { IMenu } from '../../shared/model/menu.model';
+import { ITables } from '../../shared/model/tables.model';
 import { OrderService } from './order.service';
-import { IMenu } from 'app/shared/model/menu.model';
-import { MenuService } from 'app/entities/menu/menu.service';
-import { ITables } from 'app/shared/model/tables.model';
-import { TablesService } from 'app/entities/tables/tables.service';
+import { MenuService } from '../menu/menu.service';
+import { TablesService } from '../tables/tables.service';
+import { IOrder, Order } from '../../shared/model/order.model';
 
 type SelectableEntity = IMenu | ITables;
 

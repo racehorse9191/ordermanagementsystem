@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
-import { Authority } from 'app/shared/constants/authority.constants';
-
+import { UserRouteAccessService } from '../../core/auth/user-route-access-service';
+import { Authority } from '../../shared/constants/authority.constants';
 import { RegisterComponent } from './register.component';
 
 export const registerRoute: Route = {
@@ -10,4 +10,5 @@ export const registerRoute: Route = {
     authorities: [Authority.ADMIN],
     pageTitle: 'register.title',
   },
+  canActivate: [UserRouteAccessService],
 };

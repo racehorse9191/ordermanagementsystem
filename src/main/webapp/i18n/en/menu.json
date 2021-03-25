@@ -5,7 +5,9 @@
         "title": "Menus",
         "createLabel": "Create a new Menu",
         "createOrEditLabel": "Create or edit a Menu",
-        "notFound": "No Menus found"
+        "notFound": "No Menus found",
+        "showList": "show List",
+        "showCategory": "show Category"
       },
       "created": "A new Menu is created with identifier {{ param }}",
       "updated": "A Menu is updated with identifier {{ param }}",

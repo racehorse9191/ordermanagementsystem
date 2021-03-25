@@ -3,14 +3,13 @@ import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
-
-import { Authority } from 'app/shared/constants/authority.constants';
-import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { IOrder, Order } from 'app/shared/model/order.model';
 import { OrderService } from './order.service';
 import { OrderComponent } from './order.component';
 import { OrderDetailComponent } from './order-detail.component';
 import { OrderUpdateComponent } from './order-update.component';
+import { IOrder, Order } from '../../shared/model/order.model';
+import { Authority } from '../../shared/constants/authority.constants';
+import { UserRouteAccessService } from '../../core/auth/user-route-access-service';
 
 @Injectable({ providedIn: 'root' })
 export class OrderResolve implements Resolve<IOrder> {
@@ -39,7 +38,7 @@ export const orderRoute: Routes = [
     path: '',
     component: OrderComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN, Authority.USER, Authority.BARTENDER, Authority.CHEF],
       defaultSort: 'id,asc',
       pageTitle: 'orderManagementSystemApp.order.home.title',
     },
@@ -52,7 +51,7 @@ export const orderRoute: Routes = [
       order: OrderResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN, Authority.USER],
       pageTitle: 'orderManagementSystemApp.order.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -64,7 +63,7 @@ export const orderRoute: Routes = [
       order: OrderResolve,
     },
     data: {
-      authorities: [Authority.ADMIN],
+      authorities: [Authority.ADMIN, Authority.USER],
       pageTitle: 'orderManagementSystemApp.order.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -76,7 +75,7 @@ export const orderRoute: Routes = [
       order: OrderResolve,
     },
     data: {
-      authorities: [Authority.ADMIN],
+      authorities: [Authority.ADMIN, Authority.USER],
       pageTitle: 'orderManagementSystemApp.order.home.title',
     },
     canActivate: [UserRouteAccessService],

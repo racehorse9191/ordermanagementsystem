@@ -52,6 +52,8 @@
                     <select class="form-control" name="type" formControlName="type" id="field_type">
                         <option value="VEG">{{ 'orderManagementSystemApp.Type.VEG' | translate }}</option>
                         <option value="NON_VEG">{{ 'orderManagementSystemApp.Type.NON_VEG' | translate }}</option>
+                        <option value="ALCOHOLIC">{{ 'orderManagementSystemApp.Type.ALCOHOLIC' | translate }}</option>
+                        <option value="NON_ALCOHOLIC">{{ 'orderManagementSystemApp.Type.NON_ALCOHOLIC' | translate }}</option>
                     </select>
                     <div *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
                         <small class="form-text text-danger"

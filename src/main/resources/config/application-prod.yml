@@ -23,6 +23,8 @@ eureka:
   instance:
     prefer-ip-address: true
   client:
+    register-with-eureka: false
+    fetch-registry: false
     service-url:
       defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 
@@ -52,8 +54,7 @@ spring:
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
   jpa:
-    show-sql: false
-  # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
+    show-sql: false # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod
   mail:

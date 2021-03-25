@@ -4,13 +4,13 @@ import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router
 import { Observable, of, EMPTY } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
-import { Authority } from 'app/shared/constants/authority.constants';
-import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { IMenu, Menu } from 'app/shared/model/menu.model';
 import { MenuService } from './menu.service';
 import { MenuComponent } from './menu.component';
 import { MenuDetailComponent } from './menu-detail.component';
 import { MenuUpdateComponent } from './menu-update.component';
+import { IMenu, Menu } from '../../shared/model/menu.model';
+import { Authority } from '../../shared/constants/authority.constants';
+import { UserRouteAccessService } from '../../core/auth/user-route-access-service';
 
 @Injectable({ providedIn: 'root' })
 export class MenuResolve implements Resolve<IMenu> {
@@ -39,7 +39,7 @@ export const menuRoute: Routes = [
     path: '',
     component: MenuComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.menu.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const menuRoute: Routes = [
       menu: MenuResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.menu.home.title',
     },
     canActivate: [UserRouteAccessService],

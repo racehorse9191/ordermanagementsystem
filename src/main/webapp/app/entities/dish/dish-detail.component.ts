@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JhiDataUtils } from 'ng-jhipster';
-
-import { IDish } from 'app/shared/model/dish.model';
+import { IDish } from '../../shared/model/dish.model';
 
 @Component({
   selector: 'jhi-dish-detail',

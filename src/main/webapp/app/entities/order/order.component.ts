@@ -5,11 +5,10 @@ import { Subscription, combineLatest } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IOrder } from 'app/shared/model/order.model';
-
-import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { OrderService } from './order.service';
 import { OrderDeleteDialogComponent } from './order-delete-dialog.component';
+import { IOrder } from '../../shared/model/order.model';
+import { ITEMS_PER_PAGE } from '../../shared/constants/pagination.constants';
 
 @Component({
   selector: 'jhi-order',

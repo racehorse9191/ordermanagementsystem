@@ -1,4 +1,4 @@
-import { IDish } from 'app/shared/model/dish.model';
+import { IDish } from './dish.model';
 
 export interface ICategory {
   id?: number;

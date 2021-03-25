@@ -1,12 +1,13 @@
 import { Moment } from 'moment';
-import { IMenu } from 'app/shared/model/menu.model';
-import { ITables } from 'app/shared/model/tables.model';
-import { OrderStatus } from 'app/shared/model/enumerations/order-status.model';
+import { OrderStatus } from './enumerations/order-status.model';
+import { IMenu } from './menu.model';
+import { ITables } from './tables.model';
 
 export interface IOrder {
   id?: number;
-  menuIdsandQty?: string;
+  menuIdsandQty?: any;
   waiterName?: string;
+  waiterId?: number;
   note?: string;
   orderDate?: Moment;
   orderstatus?: OrderStatus;
@@ -17,8 +18,9 @@ export interface IOrder {
 export class Order implements IOrder {
   constructor(
     public id?: number,
-    public menuIdsandQty?: string,
+    public menuIdsandQty?: any,
     public waiterName?: string,
+    public waiterId?: number,
     public note?: string,
     public orderDate?: Moment,
     public orderstatus?: OrderStatus,

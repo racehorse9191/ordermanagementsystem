@@ -3,6 +3,8 @@ package com.oms.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -27,9 +29,13 @@ public class Order implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "menu_idsand_qty", nullable = false)
+    @Column(name = "menu_idsand_qty", columnDefinition="LONGTEXT", nullable = false)
     private String menuIdsandQty;
 
+    @NotNull
+    @Column(name = "waiter_Id", nullable = false)
+    private Long waiterId;
+    
     @NotNull
     @Column(name = "waiter_name", nullable = false)
     private String waiterName;
@@ -45,10 +51,12 @@ public class Order implements Serializable {
     private OrderStatus orderstatus;
 
     @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
     @JsonIgnoreProperties(value = "orders", allowSetters = true)
     private Menu menu;
 
     @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
     @JsonIgnoreProperties(value = "orders", allowSetters = true)
     private Tables tables;
 
@@ -151,9 +159,18 @@ public class Order implements Serializable {
     public void setTables(Tables tables) {
         this.tables = tables;
     }
+    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
-    @Override
+    public Long getWaiterId() {
+		return waiterId;
+	}
+
+	public void setWaiterId(Long waiterId) {
+		this.waiterId = waiterId;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

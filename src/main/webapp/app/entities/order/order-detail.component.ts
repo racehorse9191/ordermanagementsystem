@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { IOrder } from 'app/shared/model/order.model';
+import { IOrder } from '../../shared/model/order.model';
 
 @Component({
   selector: 'jhi-order-detail',

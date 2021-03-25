@@ -1,11 +1,34 @@
+// {
+//   "include": ["src/**/*.ts", "e2e/**/*.ts", "test/**/*.ts", "tools/**/*.ts", "integration/**/*.ts", "scripts/**/*.ts"],
+//   "exclude": ["node_modules", "lib/config", "integration", "resource", "scripts", "jib", "assets", "java", "tools", "docker"],
+//   "compileOnSave": true,
+//   "compilerOptions": {
+//     "resolveJsonModule": true,
+//     "outDir": "target/classes/static/app",
+//     "baseUrl": "src",
+//     "sourceMap": true,
+//     "declaration": false,
+//     "moduleResolution": "node",
+//     "emitDecoratorMetadata": true,
+//     "experimentalDecorators": true,
+//     "skipLibCheck": true,
+//     "noUnusedLocals": false,
+//     "noUnusedParameters": false,
+//     "noImplicitReturns": false,
+//     "target": "es5",
+//     "allowSyntheticDefaultImports": true,
+//     "typeRoots": ["node_modules/@types"],
+//     "lib": ["es2018", "dom"],
+//     "no-object-literal-type-assertion": false
+//   },
+//   "angularCompilerOptions": {
+//     "preserveWhitespaces": false
+//   }
+// }
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.e2e.json"
-    }
-  ]
+  "exclude": ["node_modules", "lib/config", "integration", "resource", "scripts", "jib", "assets", "java", "tools", "docker"],
+  "compileOnSave": true,
+  "compilerOptions": {
+    "experimentalDecorators": true
+  }
 }

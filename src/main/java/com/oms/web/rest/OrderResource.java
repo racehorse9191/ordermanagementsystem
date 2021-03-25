@@ -1,6 +1,7 @@
 package com.oms.web.rest;
 
 import com.oms.domain.Order;
+import com.oms.domain.enumeration.OrderStatus;
 import com.oms.repository.OrderRepository;
 import com.oms.web.rest.errors.BadRequestAlertException;
 
@@ -41,6 +42,7 @@ public class OrderResource {
     private String applicationName;
 
     private final OrderRepository orderRepository;
+    
 
     public OrderResource(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -124,5 +126,48 @@ public class OrderResource {
         log.debug("REST request to delete Order : {}", id);
         orderRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+    
+    /**
+     * {@code GET  /orders} : get all the orders.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of orders in body.
+     */
+    @GetMapping("/orders/status/{orderStatus}")
+    public ResponseEntity<List<Order>> getAllOrdersByOrderStatus(@PathVariable OrderStatus orderStatus) {
+        log.debug("REST request to get a page of Orders by order status");
+        return ResponseEntity.ok().body(orderRepository.findByOrderstatus(orderStatus));
+    }
+    
+    /**
+     * {@code GET  /orders} : get all the orders.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of orders in body.
+     */
+    @GetMapping("/orders/getUserOrderHistory/{id}/{orderStatus}")
+    public ResponseEntity<List<Order>> getUserOrderHistory(Pageable pageable,@PathVariable Long id,@PathVariable OrderStatus orderStatus ) {
+        log.debug("REST request to get a page of Orders");
+        Page<Order> page = orderRepository.findByWaiterIdAndOrderstatus(id,orderStatus,pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+    /**
+     * Gets order details by table Id
+     */
+    @GetMapping("/orders/table/{tableId}")
+    public ResponseEntity<Order> getAllOrdersByTableId(@PathVariable Long tableId) {
+        log.debug("REST request to get a page of Orders by table ID");
+        ResponseEntity<Order> orderById;
+        List<Order> orderList;
+        ResponseEntity<Order> orderOfTable = null;
+        orderList = orderRepository.findByOrderstatus(OrderStatus.CONFIRMED);
+        for (int i = 0; i < orderList.size(); i++) {
+        	if(orderList.get(i).getTables().getId() == tableId) {
+        		orderOfTable = ResponseEntity.ok().body(orderList.get(i));
+        	}
+        }
+        return orderOfTable;
     }
 }

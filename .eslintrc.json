@@ -1,24 +1,46 @@
 {
-  "plugins": ["@typescript-eslint/tslint"],
+  "env": { "browser": true, "node": true, "es6": true },
+  "parser": "@typescript-eslint/parser",
   "extends": ["jhipster"],
+  "plugins": ["@typescript-eslint", "@typescript-eslint/tslint"],
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts"],
+      "@typescript-eslint": [".ts"]
+    },
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
   "parserOptions": {
     "project": "./tsconfig.base.json"
   },
   "rules": {
+    "eqeqeq": "off",
+    "member-ordering": [
+      "off",
+      {
+        "order": [
+          {
+            "name": "static non-private",
+            "kinds": ["public-static-field", "protected-static-field", "public-static-method", "protected-static-method"]
+          },
+          "constructor"
+        ]
+      }
+    ],
+    "@typescript-eslint/array-type": ["off", { "default": "array-simple" }],
+    "@typescript-eslint/prefer-includes": "off",
+    "no-console": ["off", "debug", "time", "timeEnd", "trace"],
+    "no-unused-vars": "off",
     "@typescript-eslint/tslint/config": [
       "error",
       {
         "lintFile": "./tslint.json"
       }
     ],
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
-      {
-        "vars": "all",
-        "args": "after-used",
-        "ignoreRestSiblings": false
-      }
-    ],
+    "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-non-null-assertion": "off"
   }
 }

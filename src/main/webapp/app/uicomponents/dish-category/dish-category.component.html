@@ -1,0 +1,7 @@
+<ngb-accordion [destroyOnHide]='false' [closeOthers]="true"> 
+	<ngb-panel class="customCollapse" [id]="menu?.categoryName || ''" *ngFor="let menu of menus; let i=index;" [title]="menu?.categoryName || ''" >
+		<ng-template ngbPanelContent>
+			<jhi-dish-view [dishes]="menu.menus" [showDescription]="showDescription" ></jhi-dish-view>
+		</ng-template>
+	</ngb-panel>
+</ngb-accordion>

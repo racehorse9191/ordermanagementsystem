@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { ITables } from 'app/shared/model/tables.model';
+import { ITables } from '../../shared/model/tables.model';
 
 @Component({
   selector: 'jhi-tables-detail',

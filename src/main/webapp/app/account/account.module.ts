@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { OrderManagementSystemSharedModule } from 'app/shared/shared.module';
-
 import { PasswordStrengthBarComponent } from './password/password-strength-bar.component';
 import { RegisterComponent } from './register/register.component';
 import { ActivateComponent } from './activate/activate.component';
@@ -11,6 +9,7 @@ import { PasswordResetInitComponent } from './password-reset/init/password-reset
 import { PasswordResetFinishComponent } from './password-reset/finish/password-reset-finish.component';
 import { SettingsComponent } from './settings/settings.component';
 import { accountState } from './account.route';
+import { OrderManagementSystemSharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [OrderManagementSystemSharedModule, RouterModule.forChild(accountState)],

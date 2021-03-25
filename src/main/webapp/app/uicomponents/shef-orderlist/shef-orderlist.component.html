@@ -1,0 +1,36 @@
+<nav class="navbar sticky-top navbar-light bg-light row">
+	<h2>Orders</h2>
+		<button class="btn btn-primary float-right" (click)="loadAll()">
+            <fa-icon icon="sync"></fa-icon> <span jhiTranslate="metrics.refresh.button">Refresh</span>
+        </button>
+</nav>
+<h3 *ngIf="orders && orders.length == 0">No new orders!</h3>
+<section class="items">
+	<div class="card" [id]="order.id" *ngFor="let order of orders;let i = index">
+			<div class="card-body">
+			  <h5 class="card-title"># {{order.id}} <br> {{order.tables.tableName}} - {{order.waiterName}}</h5>	
+			 <div *ngIf="order" class="alert alert-class" role="alert">
+				<h6 class="alert-heading">Note!</h6>
+				<p>  {{order.note}}</p>
+			  </div>
+			  <table class="table">
+				<thead>
+				  <tr>
+					<th scope="col">#</th>
+					<th scope="col">Dish Name</th>
+					<th class="text-center" scope="col">Dish Qty</th>
+					<th class="text-center" scope="col">Order Qty</th> 
+				  </tr>
+				</thead>
+				  <tbody class="tbody" *ngIf="order">
+					<tr *ngFor="let item of order.menuIdsandQty;let j = index" >
+					  <td> <span *ngIf="item.isDishReady"><fa-icon [icon]="faCoffee"  [styles]="{'stroke': 'green', 'color': 'green'}"></fa-icon></span></td>
+					  <td> {{item.name}}  </td>
+					  <td class="text-center"> {{item.dishQty}} </td>
+					  <td class="text-center"> X {{item.orderQty}}  </td>
+					 </tr>
+				  </tbody>
+				  </table>
+			</div>
+	</div>
+</section>

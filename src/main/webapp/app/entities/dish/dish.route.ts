@@ -4,13 +4,13 @@ import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router
 import { Observable, of, EMPTY } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
-import { Authority } from 'app/shared/constants/authority.constants';
-import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { IDish, Dish } from 'app/shared/model/dish.model';
 import { DishService } from './dish.service';
 import { DishComponent } from './dish.component';
 import { DishDetailComponent } from './dish-detail.component';
 import { DishUpdateComponent } from './dish-update.component';
+import { Dish, IDish } from '../../shared/model/dish.model';
+import { Authority } from '../../shared/constants/authority.constants';
+import { UserRouteAccessService } from '../../core/auth/user-route-access-service';
 
 @Injectable({ providedIn: 'root' })
 export class DishResolve implements Resolve<IDish> {
@@ -39,7 +39,7 @@ export const dishRoute: Routes = [
     path: '',
     component: DishComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.dish.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const dishRoute: Routes = [
       dish: DishResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.dish.home.title',
     },
     canActivate: [UserRouteAccessService],

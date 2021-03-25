@@ -3,10 +3,9 @@ import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
-import { ICategory } from 'app/shared/model/category.model';
 import { CategoryService } from './category.service';
 import { CategoryDeleteDialogComponent } from './category-delete-dialog.component';
+import { ICategory } from '../../shared/model/category.model';
 
 @Component({
   selector: 'jhi-category',

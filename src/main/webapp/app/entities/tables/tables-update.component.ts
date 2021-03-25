@@ -5,8 +5,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { ITables, Tables } from 'app/shared/model/tables.model';
 import { TablesService } from './tables.service';
+import { ITables, Tables } from '../../shared/model/tables.model';
 
 @Component({
   selector: 'jhi-tables-update',

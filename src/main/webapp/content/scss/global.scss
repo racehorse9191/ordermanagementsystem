@@ -2,7 +2,7 @@
 @import '~bootstrap/scss/functions';
 @import '~bootswatch/dist/litera/variables';
 @import '~bootstrap/scss/variables';
-
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 /* ==============================================================
 Bootstrap tweaks
 ===============================================================*/
@@ -74,6 +74,15 @@ Generic styles
 }
 
 .footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  /* Height of the footer */
+  padding: 0 10px;
+  line-height: 17px;
+  font-weight: 400;
+  color: #4c4c4c;
+  background-color: #eee;
   border-top: 1px solid rgba(0, 0, 0, 0.125);
 }
 

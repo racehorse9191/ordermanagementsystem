@@ -28,6 +28,10 @@ import { RouterModule } from '@angular/router';
         path: 'order',
         loadChildren: () => import('./order/order.module').then(m => m.OrderManagementSystemOrderModule),
       },
+      {
+        path: 'ui',
+        loadChildren: () => import('../uicomponents/uicomponents.module').then(m => m.UicomponentsModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

@@ -1,5 +1,6 @@
 {
   "orderManagementSystemApp": {
+    "selectTable": "Select Table",
     "tables": {
       "home": {
         "title": "Tables",

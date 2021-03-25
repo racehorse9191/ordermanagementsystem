@@ -4,9 +4,9 @@ import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IMenu } from 'app/shared/model/menu.model';
 import { MenuService } from './menu.service';
 import { MenuDeleteDialogComponent } from './menu-delete-dialog.component';
+import { IMenu } from '../../shared/model/menu.model';
 
 @Component({
   selector: 'jhi-menu',
@@ -19,7 +19,18 @@ export class MenuComponent implements OnInit, OnDestroy {
   constructor(protected menuService: MenuService, protected eventManager: JhiEventManager, protected modalService: NgbModal) {}
 
   loadAll(): void {
-    this.menuService.query().subscribe((res: HttpResponse<IMenu[]>) => (this.menus = res.body || []));
+    this.menuService.query().subscribe((res: HttpResponse<IMenu[]>) => {
+      this.menus = res.body || [];
+      this.menus?.forEach(menu => {
+        const tempQty = {};
+        Object.keys(menu?.dishQty || []).forEach(key => {
+          if (menu?.dishQty) {
+            tempQty[key] = menu?.dishQty[key];
+          }
+        });
+        menu.dishQty = [...[tempQty]];
+      });
+    });
   }
 
   ngOnInit(): void {

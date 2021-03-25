@@ -39,7 +39,7 @@ export const dishQtyRoute: Routes = [
     path: '',
     component: DishQtyComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.dishQty.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const dishQtyRoute: Routes = [
       dishQty: DishQtyResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'orderManagementSystemApp.dishQty.home.title',
     },
     canActivate: [UserRouteAccessService],

@@ -1,0 +1,162 @@
+<div class="card gridtile">
+  <h2 class=" center-Btn" style="font-weight: 500;" id="page-heading">
+    <span jhiTranslate="orderManagementSystemApp.selectTable">Select Table</span>
+  </h2>
+    <div class="center-Btn">
+     <!--  <div class="md-form input-group input-group-lg">
+        <div class="search"> <input type="text" class="search-input form-control" placeholder="Search..." name="tableSearch" (keyup)="filterItem($event)"> <span class="search-icon">  <i class="bi bi-search"></i> </span> </div>
+      </div> -->
+      <div class="form-group has-search">
+        <span class="bi bi-search form-control-feedback"></span>
+        <input type="text" class="form-control"placeholder="Search..." name="tableSearch" (keyup)="filterItem($event)">
+      </div>
+      <br>
+      <mat-chip-list class="text-center" aria-label="Fish selection">
+        <mat-chip class="btn btn-primary" style="background:#4582EC;color:white" (click)="showVacant()">Vacant</mat-chip>
+        <mat-chip style="background: #4582EC;color:white" selected (click)="showOccupied()">Occupied</mat-chip>
+        <mat-chip style="background:#4582EC;color:white" selected (click)="showAll()">Show All</mat-chip>
+      </mat-chip-list>
+    </div>
+	<br>
+  <h3 *ngIf="noTablesAvailabe">No Tables Available!</h3>
+  <h3 *ngIf="noTablesOccupied">No Tables Occupied!</h3>
+
+</div>  
+<section class="items">
+  <div class="card gridtile" [class.occupied]="table.tablestatus == 'ENGAGED'"  [id]="table.id" *ngFor="let table of filteredItems; let i = index">
+    <div  (click)="takeorder(table)" class="card-body">
+      <div class="message">
+        <span>
+         {{table.tableName}}  <fa-icon *ngIf="table.tablestatus == 'ENGAGED'" class="primary" icon="pencil-alt"></fa-icon>
+        </span>
+        <h6 class="card-subtitle mb-2 float-right statusColor">{{ table.waiterName}} </h6>
+      </div>
+    </div>
+  </div>
+</section>
+<modal #modal [modalConfig]="modalConfig" (dismissClicked)="onDismissedClicked($event)" 
+(closeClicked)="onCloseClicked($event)" (printBtnClick)="onPrintBtnClick()"
+(emptyTableclicked) = "onEmptyTableclicked()" (backBtnClick) ="onBackButtonCLicked()"
+>
+  <!--  body of the modal  -->
+  <div *ngIf="orderData" class="alert alert-class" role="alert">
+    <h4 class="alert-heading">Note!</h4>
+    <p> {{orderData.note}}</p>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Dish Name</th>
+        <th class="text-center" scope="col">Dish Qty</th>
+        <th class="text-center" scope="col">Order Qty</th> 
+      </tr>
+    </thead>
+      <tbody *ngIf="orderData">
+        <tr *ngFor="let item of orderData.menuIdsandQty" >
+          <td> <input type="checkbox" [(ngModel)]="item.isDishReady" (ngModelChange)="updateCheckbox(orderData)"></td>
+          <td> {{item.name}}  </td>
+          <td class="text-center"> {{item.dishQty}} </td>
+          <td class="text-center"> X {{item.orderQty}}  </td>
+         </tr>
+      </tbody>
+      </table>
+</modal>
+<modal #printmodal [modalConfig]="printModalConfig">
+  <!--  body of the modal  -->
+  <div  id="print-section">
+    <div id="invoice">
+
+      <div class="toolbar hidden-print">
+      </div>
+      <div class="invoice overflow-auto">
+          <div style="min-width: 600px">
+              <header>
+                  <div class="row">
+                      <div class="col company-details">
+                          <h2 class="name">
+                            Mantra Residency
+                          </h2>
+                          <div>Opposite Basava Vana, Near old Bus stand, Hubli, Karnataka 580020</div>
+                          <div> (0836) 230 7900</div>
+                          <div> mantraFinedine2018@gmail.com</div>
+                          <div> www.mantraResidency.com</div>
+                          <div>GSTIN: 29MY78U3UIOY</div>
+                      </div>
+                  </div>
+              </header>
+              <main>
+                  <div class="row contacts">
+                      <div class="col invoice-details">
+                          <h1 class="invoice-id">INVOICE</h1>
+                          <div class="date">Date of Invoice: {{ today | date:'dd/mm/yyyy'}}</div>
+                          <div class="date">Time of Invoice: {{ today | date:'hh:mm:ss'}}</div>
+                      </div>
+                  </div>
+                  <table class="table table-striped">
+                      <thead>
+                          <tr>
+                              <th>#</th>
+                              <th class="text-left">item Name</th>
+                              <th class="text-right">Dish Qty</th>
+                              <th class="text-right">order Qty</th>
+                              <th class="text-right">Rate</th>
+                              <th class="text-right">Amount</th>
+                          </tr>
+                      </thead>
+                      <tbody *ngIf="orderData">
+                          <tr [id]= "order.name"  *ngFor="let order of orderData.menuIdsandQty; let i = index">
+                              <td> {{ i + 1 }} </td>
+                              <td class="text-left">{{ order.name }} </td>
+                              <td class="text-center">  {{order.dishQty}} </td>
+                              <td class="text-center Unit"> {{ order.orderQty }} </td>
+                              <td class="text-center"> {{ order.price }} </td>
+                              <td class="total"> {{ order.orderTotal }}  </td>
+                          </tr>
+                      </tbody>
+                      <tfoot *ngIf="orderData">
+                          <tr>
+                              <td colspan="3"></td>
+                              <td colspan="2"> SUBTOTAL </td>
+                              <td> {{ totalorderDetails()  | currency:'INR' }}  </td>
+                          </tr>
+                          <tr>
+                              <td colspan="3"></td>
+                              <td colspan="2"> CGST(2.5%) </td>
+                              <td>  {{ totalorderDetails()  | totalGst:2.5:false  | currency:'INR' }}</td>
+                          </tr>
+                          <tr>
+                            <td colspan="3"></td>
+                            <td colspan="2"> SGST(2.5%) </td>
+                            <td> {{ totalorderDetails()  | totalGst:2.5:false  | currency:'INR' }} </td>
+                        </tr>
+                          <tr>
+                              <td colspan="3"></td>
+                              <td colspan="2"> GRAND TOTAL </td>
+                              <td>  {{ totalorderDetails()  | totalGst:5:true  | currency:'INR'}} </td>
+                          </tr>
+                      </tfoot>
+                  </table>
+                  <div class="thanks">Thank you!</div>
+              </main>
+              <footer>
+                  Invoice was created on a computer and is valid without the signature and seal.
+              </footer>
+          </div>
+          <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
+          <div></div>
+      </div>
+  </div>
+  </div>
+      <button  class="btn btn-outline-primary" printSectionId="print-section" ngxPrint>Print Invoice</button>
+      <button  class="btn btn-outline-primary" (click) ="onPrintClose()">Close</button>
+  </modal>
+  <ng-template #confirmModal>  <!--  body of the modal  -->
+    <div>
+    <p> Are you sure you want to empty the table!. </p>
+    </div>
+    <button class="btn btn-outline-primary" (click) ="onConfirmEmptyTableClicked()"> Ok     </button>
+    <button class="btn btn-outline-primary" (click)="onConfirmCloseClicked()" > Cancel </button>
+  </ng-template>  
+  <router-outlet></router-outlet> 
+  <app-toasts></app-toasts>
