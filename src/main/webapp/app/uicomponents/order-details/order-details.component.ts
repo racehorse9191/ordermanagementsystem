@@ -171,6 +171,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     this.orderList.forEach(orderList => {
       if (orderList.id == order.id) {
         orderList.dishQty.orderQty = orderList.dishQty.orderQty + 1;
+        orderList.isDishReady = false;
       }
     });
     this.subscriptionService.updateOrder(this.orderList);
@@ -181,6 +182,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
       this.orderList.forEach(orderList => {
         if (orderList.id == order.id) {
           orderList.dishQty.orderQty = orderList.dishQty.orderQty - 1;
+          orderList.isDishReady = false;
         }
       });
       this.subscriptionService.updateOrder(this.orderList);
