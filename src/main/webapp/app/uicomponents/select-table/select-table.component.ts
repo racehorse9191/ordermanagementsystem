@@ -387,7 +387,7 @@ export class SelectTableComponent implements OnInit {
     this.toastService.removeAll();
     const order: Order = new Order();
     this.emptyTableClicked = true;
-    const menuIdsQty = JSON.stringify(this.orderData.menuIdsandQty);
+    const menuIdsQty = JSON.stringify(this.constructMenuIdsQty(this.orderData.menuIdsandQty));
     order.id = this.orderData.id;
     order.menuIdsandQty = menuIdsQty;
     order.note = this.orderData.note;

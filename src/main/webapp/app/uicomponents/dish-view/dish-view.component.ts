@@ -136,8 +136,10 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
       if (res.id == menuId) {
         if (!res.dishQty.orderQty) {
           res.dishQty.orderQty = 1;
+          res.isDishReady = false;
         } else {
           res.dishQty.orderQty = res.dishQty.orderQty + 1;
+          res.isDishReady = false;
         }
       }
     });
@@ -155,8 +157,10 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
       if (res.id == menuId) {
         if (!res.dishQty.orderQty) {
           res.dishQty.orderQty = 0;
+          res.isDishReady = false;
         } else {
           res.dishQty.orderQty = res.dishQty.orderQty - 1;
+          res.isDishReady = false;
         }
       }
     });
@@ -172,8 +176,10 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
       if (res.id == item.menuId) {
         if (!res.dishQty.orderQty) {
           res.dishQty.orderQty = 1;
+          res.isDishReady = false;
         } else {
           res.dishQty.orderQty = res.dishQty.orderQty + 1;
+          res.isDishReady = false;
         }
       }
     });
@@ -190,8 +196,10 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
       if (res.id == item.menuId) {
         if (!res.dishQty.orderQty) {
           res.dishQty.orderQty = 0;
+          res.isDishReady = false;
         } else {
           res.dishQty.orderQty = res.dishQty.orderQty - 1;
+          res.isDishReady = false;
         }
       }
     });

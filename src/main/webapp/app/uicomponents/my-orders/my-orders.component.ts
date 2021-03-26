@@ -9,6 +9,9 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { AccountService } from '../../core/auth/account.service';
 import { ActivatedRoute } from '@angular/router';
 import { ITEMS_PER_PAGE } from '../../shared/constants/pagination.constants';
+import { MenuService } from '../../entities/menu/menu.service';
+import { IMenu } from '../../shared/model/menu.model';
+import { MenuListModel } from '../../shared/model/menu-list.model';
 @Component({
   selector: 'jhi-my-orderlist',
   templateUrl: './my-orders.component.html',
@@ -32,7 +35,13 @@ export class MyOrderlist {
     size: this.itemsPerPage,
     sort: 'id,desc',
   };
-  constructor(protected orderService: OrderService, private route: ActivatedRoute, private accountService: AccountService) {}
+  menus: MenuListModel[];
+  constructor(
+    protected orderService: OrderService,
+    protected menuService: MenuService,
+    private route: ActivatedRoute,
+    private accountService: AccountService
+  ) {}
 
   /**
    *
@@ -43,17 +52,28 @@ export class MyOrderlist {
     this.orders = [];
     this.orderService.getUserOrderHistory(id, status, pageReq).subscribe((res: HttpResponse<IOrder[]>) => {
       const orders = res.body || [];
-      orders.forEach((order, index) => {
-        this.isDishReady[index] = [];
-        order.menuIdsandQty.forEach((menu, i) => {
-          if (!menu.isDishReady) {
-            this.isDishReady[index][i] = false;
-          } else {
-            this.isDishReady[index][i] = menu.isDishReady;
-          }
+      this.menuService.query().subscribe((response: HttpResponse<IMenu[]>) => {
+        this.menus = response.body || [];
+        orders.forEach((order, index) => {
+          this.isDishReady[index] = [];
+          order.menuIdsandQty.forEach((menu, i) => {
+            this.menus.forEach(dish => {
+              if (dish.id == menu.menuId) {
+                dish.dishQty.orderQty = menu.orderQty;
+                dish.isDishReady = menu.isDishReady;
+              }
+            });
+            order.menuIdsandQty = this.menus.filter(resMeu => resMeu.dishQty.orderQty && resMeu.dishQty.orderQty != 0);
+            if (!menu.isDishReady) {
+              this.isDishReady[index][i] = false;
+            } else {
+              this.isDishReady[index][i] = menu.isDishReady;
+            }
+          });
         });
+        this.orders = orders;
       });
-      this.orders = orders;
+      console.log('orders=>', this, orders);
     });
   }
 
@@ -65,17 +85,28 @@ export class MyOrderlist {
     this.orders = [];
     this.orderService.getByOrderStatus(status).subscribe((res: HttpResponse<IOrder[]>) => {
       const orders = res.body || [];
-      orders.forEach((order, index) => {
-        this.isDishReady[index] = [];
-        order.menuIdsandQty.forEach((menu, i) => {
-          if (!menu.isDishReady) {
-            this.isDishReady[index][i] = false;
-          } else {
-            this.isDishReady[index][i] = menu.isDishReady;
-          }
+      this.menuService.query().subscribe((response: HttpResponse<IMenu[]>) => {
+        this.menus = response.body || [];
+        orders.forEach((order, index) => {
+          this.isDishReady[index] = [];
+          order.menuIdsandQty.forEach((menu, i) => {
+            this.menus.forEach(dish => {
+              if (dish.id == menu.menuId) {
+                dish.dishQty.orderQty = menu.orderQty;
+                dish.isDishReady = menu.isDishReady;
+              }
+            });
+            order.menuIdsandQty = this.menus.filter(resMeu => resMeu.dishQty.orderQty && resMeu.dishQty.orderQty != 0);
+            if (!menu.isDishReady) {
+              this.isDishReady[index][i] = false;
+            } else {
+              this.isDishReady[index][i] = menu.isDishReady;
+            }
+          });
         });
+        this.orders = orders;
       });
-      this.orders = orders;
+      console.log('orders=>', this, orders);
     });
   }
 
