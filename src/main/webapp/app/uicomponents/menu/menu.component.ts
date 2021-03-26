@@ -49,10 +49,21 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
     this.detailRecivedSubscription = this.subscriptionService.selectedorderOrderObservable.subscribe((obj: any[]) => {
       if (obj.length != 0) {
-        if (this.activeTab == 2) {
-          this.showOrderButton = false;
+        let checkButton = false;
+        obj.filter(res => {
+          if (res?.dishQty?.orderQty && res?.dishQty?.orderQty != 0) {
+            checkButton = true;
+          }
+        });
+        if (checkButton) {
+          checkButton = false;
+          if (this.activeTab == 2) {
+            this.showOrderButton = false;
+          } else {
+            this.showOrderButton = true;
+          }
         } else {
-          this.showOrderButton = true;
+          this.showOrderButton = false;
         }
         this.orderList = obj;
         this.todaySplMenu = obj.filter(res => res?.dish?.isTodaysSpecial);
