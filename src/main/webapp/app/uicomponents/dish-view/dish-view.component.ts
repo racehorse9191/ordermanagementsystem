@@ -84,6 +84,7 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
     return qty;
   }
   constructQtyGroup() {
+    this.qtyGroup = [];
     this.dishes.forEach(res => {
       const groupQty: QtyGroupModel = new QtyGroupModel();
       const qtyModel: QuantitiesModel = new QuantitiesModel();
