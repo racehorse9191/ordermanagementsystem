@@ -1,3 +1,4 @@
+import { MenuListModel } from './../../shared/model/menu-list.model';
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '../../core/auth/account.service';
@@ -14,6 +15,8 @@ import { HttpResponse } from '@angular/common/http';
 import { IOrder, Order } from '../../shared/model/order.model';
 import { SubscriptionService } from '../../shared/subscription.service';
 import { ToastService } from '../../shared/util/toast.service';
+import { MenuService } from '../../entities/menu/menu.service';
+import { IMenu } from '../../shared/model/menu.model';
 
 @Component({
   selector: 'jhi-select-table',
@@ -64,6 +67,8 @@ export class SelectTableComponent implements OnInit {
   vacantFilter: boolean = false;
   occupiedFilter: boolean = false;
   showAllFilter: boolean = true;
+  /* new variables used */
+  menus: MenuListModel[];
   constructor(
     protected tablesService: TablesService,
     protected orderService: OrderService,
@@ -71,7 +76,8 @@ export class SelectTableComponent implements OnInit {
     private router: Router,
     protected subscriptionService: SubscriptionService,
     private accountService: AccountService,
-    public toastService: ToastService
+    public toastService: ToastService,
+    protected menuService: MenuService
   ) {}
 
   loadAll(): void {
@@ -120,51 +126,53 @@ export class SelectTableComponent implements OnInit {
       // calling getOrderBytableId to get data
       this.orderService.getByOrderTableId(table.id).subscribe(response => {
         if (response.body.menuIdsandQty) {
-          response.body.menuIdsandQty = JSON.parse(response.body.menuIdsandQty);
-          this.orderData = response.body;
-          if (this.orderData) {
-            const uncheckedDish = this.orderData.menuIdsandQty.filter(dish => dish.isDishReady == true);
-            const tempOrder = this.orderData;
-            this.orderData.menuIdsandQty.forEach(res => {
-              if (res.allDishQty[0] == null) {
-                tempOrder.menuIdsandQty.forEach(temp => {
-                  if (temp.name == res.name && res.allDishQty[0] != null) {
-                    Object.assign(res.allDishQty, temp.allDishQty);
-                    console.log('res=>', res);
-                  }
-                });
+          this.menuService.query().subscribe((res: HttpResponse<IMenu[]>) => {
+            response.body.menuIdsandQty = JSON.parse(response.body.menuIdsandQty);
+            this.menus = res.body || [];
+            this.menus.forEach(menu => {
+              response.body.menuIdsandQty.forEach(element => {
+                if (menu.id == element.menuId) {
+                  menu.dishQty.orderQty = element.orderQty;
+                  menu.isDishReady = element.isDishReady;
+                }
+              });
+            });
+            const menuIdsQty = [];
+            this.menus.forEach(menu => {
+              if (menu.dishQty.orderQty && menu.dishQty.orderQty != 0) {
+                menuIdsQty.push(menu);
               }
             });
-            this.orderData.menuIdsandQty.map(dish => {
-              if (dish.isDishReady) {
-                dish.allDishQty[0].isDishReady = dish.isDishReady;
+            response.body.menuIdsandQty = menuIdsQty;
+            this.orderData = response.body;
+            console.log('orderData=>', this.orderData);
+            if (this.orderData) {
+              const uncheckedDish = this.orderData.menuIdsandQty.filter(dish => dish.isDishReady == true);
+
+              if (uncheckedDish.length == this.orderData.menuIdsandQty.length) {
+                this.btnValue = 'Complete';
               } else {
-                dish.isDishReady = false;
+                this.btnValue = 'Update';
               }
-            });
-            if (uncheckedDish.length == this.orderData.menuIdsandQty.length) {
-              this.btnValue = 'Complete';
-            } else {
-              this.btnValue = 'Update';
+              if (uncheckedDish.length != 0 && this.btnValue == 'Complete') {
+                this.modalConfig = {
+                  modalTitle: 'Order Details',
+                  closeButtonLabel: 'Add more',
+                  dismissButtonLabel: this.btnValue,
+                  onDismiss: () => true,
+                  onClose: () => true,
+                  disableDismissButton: () => true,
+                  disablePrintButton: () => false,
+                };
+                this.modalComponent.modalSettings = {
+                  centered: true,
+                  scrollable: true,
+                  size: 'lg',
+                };
+              }
             }
-            if (uncheckedDish.length != 0 && this.btnValue == 'Complete') {
-              this.modalConfig = {
-                modalTitle: 'Order Details',
-                closeButtonLabel: 'Add more',
-                dismissButtonLabel: this.btnValue,
-                onDismiss: () => true,
-                onClose: () => true,
-                disableDismissButton: () => true,
-                disablePrintButton: () => false,
-              };
-              this.modalComponent.modalSettings = {
-                centered: true,
-                scrollable: true,
-                size: 'lg',
-              };
-            }
-          }
-          this.modalComponent.open();
+            this.modalComponent.open();
+          });
         }
       });
     }
@@ -235,12 +243,6 @@ export class SelectTableComponent implements OnInit {
   updateCheckbox(data) {
     this.isAllChecked = [];
     const uncheckedDish = data.menuIdsandQty.filter(dish => dish.isDishReady == true);
-    data.menuIdsandQty.map(dish => {
-      console.log('dish=>', dish);
-      if (dish.isDishReady) {
-        dish.allDishQty[0].isDishReady = dish.isDishReady;
-      }
-    });
     if (uncheckedDish.length != 0) {
       this.modalConfig = {
         modalTitle: 'Order Details',
@@ -277,7 +279,7 @@ export class SelectTableComponent implements OnInit {
   OrderUpdate(data) {
     const order: Order = new Order();
     order.id = data.id;
-    order.menuIdsandQty = JSON.stringify(data.menuIdsandQty);
+    order.menuIdsandQty = JSON.stringify(this.constructMenuIdsQty(data.menuIdsandQty));
     order.note = data.note;
     order.orderDate = data.orderDate;
     order.tables = data.tables;
@@ -285,6 +287,18 @@ export class SelectTableComponent implements OnInit {
     order.waiterId = data.waiterId;
     order.orderstatus = data.orderstatus;
     this.subscribeToSaveResponse(this.orderService.update(order));
+  }
+
+  constructMenuIdsQty(v: MenuListModel[]) {
+    const menuIdsQty = [];
+    v.forEach(element => {
+      let dishReady: boolean = false;
+      if (element.isDishReady) {
+        dishReady = element.isDishReady;
+      }
+      menuIdsQty.push({ menuId: element.id, orderQty: element.dishQty.orderQty, isDishReady: dishReady });
+    });
+    return menuIdsQty;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IOrder>>): void {
@@ -314,14 +328,7 @@ export class SelectTableComponent implements OnInit {
   }
   onCloseClicked(event) {
     if (!this.emptyTableClicked) {
-      const temp = [];
-      this.orderData.menuIdsandQty.forEach(res => {
-        if (res.allDishQty.length != 0 && res.allDishQty[0] != null) {
-          temp.push(res.allDishQty[0]);
-        }
-      });
-      this.subscriptionService.updateOrder(temp);
-      console.log('temp=>', temp);
+      this.subscriptionService.updateOrder(this.menus);
       this.router.navigate(['/ui/menu/'], { state: this.selectedTable });
     } else {
       this.emptyTableClicked = false;
@@ -371,7 +378,7 @@ export class SelectTableComponent implements OnInit {
   totalorderDetails() {
     const total: any[] = [];
     this.orderData.menuIdsandQty.forEach(res => {
-      total.push(res.orderTotal);
+      total.push(this.calculateOrderTotal(res.price, res.dishQty.orderQty));
     });
     return total.reduce((a, b) => a + b, 0);
   }
@@ -380,7 +387,7 @@ export class SelectTableComponent implements OnInit {
     this.toastService.removeAll();
     const order: Order = new Order();
     this.emptyTableClicked = true;
-    const menuIdsQty = JSON.stringify(this.orderData.menuIdsandQty);
+    const menuIdsQty = JSON.stringify(this.constructMenuIdsQty(this.orderData.menuIdsandQty));
     order.id = this.orderData.id;
     order.menuIdsandQty = menuIdsQty;
     order.note = this.orderData.note;
@@ -402,6 +409,9 @@ export class SelectTableComponent implements OnInit {
       size: 'lg',
     };
     // this.confirmModalComponent.close();
+  }
+  calculateOrderTotal(price: any, qty: any) {
+    return price * qty;
   }
   onBackButtonCLicked() {
     this.toastService.removeAll();

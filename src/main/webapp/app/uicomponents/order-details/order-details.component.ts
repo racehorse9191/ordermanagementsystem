@@ -90,35 +90,20 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   constructTable() {
     this.orderTable = [];
     this.orderList.forEach(res => {
-      if (res) {
-        console.log('res=>', res);
-        if (res.dishQty.length != 0) {
-          res.dishQty.forEach(qty => {
-            if (qty.orderQty && qty.orderQty != 0) {
-              this.order = new OrderTable();
-              if (qty.menus[0] != null) {
-                this.order.name = qty.menus[0].dish.dishName;
-                this.order.isDishReady = qty.menus[0]?.isDishReady;
-                this.order.id = qty.menus[0].id;
-                this.order.price = qty.menus[0].price;
-                this.order.orderTotal = this.calculateOrderTotal(qty.menus[0].price, qty.orderQty);
-              } else {
-                this.order.name = res.dish.dishName;
-                this.order.isDishReady = res.isDishReady;
-                this.order.id = res.id;
-                this.order.price = res.price;
-                this.order.orderTotal = this.calculateOrderTotal(res.price, qty.orderQty);
-              }
-              this.order.allDishQty = [res];
-              this.order.dishQty = qty.qtyName;
-              this.order.dishQty = qty.qtyName;
-              this.order.orderQty = qty.orderQty;
-              this.orderTable.push(this.order);
-            }
-          });
-        }
+      if (res.dishQty.orderQty && res.dishQty.orderQty != 0) {
+        this.order = new OrderTable();
+        this.order.name = res.dish.dishName;
+        this.order.isDishReady = res?.isDishReady;
+        this.order.id = res.id;
+        this.order.price = res.price;
+        this.order.orderTotal = this.calculateOrderTotal(res.price, res.dishQty.orderQty);
+        this.order.allDishQty = [res];
+        this.order.dishQty = res.dishQty.qtyName;
+        this.order.orderQty = res.dishQty.orderQty;
+        this.orderTable.push(this.order);
       }
     });
+    console.log('order table=>', this.orderTable);
   }
 
   calculateOrderTotal(price: any, qty: any) {
@@ -141,29 +126,27 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
           delete this.table['navigationId'];
           this.table.tablestatus = 'ENGAGED';
           order.id = response.body.id;
-          order.menuIdsandQty = this.customStringify(this.orderTable);
+          order.menuIdsandQty = JSON.stringify(this.constructMenuIdsQty(this.orderTable));
           order.note = this.chefNote;
           order.orderDate = response.body.orderDate;
           order.tables = this.table;
-          order.waiterName = this.account.firstName + this.account.lastName;
+          order.waiterName = this.account.firstName + ' ' + this.account.lastName;
           order.waiterId = this.account.id;
           order.orderstatus = OrderStatus.CONFIRMED;
           this.subscriptionService.updateOrder([]);
-          // this.orderService.update()
           this.subscribeToSaveResponse(this.orderService.update(order));
         } else {
           const order: Order = new Order();
           delete this.table['navigationId'];
           this.table.tablestatus = 'ENGAGED';
-          order.menuIdsandQty = this.customStringify(this.orderTable);
+          order.menuIdsandQty = JSON.stringify(this.constructMenuIdsQty(this.orderTable));
           order.note = this.chefNote;
           order.orderDate = moment();
           order.tables = this.table;
-          order.waiterName = this.account.firstName + this.account.lastName;
+          order.waiterName = this.account.firstName + ' ' + this.account.lastName;
           order.waiterId = this.account.id;
           order.orderstatus = OrderStatus.CONFIRMED;
           this.subscriptionService.updateOrder([]);
-          // this.orderService.update()
           this.subscribeToSaveResponse(this.orderService.create(order));
         }
       },
@@ -173,76 +156,46 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  customStringify(v) {
-    const cache = new Set();
-    v.forEach(res => {
-      res.allDishQty.forEach(dish => {
-        delete dish.dish.dishImage;
-        dish.dishQty.forEach(qty => {
-          if (qty.menus) {
-            qty.menus.forEach(element => {
-              if (element && element.dish && element.dish.dishImage) {
-                delete element.dish.dishImage;
-              }
-            });
-          }
-        });
-      });
-    });
-    return JSON.stringify(v, function (key, value) {
-      if (typeof value === 'object' && value !== null) {
-        if (cache.has(value)) {
-          // Circular reference found
-          try {
-            // If this value does not reference a parent it can be deduped
-            return JSON.parse(JSON.stringify(value));
-          } catch (err) {
-            // discard key if value cannot be deduped
-            return;
-          }
-        }
-        // Store value in our set
-        cache.add(value);
+  constructMenuIdsQty(v: OrderTable[]) {
+    const menuIdsQty = [];
+    v.forEach(element => {
+      let dishReady: boolean = false;
+      if (element.isDishReady) {
+        dishReady = element.isDishReady;
       }
-      return value;
+      menuIdsQty.push({ menuId: element.id, orderQty: element.orderQty, isDishReady: dishReady });
     });
+    return menuIdsQty;
   }
   orderPlusClicked(order: OrderTable) {
     this.orderList.forEach(orderList => {
-      if (orderList.dish.id == order.allDishQty[0].dish.id) {
-        orderList.dishQty.forEach(qty => {
-          if (qty.qtyName == order.dishQty) {
-            Object.assign(qty.orderQty, qty.orderQty++);
-          }
-        });
+      if (orderList.id == order.id) {
+        orderList.dishQty.orderQty = orderList.dishQty.orderQty + 1;
+        orderList.isDishReady = false;
       }
     });
     this.subscriptionService.updateOrder(this.orderList);
   }
 
-  orderMinusClicked(order: OrderTable, index: any) {
+  orderMinusClicked(order: OrderTable) {
     if (order.orderQty > 0) {
       this.orderList.forEach(orderList => {
-        if (orderList.dish.id == order.allDishQty[0].dish.id) {
-          orderList.dishQty.forEach(qty => {
-            if (qty.qtyName == order.dishQty) {
-              Object.assign(qty.orderQty, qty.orderQty--);
-            }
-          });
+        if (orderList.id == order.id) {
+          orderList.dishQty.orderQty = orderList.dishQty.orderQty - 1;
+          orderList.isDishReady = false;
         }
       });
       this.subscriptionService.updateOrder(this.orderList);
     }
   }
-
+  removeRedundentObjects(arr: any[]) {
+    const ids = arr.map(o => o.id);
+    return arr.filter(({ id }, index) => !ids.includes(id, index + 1));
+  }
   delete(order: any) {
     this.orderList.forEach(orderList => {
-      if (orderList.dish.id == order.allDishQty[0].dish.id) {
-        orderList.dishQty.forEach(qty => {
-          if (qty.qtyName == order.dishQty) {
-            qty.orderQty = 0;
-          }
-        });
+      if (orderList.id == order.id) {
+        orderList.dishQty.orderQty = 0;
       }
     });
     this.subscriptionService.updateOrder(this.orderList);

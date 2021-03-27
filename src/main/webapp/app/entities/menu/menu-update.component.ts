@@ -41,7 +41,6 @@ export class MenuUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ menu }) => {
-      console.log('res=>', menu);
       this.updateForm(menu);
 
       this.dishService.query().subscribe((res: HttpResponse<IDish[]>) => (this.dishes = res.body || []));
@@ -58,8 +57,6 @@ export class MenuUpdateComponent implements OnInit {
       dish: menu.dish,
       dishQty: menu.dishQty,
     });
-    console.log('dishvalue=>', this.editForm.get('dish')!.value);
-    console.log('qty=>', this.editForm.get('dishQty')!.value);
   }
 
   previousState(): void {

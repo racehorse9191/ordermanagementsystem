@@ -55,9 +55,9 @@
       <tbody *ngIf="orderData">
         <tr *ngFor="let item of orderData.menuIdsandQty" >
           <td> <input type="checkbox" [(ngModel)]="item.isDishReady" (ngModelChange)="updateCheckbox(orderData)"></td>
-          <td> {{item.name}}  </td>
-          <td class="text-center"> {{item.dishQty}} </td>
-          <td class="text-center"> X {{item.orderQty}}  </td>
+          <td> {{item.dish.dishName }}  </td>
+          <td class="text-center"> {{item.dishQty.qtyName}} </td>
+          <td class="text-center"> X {{item.dishQty.orderQty}}  </td>
          </tr>
       </tbody>
       </table>
@@ -107,11 +107,11 @@
                       <tbody *ngIf="orderData">
                           <tr [id]= "order.name"  *ngFor="let order of orderData.menuIdsandQty; let i = index">
                               <td> {{ i + 1 }} </td>
-                              <td class="text-left">{{ order.name }} </td>
-                              <td class="text-center">  {{order.dishQty}} </td>
-                              <td class="text-center Unit"> {{ order.orderQty }} </td>
+                              <td class="text-left">{{ order.dish.dishName  }} </td>
+                              <td class="text-center">  {{order.dishQty.qtyName}} </td>
+                              <td class="text-center Unit"> {{ order.dishQty.orderQty }} </td>
                               <td class="text-center"> {{ order.price }} </td>
-                              <td class="total"> {{ order.orderTotal }}  </td>
+                              <td class="total"> {{ calculateOrderTotal(order.price ,  order.dishQty.orderQty ) }}  </td>
                           </tr>
                       </tbody>
                       <tfoot *ngIf="orderData">

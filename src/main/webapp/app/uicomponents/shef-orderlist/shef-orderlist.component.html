@@ -25,9 +25,9 @@
 				  <tbody class="tbody" *ngIf="order">
 					<tr *ngFor="let item of order.menuIdsandQty;let j = index" >
 					  <td> <span *ngIf="item.isDishReady"><fa-icon [icon]="faCoffee"  [styles]="{'stroke': 'green', 'color': 'green'}"></fa-icon></span></td>
-					  <td> {{item.name}}  </td>
-					  <td class="text-center"> {{item.dishQty}} </td>
-					  <td class="text-center"> X {{item.orderQty}}  </td>
+					  <td> {{item.dish.dishName}}  </td>
+					  <td class="text-center"> {{item.dishQty.qtyName }} </td>
+					  <td class="text-center"> X {{item.dishQty.orderQty}}  </td>
 					 </tr>
 				  </tbody>
 				  </table>

@@ -20,25 +20,20 @@ import { ITables } from '../../shared/model/tables.model';
 export class MenuComponent implements OnInit {
   @ViewChild('tabset')
   private tabs: NgbNav;
-  todaysSplVal: boolean = true;
-  selectedDishes: MenuListModel[] = [];
-  orders: number = 0;
-  dishSelected: boolean = false;
   showDescription: boolean = false;
-  dishToOrder: DishToOrder[] = [];
-  menus?: MenuListModel[] = [];
-  todaySplMenu: MenuListModel[] = [];
-  categoryTemp: MenuListModel[] = [];
-  category: MenuListModel[] = [];
-  singleCategory: MenuListModel = new MenuListModel();
-  detailRecivedSubscription: Subscription = new Subscription();
-  showOrderButton: boolean = false;
-  orderList: MenuListModel[] = [];
-  categoryList: DisplayCategory[] = [];
-  activeTab: any;
   singleCategoryList: DisplayCategory = new DisplayCategory();
+  categoryList: DisplayCategory[] = [];
+  category: MenuListModel[] = [];
+  dishSelected: boolean = false;
+  selectedDishes: MenuListModel[] = [];
+  orderList: MenuListModel[] = [];
+  todaySplMenu: MenuListModel[] = [];
+  showOrderButton: boolean = false;
+  detailRecivedSubscription: Subscription = new Subscription();
+  activeTab: any;
   currentTable: ITables;
   private routeSub: Subscription = new Subscription();
+  globalSearchItem: MenuListModel[] = [];
   constructor(
     protected dishService: DishService,
     protected menuService: MenuService,
@@ -46,7 +41,6 @@ export class MenuComponent implements OnInit {
     protected cd: ChangeDetectorRef,
     private route: ActivatedRoute
   ) {
-    this.loadDishes();
     this.routeSub = this.route.params.subscribe(params => {
       this.currentTable = history.state;
     });
@@ -55,79 +49,53 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
     this.detailRecivedSubscription = this.subscriptionService.selectedorderOrderObservable.subscribe((obj: any[]) => {
       if (obj.length != 0) {
-        if (this.activeTab == 2) {
-          this.showOrderButton = false;
+        let checkButton = false;
+        obj.filter(res => {
+          if (res?.dishQty?.orderQty && res?.dishQty?.orderQty != 0) {
+            checkButton = true;
+          }
+        });
+        if (checkButton) {
+          checkButton = false;
+          if (this.activeTab == 2) {
+            this.showOrderButton = false;
+          } else {
+            this.showOrderButton = true;
+          }
         } else {
-          this.showOrderButton = true;
+          this.showOrderButton = false;
         }
         this.orderList = obj;
+        this.todaySplMenu = obj.filter(res => res?.dish?.isTodaysSpecial);
         this.updateMenuCategoryDishes();
-        this.updateTOdaysSpl();
       } else {
         this.orderList = [];
         this.showOrderButton = false;
         this.selectedDishes = [];
         this.dishSelected = false;
+        this.todaySplMenu = obj;
         this.updateMenuCategoryDishes();
-        this.updateTOdaysSpl();
       }
     });
+    if (this.todaySplMenu.length == 0) {
+      this.loadDishes();
+    }
   }
   ngOnDestroy() {
     this.detailRecivedSubscription.unsubscribe();
   }
   loadDishes() {
     this.menuService.query().subscribe((res: HttpResponse<IMenu[]>) => {
-      this.menus = res.body || [];
-      this.groupMenuByQty();
+      this.category = res.body || [];
+      this.fetchTodaysSpl();
+      this.createDisplayCategory();
+      this.globalSearchItem = this.constructQtyGroup(this.category);
     });
   }
-  groupMenuByQty() {
-    this.menus?.forEach(res => {
-      if (this.categoryTemp.length == 0) {
-        this.singleCategory = res;
-        const tempQty = {};
-        Object.keys(this.singleCategory?.dishQty || []).forEach(key => {
-          if (this.singleCategory?.dishQty) {
-            tempQty[key] = this.singleCategory?.dishQty[key] || '';
-          }
-        });
-        tempQty['menus'] = [res];
-        this.singleCategory.dishQty = [...[tempQty]];
-        this.categoryTemp.push(this.singleCategory);
-        this.singleCategory = new MenuListModel();
-      } else {
-        if (this.categoryTemp.find(obj => obj?.dish?.id === res?.dish?.id)) {
-          const index = this.categoryTemp.findIndex(x => x?.dish?.id === res?.dish?.id);
-          const newData = {};
-          Object.keys(res?.dishQty || []).forEach(key => {
-            if (res?.dishQty) {
-              newData[key] = res?.dishQty[key] || null;
-            }
-          });
-          if (this.categoryTemp[index]?.dishQty) {
-            res.dishQty = this.categoryTemp[index].dishQty;
-            newData['menus'] = [res];
-            this.categoryTemp[index]?.dishQty?.push(newData);
-          }
-        } else {
-          this.singleCategory = res;
-          const tempQty = {};
-          Object.keys(this.singleCategory?.dishQty || []).forEach(key => {
-            if (this.singleCategory?.dishQty) {
-              tempQty[key] = this.singleCategory?.dishQty[key];
-            }
-          });
-          tempQty['menus'] = [res];
-          this.singleCategory.dishQty = [...[tempQty]];
-          this.categoryTemp.push(this.singleCategory);
-          this.singleCategory = new MenuListModel();
-        }
-      }
-    });
-    this.category = this.categoryTemp;
-    this.fetchTodaysSpl();
-    this.createDisplayCategory();
+
+  constructQtyGroup(arr) {
+    const ids = arr.map(o => o.dish.id);
+    return arr.filter((res, index) => !ids.includes(res.dish.id, index + 1));
   }
 
   groupByFn = (item: any) => item?.dish?.category?.categoryName;
@@ -156,36 +124,8 @@ export class MenuComponent implements OnInit {
     }
   }
 
-  /* section to cooks for todays spl */
-  updateTOdaysSpl() {
-    const tempTodaysSPl = [];
-    Object.assign(tempTodaysSPl, this.todaySplMenu);
-    tempTodaysSPl.forEach(res => {
-      this.orderList.forEach(order => {
-        if (res.id == order.id) {
-          res = order;
-        }
-      });
-    });
-    this.todaySplMenu = [];
-    this.todaySplMenu = tempTodaysSPl;
-    this.cd.detectChanges();
-  }
   fetchTodaysSpl() {
     const tempTodaysSPl = this.category?.filter(res => res?.dish?.isTodaysSpecial);
-    tempTodaysSPl.forEach(res => {
-      this.orderList.forEach(order => {
-        if (res.id == order.id) {
-          order.dish.dishImage = res.dish.dishImage;
-          order.dishQty.forEach(qty => {
-            if (qty.menus[0] == null) {
-              qty.menus = res.dishQty[0].menus;
-            }
-          });
-          Object.assign(res, order);
-        }
-      });
-    });
     this.todaySplMenu = [];
     this.todaySplMenu = tempTodaysSPl;
     this.cd.detectChanges();
@@ -230,7 +170,6 @@ export class MenuComponent implements OnInit {
     });
     this.categoryList = tempCatergoryList;
     this.updateMenuCategoryDishes();
-    this.updateTOdaysSpl();
   }
   /* the section of cooking category data ends here*/
 
@@ -244,26 +183,12 @@ export class MenuComponent implements OnInit {
     }
   }
   onSearchClear() {
-    this.orderList.filter(res => {
-      res.dishQty.forEach(qty => {
-        if (qty.orderQty) {
-          qty.orderQty = 0;
-        }
-      });
-    });
+    this.orderList.filter(res => {});
     this.subscriptionService.updateOrder([]);
   }
   clearItem(item) {
     if (this.orderList.length != 0) {
-      this.orderList.filter(res => {
-        if (res.id == item.id) {
-          res.dishQty.forEach(qty => {
-            if (qty.orderQty) {
-              qty.orderQty = 0;
-            }
-          });
-        }
-      });
+      this.orderList.filter(res => {});
     }
     this.subscriptionService.updateOrder(this.orderList);
   }
