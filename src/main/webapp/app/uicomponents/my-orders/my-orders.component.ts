@@ -56,13 +56,14 @@ export class MyOrderlist {
         this.menus = response.body || [];
         orders.forEach((order, index) => {
           this.isDishReady[index] = [];
-          const tempDish = [];
+          let tempDish = [];
           order.menuIdsandQty.forEach((menu, i) => {
             this.menus.forEach(dish => {
               if (dish.id == menu.menuId) {
-                dish.dishQty.orderQty = menu.orderQty;
-                dish.isDishReady = menu.isDishReady;
-                tempDish.push(dish);
+                const temp = JSON.parse(JSON.stringify(dish));
+                temp.dishQty.orderQty = menu.orderQty;
+                temp.isDishReady = menu.isDishReady;
+                tempDish = [...tempDish, temp];
               }
               if (!menu.isDishReady) {
                 this.isDishReady[index][i] = false;
@@ -91,13 +92,14 @@ export class MyOrderlist {
         this.menus = response.body || [];
         orders.forEach((order, index) => {
           this.isDishReady[index] = [];
-          const tempDish = [];
+          let tempDish = [];
           order.menuIdsandQty.forEach((menu, i) => {
             this.menus.forEach(dish => {
               if (dish.id == menu.menuId) {
-                dish.dishQty.orderQty = menu.orderQty;
-                dish.isDishReady = menu.isDishReady;
-                tempDish.push(dish);
+                const temp = JSON.parse(JSON.stringify(dish));
+                temp.dishQty.orderQty = menu.orderQty;
+                temp.isDishReady = menu.isDishReady;
+                tempDish = [...tempDish, temp];
               }
               if (!menu.isDishReady) {
                 this.isDishReady[index][i] = false;
@@ -113,7 +115,7 @@ export class MyOrderlist {
       console.log('orders=>', this.orders);
     });
   }
-
+  updateQrderQty() {}
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.status = params.get('status');
