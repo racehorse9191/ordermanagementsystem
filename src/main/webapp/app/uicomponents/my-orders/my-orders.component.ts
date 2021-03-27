@@ -56,24 +56,26 @@ export class MyOrderlist {
         this.menus = response.body || [];
         orders.forEach((order, index) => {
           this.isDishReady[index] = [];
+          const tempDish = [];
           order.menuIdsandQty.forEach((menu, i) => {
             this.menus.forEach(dish => {
               if (dish.id == menu.menuId) {
                 dish.dishQty.orderQty = menu.orderQty;
                 dish.isDishReady = menu.isDishReady;
+                tempDish.push(dish);
+              }
+              if (!menu.isDishReady) {
+                this.isDishReady[index][i] = false;
+              } else {
+                this.isDishReady[index][i] = menu.isDishReady;
               }
             });
-            order.menuIdsandQty = this.menus.filter(resMeu => resMeu.dishQty.orderQty && resMeu.dishQty.orderQty != 0);
-            if (!menu.isDishReady) {
-              this.isDishReady[index][i] = false;
-            } else {
-              this.isDishReady[index][i] = menu.isDishReady;
-            }
           });
+          order.menuIdsandQty = tempDish;
         });
         this.orders = orders;
       });
-      console.log('orders=>', this, orders);
+      console.log('orders=>', this.orders);
     });
   }
 
@@ -89,24 +91,26 @@ export class MyOrderlist {
         this.menus = response.body || [];
         orders.forEach((order, index) => {
           this.isDishReady[index] = [];
+          const tempDish = [];
           order.menuIdsandQty.forEach((menu, i) => {
             this.menus.forEach(dish => {
               if (dish.id == menu.menuId) {
                 dish.dishQty.orderQty = menu.orderQty;
                 dish.isDishReady = menu.isDishReady;
+                tempDish.push(dish);
+              }
+              if (!menu.isDishReady) {
+                this.isDishReady[index][i] = false;
+              } else {
+                this.isDishReady[index][i] = menu.isDishReady;
               }
             });
-            order.menuIdsandQty = this.menus.filter(resMeu => resMeu.dishQty.orderQty && resMeu.dishQty.orderQty != 0);
-            if (!menu.isDishReady) {
-              this.isDishReady[index][i] = false;
-            } else {
-              this.isDishReady[index][i] = menu.isDishReady;
-            }
           });
+          order.menuIdsandQty = tempDish;
         });
         this.orders = orders;
       });
-      console.log('orders=>', this, orders);
+      console.log('orders=>', this.orders);
     });
   }
 
