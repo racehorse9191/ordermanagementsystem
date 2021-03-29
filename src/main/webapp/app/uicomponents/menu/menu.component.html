@@ -23,7 +23,7 @@
           [clearable]="true">
           <ng-template ng-label-tmp let-item="item" let-clear="clear">
             <div>
-            <span class="ng-value-icon right" (click)="orderList.length == 0?clear(item):clearItem(item);clear(item)" aria-hidden="true">
+            <span class="ng-value-icon right" (click)="orderList.length == 0?clear(item):clearItem(item)" aria-hidden="true">
               ×</span>
             <img height="15" width="15" [src]="item?.dish?.dishImage | sanitizeUrl"/>
             <b>{{item?.dish?.dishName}}</b>
@@ -64,6 +64,6 @@
       </ngb-tab>   
     </ngb-tabset>
      <ng-template #selectedBlock>
-      <jhi-dish-view [dishes]="selectedDishes" [showDescription]="showDescription"></jhi-dish-view>
+      <jhi-dish-view [dishes]="selectedDishesQtys" [showDescription]="showDescription"></jhi-dish-view>
      </ng-template>
     </div> 

@@ -41,25 +41,27 @@ export class ShefOrderlist {
         let orders = [];
         this.orders = [];
         orders = res.body || [];
-        console.log('orders=>', JSON.parse(JSON.stringify(res.body)));
         this.menuService.query().subscribe((response: HttpResponse<IMenu[]>) => {
           this.menus = response.body || [];
           orders.forEach((order, index) => {
             this.isDishReady[index] = [];
+            let tempDish = [];
             order.menuIdsandQty.forEach((menu, i) => {
               this.menus.forEach(dish => {
                 if (dish.id == menu.menuId) {
-                  dish.dishQty.orderQty = menu.orderQty;
-                  dish.isDishReady = menu.isDishReady;
+                  const temp = JSON.parse(JSON.stringify(dish));
+                  temp.dishQty.orderQty = menu.orderQty;
+                  temp.isDishReady = menu.isDishReady;
+                  tempDish = [...tempDish, temp];
+                }
+                if (!menu.isDishReady) {
+                  this.isDishReady[index][i] = false;
+                } else {
+                  this.isDishReady[index][i] = menu.isDishReady;
                 }
               });
-              order.menuIdsandQty = this.menus.filter(resMeu => resMeu.dishQty.orderQty && resMeu.dishQty.orderQty != 0);
-              if (!menu.isDishReady) {
-                this.isDishReady[index][i] = false;
-              } else {
-                this.isDishReady[index][i] = menu.isDishReady;
-              }
             });
+            order.menuIdsandQty = tempDish;
           });
           this.orders = this.authoritiesOrder(orders);
         });
