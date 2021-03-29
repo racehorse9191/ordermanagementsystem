@@ -77,9 +77,8 @@ export class MenuComponent implements OnInit {
         this.updateMenuCategoryDishes();
       }
     });
-    if (this.todaySplMenu.length == 0) {
-      this.loadDishes();
-    }
+    console.log('todayspl=>', this.todaySplMenu);
+    this.loadDishes();
   }
   ngOnDestroy() {
     this.detailRecivedSubscription.unsubscribe();
@@ -87,9 +86,15 @@ export class MenuComponent implements OnInit {
   loadDishes() {
     this.menuService.query().subscribe((res: HttpResponse<IMenu[]>) => {
       this.category = res.body || [];
-      this.fetchTodaysSpl();
-      this.createDisplayCategory();
-      this.globalSearchItem = this.constructQtyGroup(this.category);
+      if (this.todaySplMenu.length == 0) {
+        this.fetchTodaysSpl();
+      }
+      if (this.orderList.length != 0) {
+        this.createDisplayCategory(this.orderList);
+      } else {
+        this.createDisplayCategory(this.category);
+        this.globalSearchItem = this.constructQtyGroup(this.category);
+      }
     });
   }
 
@@ -148,9 +153,9 @@ export class MenuComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  createDisplayCategory() {
+  createDisplayCategory(category) {
     const tempCatergoryList: DisplayCategory[] = [];
-    this.category?.forEach(res => {
+    category?.forEach(res => {
       if (this.category.length == 0) {
         this.singleCategoryList.categoryName = res?.dish?.category?.categoryName || '';
         this.singleCategoryList.menus.push(res);
@@ -169,6 +174,11 @@ export class MenuComponent implements OnInit {
       }
     });
     this.categoryList = tempCatergoryList;
+    if (this.orderList.length != 0) {
+      this.globalSearchItem = this.constructQtyGroup(this.orderList);
+    } else {
+      this.globalSearchItem = this.constructQtyGroup(this.category);
+    }
     this.updateMenuCategoryDishes();
   }
   /* the section of cooking category data ends here*/
