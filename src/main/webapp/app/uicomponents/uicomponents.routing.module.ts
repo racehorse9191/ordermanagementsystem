@@ -8,6 +8,7 @@ import { DishCategoryComponent } from './dish-category/dish-category.component';
 import { SelectTableComponent } from './select-table/select-table.component';
 import { ShefOrderlist } from './shef-orderlist/shef-orderlist.component';
 import { MyOrderlist } from './my-orders/my-orders.component';
+import { QRMenuComponent } from './qr-menu/menu/qrmenu.component';
 
 export const UiComponentRoutes: Routes = [
   {
@@ -69,6 +70,14 @@ export const UiComponentRoutes: Routes = [
     component: MyOrderlist,
     data: {
       authorities: [Authority.USER, Authority.ADMIN],
+      pageTitle: 'orderManagementSystemApp.dish.home.title',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'qrmenu',
+    component: QRMenuComponent,
+    data: {
       pageTitle: 'orderManagementSystemApp.dish.home.title',
     },
     canActivate: [UserRouteAccessService],

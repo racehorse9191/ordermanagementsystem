@@ -17,6 +17,7 @@ export class DisplayCategory {
 })
 export class DishCategoryComponent implements OnInit, OnChanges, OnDestroy {
   @Input() menus?: DisplayCategory[];
+  @Input() isQRMenu?: boolean = false;
   showDescription: boolean = true;
   category: DisplayCategory[] = [];
   singleCategory: DisplayCategory = new DisplayCategory();

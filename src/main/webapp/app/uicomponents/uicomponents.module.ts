@@ -23,6 +23,7 @@ import { MyOrderlist } from './my-orders/my-orders.component';
 import { ModalComponent } from './modal/modal.component';
 import { NgxPrintModule } from 'ngx-print';
 import { ToastComponent } from './toast/toast.component';
+import { QRMenuComponent } from './qr-menu/menu/qrmenu.component';
 @NgModule({
   declarations: [
     MenuComponent,
@@ -34,6 +35,7 @@ import { ToastComponent } from './toast/toast.component';
     MyOrderlist,
     ModalComponent,
     ToastComponent,
+    QRMenuComponent,
   ],
   imports: [
     CommonModule,
@@ -58,6 +60,7 @@ import { ToastComponent } from './toast/toast.component';
     DishCategoryComponent,
     ShefOrderlist,
     MyOrderlist,
+    QRMenuComponent,
   ],
   providers: [SubscriptionService, ToastService],
 })

@@ -26,7 +26,7 @@
         <h6 class="card-subtitle mb-2 text-muted">price: {{ menu.price | currency:'INR'}}</h6>
         <p class="card-text">{{menu.dish?.dishDescription}}</p>
       </div>
-      <div class="actions">
+      <div *ngIf="!isQRMenu" class="actions">
         <div class="row">
           <ng-select class="QtyDropDown" data-toggle="tooltip" data-placement="bottom"
             title="Select Dish Qty" id="selectDish" name="selectDish" bindLabel="qtyName" [(ngModel)]="selectedQty[i]" 

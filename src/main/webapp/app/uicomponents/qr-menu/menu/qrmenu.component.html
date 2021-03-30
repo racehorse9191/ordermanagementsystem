@@ -1,7 +1,7 @@
 <div class="">
-  <div>
+  <!-- <div>
     <mat-chip class="btn btn-primary" style="background:#4582EC;color:white"> Table : {{ currentTable.tableName  }}</mat-chip>
-  </div>
+  </div> -->
   <br>
   <nav class="navbar sticky-top navbar-light bg-light row spaceBetween">
     <div class="container-fluid">
@@ -45,25 +45,25 @@
       
       <ngb-tab id="0" title="Todays Spl">
         <ng-template ngbTabContent>
-          <jhi-dish-view [dishes]="todaySplMenu" [todaysSpl]="true" [showDescription]="showDescription" [isQRMenu]="false"></jhi-dish-view>
+          <jhi-dish-view [dishes]="todaySplMenu" [todaysSpl]="true" [showDescription]="showDescription" [isQRMenu]="true"></jhi-dish-view>
         </ng-template>
       </ngb-tab>
        
       <ngb-tab id="1">
         <ng-template ngbTabTitle>Dish Category</ng-template>
         <ng-template ngbTabContent>
-            <jhi-dish-category *ngIf="categoryList" [menus]="categoryList" [isQRMenu]="false"></jhi-dish-category>
+            <jhi-dish-category *ngIf="categoryList" [menus]="categoryList" [isQRMenu]="true"></jhi-dish-category>
         </ng-template>
       </ngb-tab>
        
-      <ngb-tab id="2">
+      <!-- <ngb-tab id="2">
         <ng-template ngbTabTitle>Order Details</ng-template>
         <ng-template ngbTabContent>
             <jhi-order-details></jhi-order-details>
         </ng-template>
-      </ngb-tab>   
+      </ngb-tab>    -->
     </ngb-tabset>
      <ng-template #selectedBlock>
-      <jhi-dish-view [dishes]="selectedDishesQtys" [showDescription]="showDescription" [isQRMenu]="false"></jhi-dish-view>
+      <jhi-dish-view [dishes]="selectedDishesQtys" [showDescription]="showDescription" [isQRMenu]="true"></jhi-dish-view>
      </ng-template>
     </div> 

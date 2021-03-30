@@ -17,6 +17,7 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   @Input() dishes?: MenuListModel[] = [];
   @Input() showDescription?: boolean = true;
   @Input() todaysSpl?: boolean = false;
+  @Input() isQRMenu?: boolean = false;
   orders: any[] = [];
   detailRecivedSubscription: Subscription = new Subscription();
   images: any[] = [];
@@ -47,6 +48,7 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log('in dishview qrmenu', this.isQRMenu);
     this.detailRecivedSubscription = this.subscriptionService.selectedorderOrderObservable.subscribe((obj: any[]) => {
       console.log('res=>', obj);
       if (obj && obj.length != 0) {
