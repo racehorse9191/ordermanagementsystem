@@ -1,17 +1,3 @@
-// import { MenuListModel } from './../../shared/model/menu-list.model';
-// import { HttpResponse } from '@angular/common/http';
-// import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-// import { DishService } from '../../entities/dish/dish.service';
-// import { DishToOrder } from '../../shared/model/dish-to-order';
-// import { IMenu } from '../../shared/model/menu.model';
-// import { MenuService } from '../../entities/menu/menu.service';
-// import { Subscription } from 'rxjs';
-// import { SubscriptionService } from '../../shared/subscription.service';
-// import { DisplayCategory } from '../dish-category/dish-category.component';
-// import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
-// import { ActivatedRoute } from '@angular/router';
-// import { ITables } from '../../shared/model/tables.model';
-
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -61,37 +47,6 @@ export class QRMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.detailRecivedSubscription = this.subscriptionService.selectedorderOrderObservable.subscribe((obj: any[]) => {
-    //   if (obj.length != 0) {
-    //     let checkButton = false;
-    //     obj.filter(res => {
-    //       if (res?.dishQty?.orderQty && res?.dishQty?.orderQty != 0) {
-    //         checkButton = true;
-    //       }
-    //     });
-    //     if (checkButton) {
-    //       checkButton = false;
-    //       if (this.activeTab == 2) {
-    //         this.showOrderButton = false;
-    //       } else {
-    //         this.showOrderButton = true;
-    //       }
-    //     } else {
-    //       this.showOrderButton = false;
-    //     }
-    //     this.orderList = obj;
-    //     this.todaySplMenu = obj.filter(res => res?.dish?.isTodaysSpecial);
-    //     this.updateMenuCategoryDishes();
-    //   } else {
-    //     this.orderList = [];
-    //     this.showOrderButton = false;
-    //     this.selectedDishes = [];
-    //     this.dishSelected = false;
-    //     this.todaySplMenu = obj;
-    //     this.updateMenuCategoryDishes();
-    //   }
-    // });
-    // console.log('todayspl=>', this.todaySplMenu);
     this.loadDishes();
   }
   ngOnDestroy() {

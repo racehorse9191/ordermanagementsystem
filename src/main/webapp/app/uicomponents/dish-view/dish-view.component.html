@@ -26,7 +26,7 @@
         <h6 class="card-subtitle mb-2 text-muted">price: {{ menu.price | currency:'INR'}}</h6>
         <p class="card-text">{{menu.dish?.dishDescription}}</p>
       </div>
-      <div *ngIf="!isQRMenu" class="actions">
+      <div class="actions">
         <div class="row">
           <ng-select class="QtyDropDown" data-toggle="tooltip" data-placement="bottom"
             title="Select Dish Qty" id="selectDish" name="selectDish" bindLabel="qtyName" [(ngModel)]="selectedQty[i]" 
@@ -34,7 +34,7 @@
             <ng-template ng-option-tmp let-item="item" let-index="index"> 
              <div class="wrapping-option">
               <div class="float-left"> <b>{{item?.qtyName}}</b> &nbsp; <b>{{ item?.price | currency:'INR'}}</b>  </div>
-              <div class="float-right Qty-Wrapper">
+              <div *ngIf="!isQRMenu" class="float-right Qty-Wrapper">
                 <div class=" Base-wrappwer-Qty  base-Qty">
                   <div (click)="subOrderMinusClicked(item); $event.stopPropagation()" class="less-Qty">
                     <i class="rbbb40-1 MxLSp sc-1usozeh-4 TZpZK" size="14" color="#ED5A6B">
@@ -69,7 +69,7 @@
             </ng-template>
           </ng-select>
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <div class="Qty-Wrapper">
+          <div *ngIf="!isQRMenu" class="Qty-Wrapper">
             <div class=" Base-wrappwer-Qty  base-Qty">
               <div (click)="orderMinusClicked(i,menu.id)" class="less-Qty">
                 <i class="rbbb40-1 MxLSp sc-1usozeh-4 TZpZK" size="14" color="#ED5A6B">
