@@ -1,7 +1,6 @@
-import { MenuListModel, DishQtyModel } from './../../shared/model/menu-list.model';
+import { MenuListModel } from './../../shared/model/menu-list.model';
 import { Component, Input, OnChanges, OnInit, SimpleChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { DishToOrder } from '../../shared/model/dish-to-order';
 import { SubscriptionService } from '../../shared/subscription.service';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { CorosalModal } from '../../shared/model/corosal.model';
@@ -18,6 +17,8 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showDescription?: boolean = true;
   @Input() todaysSpl?: boolean = false;
   @Input() isQRMenu?: boolean = false;
+  @Input() globalSearch?: boolean = false;
+  @Input() dishesToDisplay?: MenuListModel[] = [];
   orders: any[] = [];
   detailRecivedSubscription: Subscription = new Subscription();
   images: any[] = [];
@@ -40,7 +41,7 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     this.orders = [];
     this.selectedQty = [];
-    this.tempDish = this.dishes;
+    this.tempDish = this.dishesToDisplay.length != 0 ? this.dishesToDisplay : this.dishes;
     this.tempDish = this.filterByDishName(this.tempDish);
     this.constructCorosol();
     this.constructQtyGroup();
@@ -129,11 +130,13 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
   orderPlusClicked(index: any, menuId: any) {
-    /*  if(!this.tempDish[index].dishQty.orderQty){
-      this.tempDish[index].dishQty.orderQty = 1;
-    }else{
-      this.tempDish[index].dishQty.orderQty = this.tempDish[index].dishQty.orderQty+1 ;
-    } */
+    if (this.globalSearch) {
+      if (!this.tempDish[index].dishQty.orderQty) {
+        this.tempDish[index].dishQty.orderQty = 1;
+      } else {
+        this.tempDish[index].dishQty.orderQty = this.tempDish[index].dishQty.orderQty + 1;
+      }
+    }
     this.dishes.forEach(res => {
       if (res.id == menuId) {
         if (!res.dishQty.orderQty) {
@@ -145,16 +148,19 @@ export class DishViewComponent implements OnInit, OnChanges, OnDestroy {
         }
       }
     });
+    console.log('dish to update=>', JSON.parse(JSON.stringify(this.dishes)));
     this.subscriptionService.updateOrder(this.dishes);
   }
   orderMinusClicked(index: any, menuId: any) {
-    /*  if(!this.tempDish[index].dishQty.orderQty){
-      this.tempDish[index].dishQty.orderQty = 0
-    }else{
-      if(this.tempDish[index].dishQty.orderQty > 0 ){
-        this.tempDish[index].dishQty.orderQty = this.tempDish[index].dishQty.orderQty -1;
+    if (this.globalSearch) {
+      if (!this.tempDish[index].dishQty.orderQty) {
+        this.tempDish[index].dishQty.orderQty = 0;
+      } else {
+        if (this.tempDish[index].dishQty.orderQty > 0) {
+          this.tempDish[index].dishQty.orderQty = this.tempDish[index].dishQty.orderQty - 1;
+        }
       }
-    } */
+    }
     this.dishes.forEach(res => {
       if (res.id == menuId) {
         if (!res.dishQty.orderQty) {

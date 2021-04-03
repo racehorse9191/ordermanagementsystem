@@ -58,8 +58,10 @@ export class MenuComponent implements OnInit {
         });
         if (checkButton) {
           checkButton = false;
-          if (this.activeTab == 2) {
+          if (this.activeTab == 2 && !this.dishSelected) {
             this.showOrderButton = false;
+          } else if (this.activeTab == 2) {
+            this.showOrderButton = true;
           } else {
             this.showOrderButton = true;
           }
@@ -92,13 +94,23 @@ export class MenuComponent implements OnInit {
       }
       if (this.orderList.length != 0) {
         this.createDisplayCategory(this.orderList);
+        this.updateCategory();
       } else {
         this.createDisplayCategory(this.category);
-        this.globalSearchItem = this.constructQtyGroup(this.category);
+        this.globalSearchItem = JSON.parse(JSON.stringify(this.constructQtyGroup(this.category)));
       }
     });
   }
-
+  updateCategory() {
+    this.orderList.forEach(ord => {
+      this.category.forEach(cat => {
+        if (cat.id == ord.id) {
+          Object.assign(cat, ord);
+        }
+      });
+    });
+    console.log('updated category=>', this.category);
+  }
   constructQtyGroup(arr) {
     const ids = arr.map(o => o.dish.id);
     return arr.filter((res, index) => !ids.includes(res.dish.id, index + 1));
@@ -109,9 +121,20 @@ export class MenuComponent implements OnInit {
   selectedItem(selectedDish: any[]) {
     console.log('selectedDishes=>', this.selectedDishes);
     if (this.orderList.length != 0) {
-      this.selectedDishesQtys = this.orderList.filter(res => this.selectedDishes.find(seldish => seldish.dish.id == res.dish.id));
+      const notFoundId = this.selectedDishes.filter(res => this.orderList.find(ord => res.dish.id != ord.dish.id));
+      if (notFoundId.length == 0) {
+        this.selectedDishesQtys = JSON.parse(
+          JSON.stringify(this.orderList.filter(res => this.selectedDishes.find(seldish => seldish.dish.id == res.dish.id)))
+        );
+      } else {
+        this.selectedDishesQtys = JSON.parse(
+          JSON.stringify(this.category.filter(res => notFoundId.find(seldish => seldish.dish.id == res.dish.id)))
+        );
+      }
     } else {
-      this.selectedDishesQtys = this.category.filter(res => this.selectedDishes.find(seldish => seldish.dish.id == res.dish.id));
+      this.selectedDishesQtys = JSON.parse(
+        JSON.stringify(this.category.filter(res => this.selectedDishes.find(seldish => seldish.dish.id == res.dish.id)))
+      );
     }
     console.log('selectedDishesQtys=>', this.selectedDishesQtys);
     if (selectedDish.length != 0) {
@@ -183,15 +206,16 @@ export class MenuComponent implements OnInit {
     });
     this.categoryList = tempCatergoryList;
     if (this.orderList.length != 0) {
-      this.globalSearchItem = this.constructQtyGroup(this.orderList);
+      this.globalSearchItem = JSON.parse(JSON.stringify(this.constructQtyGroup(this.orderList)));
     } else {
-      this.globalSearchItem = this.constructQtyGroup(this.category);
+      this.globalSearchItem = JSON.parse(JSON.stringify(this.constructQtyGroup(this.category)));
     }
     this.updateMenuCategoryDishes();
   }
   /* the section of cooking category data ends here*/
 
   onSearchItemRemove(event: any) {
+    console.log('onSearchItemRemove');
     if (this.orderList.length != 0) {
       this.orderList.forEach(ord => {
         if (ord.dish.id == event.value.dish.id) {
@@ -206,12 +230,18 @@ export class MenuComponent implements OnInit {
     }
   }
   onSearchClear() {
+    console.log('onSearchClear');
     this.selectedDishesQtys = [];
     this.selectedDishes = [];
+    console.log('before order list=>', JSON.parse(JSON.stringify(this.orderList)));
     this.orderList.filter(res => (res.dishQty.orderQty = 0));
-    this.subscriptionService.updateOrder(this.orderList);
+    console.log('order list=>', JSON.parse(JSON.stringify(this.orderList)));
+    if (this.orderList.length != 0) {
+      this.subscriptionService.updateOrder(this.orderList);
+    }
   }
   clearItem(item) {
+    console.log('clearItem');
     this.selectedDishesQtys = this.selectedDishesQtys.filter(res => res.dish.id != item.dish.id);
     this.selectedDishes = this.selectedDishes.filter(res => res.dish.id != item.dish.id);
     this.orderList.filter(res => {

@@ -78,7 +78,7 @@
         </form>
           <div class="row">
             <ul>
-              <li><span>Table:  {{ tableName }}</span></li>
+              <li><span>Table:  {{ table.tableName }}</span></li>
               <li><span>No of Items Ordered:  {{ orderTable.length }}</span></li>
               <li> CGST(2.5%) : {{ totalorderDetails()  | totalGst:2.5:false  | currency:'INR' }}   </li>
               <li> SGST(2.5%) : {{ totalorderDetails()  | totalGst:2.5:false  | currency:'INR' }} </li>

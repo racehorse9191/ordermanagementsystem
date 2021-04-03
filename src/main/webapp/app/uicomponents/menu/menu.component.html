@@ -64,6 +64,6 @@
       </ngb-tab>   
     </ngb-tabset>
      <ng-template #selectedBlock>
-      <jhi-dish-view [dishes]="selectedDishesQtys" [showDescription]="showDescription" [isQRMenu]="false"></jhi-dish-view>
+      <jhi-dish-view [dishes]="category" [globalSearch]="true" [isQRMenu]="false" [dishesToDisplay]="selectedDishesQtys" [showDescription]="showDescription"></jhi-dish-view>
      </ng-template>
     </div> 
