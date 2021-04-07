@@ -19,7 +19,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MyOrderlist } from './my-orders/my-orders.component';
 import { ModalComponent } from './modal/modal.component';
 import { NgxPrintModule } from 'ngx-print';
 import { ToastComponent } from './toast/toast.component';
@@ -32,7 +31,6 @@ import { QRMenuComponent } from './qr-menu/menu/qrmenu.component';
     DishCategoryComponent,
     SelectTableComponent,
     ShefOrderlist,
-    MyOrderlist,
     ModalComponent,
     ToastComponent,
     QRMenuComponent,
@@ -59,7 +57,6 @@ import { QRMenuComponent } from './qr-menu/menu/qrmenu.component';
     DishViewComponent,
     DishCategoryComponent,
     ShefOrderlist,
-    MyOrderlist,
     QRMenuComponent,
   ],
   providers: [SubscriptionService, ToastService],

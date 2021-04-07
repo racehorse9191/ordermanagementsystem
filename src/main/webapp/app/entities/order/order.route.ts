@@ -10,6 +10,7 @@ import { OrderUpdateComponent } from './order-update.component';
 import { IOrder, Order } from '../../shared/model/order.model';
 import { Authority } from '../../shared/constants/authority.constants';
 import { UserRouteAccessService } from '../../core/auth/user-route-access-service';
+import { MyOrdersComponent } from './my-orders.component';
 
 @Injectable({ providedIn: 'root' })
 export class OrderResolve implements Resolve<IOrder> {
@@ -40,6 +41,16 @@ export const orderRoute: Routes = [
     data: {
       authorities: [Authority.ADMIN, Authority.USER, Authority.BARTENDER, Authority.CHEF],
       defaultSort: 'id,asc',
+      pageTitle: 'orderManagementSystemApp.order.home.title',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'myOrders/:status',
+    component: MyOrdersComponent,
+    data: {
+      authorities: [Authority.ADMIN, Authority.USER],
+      defaultSort: 'id,desc',
       pageTitle: 'orderManagementSystemApp.order.home.title',
     },
     canActivate: [UserRouteAccessService],

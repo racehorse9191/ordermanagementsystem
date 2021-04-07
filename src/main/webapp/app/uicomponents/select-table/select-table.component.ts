@@ -293,10 +293,18 @@ export class SelectTableComponent implements OnInit {
     const menuIdsQty = [];
     v.forEach(element => {
       let dishReady: boolean = false;
+      const dishName = element.dish.dishName;
       if (element.isDishReady) {
         dishReady = element.isDishReady;
+        // dishName = element.dish.dishName;
       }
-      menuIdsQty.push({ menuId: element.id, orderQty: element.dishQty.orderQty, isDishReady: dishReady });
+      menuIdsQty.push({
+        menuId: element.id,
+        dishName: dishName,
+        dishQty: element.dishQty.qtyName,
+        orderQty: element.dishQty.orderQty,
+        isDishReady: dishReady,
+      });
     });
     return menuIdsQty;
   }

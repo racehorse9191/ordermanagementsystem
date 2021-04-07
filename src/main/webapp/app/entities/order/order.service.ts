@@ -45,9 +45,20 @@ export class OrderService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
-  getByOrderStatus(req: OrderStatus): Observable<EntityArrayResponseType> {
+  getByOrderStatus(req: any, pageParams?: any): Observable<EntityArrayResponseType> {
+    let options: HttpParams = new HttpParams();
+    if (pageParams) {
+      options = pageParams;
+    } else {
+      pageParams = {
+        page: 0,
+        size: 10000,
+        sort: 'id,desc',
+      };
+      options = pageParams;
+    }
     return this.http
-      .get<IOrder[]>(`${this.resourceUrl}/status/${req}`, { observe: 'response' })
+      .get<IOrder[]>(`${this.resourceUrl}/status/${req}`, { params: options, observe: 'response' })
       .pipe(
         map((res: EntityArrayResponseType) => {
           this.convertDateArrayFromServer(res);

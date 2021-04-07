@@ -163,7 +163,13 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
       if (element.isDishReady) {
         dishReady = element.isDishReady;
       }
-      menuIdsQty.push({ menuId: element.id, orderQty: element.orderQty, isDishReady: dishReady });
+      menuIdsQty.push({
+        menuId: element.id,
+        dishName: element.name,
+        dishQty: element.dishQty,
+        orderQty: element.orderQty,
+        isDishReady: dishReady,
+      });
     });
     return menuIdsQty;
   }
